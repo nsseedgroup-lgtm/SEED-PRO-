@@ -848,6 +848,7 @@
                                     <th onclick="doSort('status')">狀態 <i class="bi bi-arrow-down-up sort-icon"
                                             id="sort-status"></i></th>
                                     <th>日期</th>
+                                    <th>時間</th>
                                     <th>方式</th>
                                     <th width="120" class="text-center">操作</th>
                                 </tr>
@@ -1283,16 +1284,21 @@
                                 <input type="date" id="trStatEnd" class="form-control bg-white shadow-none"
                                     style="border-radius: 10px;">
                             </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-elegant w-100 py-2" onclick="loadTrStats()"
-                                    style="border-radius: 10px;">
-                                    <i class="bi bi-file-earmark-bar-graph me-1"></i> 產生統計
-                                </button>
-                            </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-refresh-soft w-100 py-2" onclick="exportTrainingStats()">
-                                    <i class="bi bi-download me-1"></i> 匯出 Excel
-                                </button>
+                            <div class="col-md-6">
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-elegant flex-grow-1 py-2" onclick="loadTrStats()"
+                                        style="border-radius: 10px;">
+                                        <i class="bi bi-file-earmark-bar-graph me-1"></i> 產生統計
+                                    </button>
+                                    <button class="btn btn-refresh-soft flex-grow-1 py-2"
+                                        onclick="exportTrainingStats()">
+                                        <i class="bi bi-file-earmark-excel me-1"></i> Excel
+                                    </button>
+                                    <button class="btn btn-elegant flex-grow-1 py-2"
+                                        style="background: #34495e; color: white;" onclick="downloadTrainingStatsPDF()">
+                                        <i class="bi bi-file-earmark-pdf me-1"></i> PDF
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1375,376 +1381,388 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm hover-card" onclick="openPage('penalty')"
-                            style="cursor: pointer;">
+                        <div class="card h-100 border-0 shadow-sm hover-card"
+                            onclick="window.open('interaction.html', '_blank')" style="cursor: pointer;">
                             <div class="card-body p-4 text-center">
-                                <i class="bi bi-shield-lock display-4 text-dark mb-3"></i>
-                                <h5 class="fw-bold">違規紀錄</h5>
-                                <p class="text-muted small">管理與查詢違規處分詳情</p>
+                                <i class="bi bi-controller display-4 text-purple mb-3" style="color: #6c5ce7;"></i>
+                                <h5 class="fw-bold">互動工具</h5>
+                                <p class="text-muted small">抽籤、分組、小遊戲</p>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm hover-card"
+                            onclick="window.open('penalty.html', '_blank')" style="cursor: pointer;">
+                            <div class="card-body p-4 text-center">
+                                <i class="bi bi-exclamation-octagon display-4 text-danger mb-3"></i>
+                                <h5 class="fw-bold">違規管理</h5>
+                                <p class="text-muted small">紀錄與查詢違規事項</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="mb-3 border-bottom pb-2">系統工具</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <button
+                                class="btn btn-outline-secondary w-100 py-3 d-flex align-items-center justify-content-center gap-2"
+                                onclick="testConnection()">
+                                <i class="bi bi-activity fs-4"></i>
+                                <div class="text-start">
+                                    <div class="fw-bold">連線測試</div>
+                                    <small>測試與伺服器的連線品質</small>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button
+                                class="btn btn-outline-secondary w-100 py-3 d-flex align-items-center justify-content-center gap-2"
+                                onclick="reloadSystem()">
+                                <i class="bi bi-arrow-clockwise fs-4"></i>
+                                <div class="text-start">
+                                    <div class="fw-bold">重新整理</div>
+                                    <small>強制同步雲端最新數據</small>
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <h4 class="mb-3 border-bottom pb-2">系統工具</h4>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <button
-                            class="btn btn-outline-secondary w-100 py-3 d-flex align-items-center justify-content-center gap-2"
-                            onclick="testConnection()">
-                            <i class="bi bi-activity fs-4"></i>
-                            <div class="text-start">
-                                <div class="fw-bold">連線測試</div>
-                                <small>測試與伺服器的連線品質</small>
-                            </div>
-                        </button>
-                    </div>
-                    <div class="col-md-6">
-                        <button
-                            class="btn btn-outline-secondary w-100 py-3 d-flex align-items-center justify-content-center gap-2"
-                            onclick="reloadSystem()">
-                            <i class="bi bi-arrow-clockwise fs-4"></i>
-                            <div class="text-start">
-                                <div class="fw-bold">重新整理</div>
-                                <small>強制同步雲端最新數據</small>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Settings Page -->
-            <div id="page-settings" class="page-section">
-                <h3 class="mb-4">系統設定</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h5 class="card-title mb-3"><i class="bi bi-volume-up me-2"></i>系統音效</h5>
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <span>開啟音效提示</span>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="chk_audio"
-                                        onchange="toggleAudioSetting()">
+                <!-- Settings Page -->
+                <div id="page-settings" class="page-section">
+                    <h3 class="mb-4">系統設定</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card p-4">
+                                <h5 class="card-title mb-3"><i class="bi bi-volume-up me-2"></i>系統音效</h5>
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span>開啟音效提示</span>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="chk_audio"
+                                            onchange="toggleAudioSetting()">
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span>音效風格</span>
+                                    <select id="sel_audio_theme" class="form-select w-auto"
+                                        onchange="changeAudioTheme()">
+                                        <option value="classic">經典 (Classic)</option>
+                                        <option value="modern">現代 (Modern)</option>
+                                        <option value="game">遊戲 (8-bit)</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span>音效風格</span>
-                                <select id="sel_audio_theme" class="form-select w-auto" onchange="changeAudioTheme()">
-                                    <option value="classic">經典 (Classic)</option>
-                                    <option value="modern">現代 (Modern)</option>
-                                    <option value="game">遊戲 (8-bit)</option>
-                                </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="exportModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                    <div class="modal-header border-0 pb-0 ps-4 pe-4 pt-4">
+                        <h5 class="modal-title fw-bold">匯出中心</h5><button type="button" class="btn-close"
+                            data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <div class="export-option selected" id="opt-pdf" onclick="selectExport('pdf')"><i
+                                        class="bi bi-file-earmark-pdf export-icon"></i>
+                                    <div class="fw-bold">PDF 報表</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="export-option" id="opt-excel" onclick="selectExport('excel')"><i
+                                        class="bi bi-file-earmark-excel export-icon"></i>
+                                    <div class="fw-bold">Excel 試算表</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                        <div class="mb-3"><label class="form-label">報表標題</label><input type="text" class="form-control"
+                                id="exportTitle" value="教育訓練統計報表"></div>
 
-        </div>
-    </div>
-
-    <div class="modal fade" id="exportModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
-                <div class="modal-header border-0 pb-0 ps-4 pe-4 pt-4">
-                    <h5 class="modal-title fw-bold">匯出中心</h5><button type="button" class="btn-close"
-                        data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="row g-3 mb-4">
-                        <div class="col-6">
-                            <div class="export-option selected" id="opt-pdf" onclick="selectExport('pdf')"><i
-                                    class="bi bi-file-earmark-pdf export-icon"></i>
-                                <div class="fw-bold">PDF 報表</div>
+                        <div class="mb-3"><label class="form-label">列印範圍 (狀態篩選)</label>
+                            <div class="d-flex gap-3 flex-wrap bg-light p-3 rounded">
+                                <div class="form-check"><input class="form-check-input" type="radio" name="exportStatus"
+                                        id="es-all" value="all" checked><label class="form-check-label"
+                                        for="es-all">全部顯示</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" name="exportStatus"
+                                        id="es-done" value="done"><label class="form-check-label text-success"
+                                        for="es-done">僅已完訓</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" name="exportStatus"
+                                        id="es-miss" value="miss"><label class="form-check-label text-danger"
+                                        for="es-miss">僅未完訓</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" name="exportStatus"
+                                        id="es-exempt" value="exempt"><label class="form-check-label text-secondary"
+                                        for="es-exempt">僅免訓</label></div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="export-option" id="opt-excel" onclick="selectExport('excel')"><i
-                                    class="bi bi-file-earmark-excel export-icon"></i>
-                                <div class="fw-bold">Excel 試算表</div>
-                            </div>
+
+                        <div id="pdf-options">
+                            <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="printStats"
+                                    checked><label class="form-check-label small">包含統計圖表</label></div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="printSign"
+                                    checked><label class="form-check-label small">包含簽核欄位</label></div>
                         </div>
                     </div>
-                    <div class="mb-3"><label class="form-label">報表標題</label><input type="text" class="form-control"
-                            id="exportTitle" value="教育訓練統計報表"></div>
+                    <div class="modal-footer border-0 p-4 pt-0"><button class="btn btn-elegant w-100"
+                            onclick="executeExport()">立即匯出</button></div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="mb-3"><label class="form-label">列印範圍 (狀態篩選)</label>
-                        <div class="d-flex gap-3 flex-wrap bg-light p-3 rounded">
-                            <div class="form-check"><input class="form-check-input" type="radio" name="exportStatus"
-                                    id="es-all" value="all" checked><label class="form-check-label"
-                                    for="es-all">全部顯示</label></div>
-                            <div class="form-check"><input class="form-check-input" type="radio" name="exportStatus"
-                                    id="es-done" value="done"><label class="form-check-label text-success"
-                                    for="es-done">僅已完訓</label></div>
-                            <div class="form-check"><input class="form-check-input" type="radio" name="exportStatus"
-                                    id="es-miss" value="miss"><label class="form-check-label text-danger"
-                                    for="es-miss">僅未完訓</label></div>
-                            <div class="form-check"><input class="form-check-input" type="radio" name="exportStatus"
-                                    id="es-exempt" value="exempt"><label class="form-check-label text-secondary"
-                                    for="es-exempt">僅免訓</label></div>
+        <div class="modal fade" id="courseModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">課程編輯</h5><button type="button" class="btn-close"
+                            data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body"><input type="hidden" id="c_idx">
+                        <div class="row g-2">
+                            <div class="col-6"><input class="form-control mb-2" id="c_pCode" placeholder="母代號"
+                                    list="list-pcode" oninput="autoFillParent('code')"></div>
+                            <div class="col-6"><input class="form-control mb-2" id="c_pName" placeholder="母課程"
+                                    list="list-pname" oninput="autoFillParent('name')"></div>
+                            <datalist id="list-pcode"></datalist>
+                            <datalist id="list-pname"></datalist>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6"><input class="form-control mb-2" id="c_cCode" placeholder="子代號"></div>
+                            <div class="col-6"><input class="form-control mb-2" id="c_cName" placeholder="子課程"></div>
                         </div>
                     </div>
-
-                    <div id="pdf-options">
-                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="printStats"
-                                checked><label class="form-check-label small">包含統計圖表</label></div>
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="printSign"
-                                checked><label class="form-check-label small">包含簽核欄位</label></div>
-                    </div>
+                    <div class="modal-footer"><button class="btn btn-elegant" onclick="saveCourse()">儲存</button></div>
                 </div>
-                <div class="modal-footer border-0 p-4 pt-0"><button class="btn btn-elegant w-100"
-                        onclick="executeExport()">立即匯出</button></div>
             </div>
         </div>
-    </div>
-
-    <div class="modal fade" id="courseModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">課程編輯</h5><button type="button" class="btn-close"
-                        data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body"><input type="hidden" id="c_idx">
-                    <div class="row g-2">
-                        <div class="col-6"><input class="form-control mb-2" id="c_pCode" placeholder="母代號"
-                                list="list-pcode" oninput="autoFillParent('code')"></div>
-                        <div class="col-6"><input class="form-control mb-2" id="c_pName" placeholder="母課程"
-                                list="list-pname" oninput="autoFillParent('name')"></div>
-                        <datalist id="list-pcode"></datalist>
-                        <datalist id="list-pname"></datalist>
+        <div class="modal fade" id="personModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">人員編輯</h5><button type="button" class="btn-close"
+                            data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="row g-2">
-                        <div class="col-6"><input class="form-control mb-2" id="c_cCode" placeholder="子代號"></div>
-                        <div class="col-6"><input class="form-control mb-2" id="c_cName" placeholder="子課程"></div>
+                    <div class="modal-body"><input class="form-control mb-2" id="p_id" placeholder="AGCODE"><input
+                            class="form-control mb-2" id="p_name" placeholder="姓名">
+                        <div class="row g-2">
+                            <div class="col-6"><input class="form-control mb-2" id="p_rank" placeholder="職級"></div>
+                            <div class="col-6"><input class="form-control mb-2" id="p_group" placeholder="單位"></div>
+                        </div><input class="form-control mb-2" id="p_manager" placeholder="主管">
                     </div>
+                    <div class="modal-footer"><button class="btn btn-elegant" onclick="savePerson()">儲存</button></div>
                 </div>
-                <div class="modal-footer"><button class="btn btn-elegant" onclick="saveCourse()">儲存</button></div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="personModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">人員編輯</h5><button type="button" class="btn-close"
-                        data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body"><input class="form-control mb-2" id="p_id" placeholder="AGCODE"><input
-                        class="form-control mb-2" id="p_name" placeholder="姓名">
-                    <div class="row g-2">
-                        <div class="col-6"><input class="form-control mb-2" id="p_rank" placeholder="職級"></div>
-                        <div class="col-6"><input class="form-control mb-2" id="p_group" placeholder="單位"></div>
-                    </div><input class="form-control mb-2" id="p_manager" placeholder="主管">
-                </div>
-                <div class="modal-footer"><button class="btn btn-elegant" onclick="savePerson()">儲存</button></div>
-            </div>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script>
-        /* Netlify API Shim for Google Apps Script */
-        const API_URL = "https://script.google.com/macros/s/AKfycbyLgSgUwX38dYwe0YK9sllLdZO3di7jRG7MONmK5F8LsNhhlX9uednSBwC3qZNN16j1/exec";
-        // Polyfill google.script.run for Netlify environment
-        if (typeof google === 'undefined' || !google.script) {
-            console.log("Initializing Netlify-to-GAS Bridge...");
-            window.google = {
-                script: {
-                    run: (function () {
-                        function createRunner(s, f) {
-                            return new Proxy({
-                                withSuccessHandler: function (fn) { return createRunner(fn, f); },
-                                withFailureHandler: function (fn) { return createRunner(s, fn); }
-                            }, {
-                                get: function (target, prop) {
-                                    if (prop in target) return target[prop];
-                                    return function (...args) {
-                                        console.log(`[API Call] ${prop}`, args);
-                                        fetch(API_URL, {
-                                            method: 'POST',
-                                            mode: 'cors',
-                                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                                            body: JSON.stringify({ action: prop, args: args })
-                                        })
-                                            .then(r => r.json())
-                                            .then(data => {
-                                                if (data && data.error) {
-                                                    console.error(`[API Error]`, data);
-                                                    if (f) f(data.message || data.error);
-                                                } else {
-                                                    if (s) s(data);
-                                                }
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script>
+            /* Netlify API Shim for Google Apps Script */
+            const API_URL = "https://script.google.com/macros/s/AKfycbwwy_8wjD_NkVgW-1fSySwQhRF3dYxzJqQ8bjeQQhG-F3NYaBpYMPORraUha8-oY3Jv/exec";
+            // Polyfill google.script.run for Netlify environment
+            if (typeof google === 'undefined' || !google.script) {
+                console.log("Initializing Netlify-to-GAS Bridge...");
+                window.google = {
+                    script: {
+                        run: (function () {
+                            function createRunner(s, f) {
+                                return new Proxy({
+                                    withSuccessHandler: function (fn) { return createRunner(fn, f); },
+                                    withFailureHandler: function (fn) { return createRunner(s, fn); }
+                                }, {
+                                    get: function (target, prop) {
+                                        if (prop in target) return target[prop];
+                                        return function (...args) {
+                                            console.log(`[API Call] ${prop}`, args);
+                                            fetch(API_URL, {
+                                                method: 'POST',
+                                                mode: 'cors',
+                                                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                                                body: JSON.stringify({ action: prop, args: args })
                                             })
-                                            .catch(err => {
-                                                console.error(`[Network Error]`, err);
-                                                if (f) f(err.toString());
-                                            });
-                                    };
-                                }
-                            });
-                        }
-                        return createRunner();
-                    })()
-                }
-            };
-        }
-        let db = {}; let currentDashData = []; let cm, pm, exportM; let sortConfig = { col: 'id', asc: true }; let exportType = 'pdf';
-        let currentUser = '';
-        let inactivityTimer = null;
-        const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
-        let personnelChanges = [];
-
-        // Audio Settings
-        let audioEnabled = true;
-        let audioTheme = 'classic';
-
-        window.onload = function () {
-            cm = new bootstrap.Modal(document.getElementById('courseModal'));
-            pm = new bootstrap.Modal(document.getElementById('personModal'));
-            exportM = new bootstrap.Modal(document.getElementById('exportModal'));
-
-            // Check for existing session
-            checkExistingSession();
-
-            // Setup inactivity detection
-            setupInactivityDetection();
-
-            // Init Audio
-            initAudio();
-        };
-
-        function load(x) { document.getElementById('loading').style.display = x ? 'flex' : 'none'; }
-
-        // Audio Control Scripts
-        function initAudio() {
-            const savedEnabled = localStorage.getItem('tms_audio_enabled');
-            const savedTheme = localStorage.getItem('tms_audio_theme');
-
-            if (savedEnabled !== null) audioEnabled = (savedEnabled === 'true');
-            if (savedTheme) audioTheme = savedTheme;
-
-            const chk = document.getElementById('chk_audio');
-            const sel = document.getElementById('sel_audio_theme');
-
-            if (chk) chk.checked = audioEnabled;
-            if (sel) sel.value = audioTheme;
-        }
-
-        function toggleAudioSetting() {
-            const chk = document.getElementById('chk_audio');
-            audioEnabled = chk.checked;
-            localStorage.setItem('tms_audio_enabled', audioEnabled);
-            if (audioEnabled) playSound('success');
-        }
-
-        function changeAudioTheme() {
-            const sel = document.getElementById('sel_audio_theme');
-            audioTheme = sel.value;
-            localStorage.setItem('tms_audio_theme', audioTheme);
-            playSound('success');
-        }
-
-        // Helper: Play Sound Effect
-        function playSound(type) {
-            if (!audioEnabled) return;
-
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                const ctx = new AudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
-                const now = ctx.currentTime;
-
-                if (type === 'success') {
-                    if (audioTheme === 'game') {
-                        // 8-bit coin sound
-                        osc.type = 'square';
-                        osc.frequency.setValueAtTime(988, now);
-                        osc.frequency.setValueAtTime(1319, now + 0.08);
-                        gain.gain.setValueAtTime(0.1, now);
-                        gain.gain.linearRampToValueAtTime(0, now + 0.3);
-                        osc.start(now);
-                        osc.stop(now + 0.3);
-                    } else if (audioTheme === 'modern') {
-                        // Soft clean ping
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(523.25, now);
-                        osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.1);
-                        gain.gain.setValueAtTime(0.1, now);
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-                        osc.start(now);
-                        osc.stop(now + 0.4);
-                    } else {
-                        // Classic Ding
-                        osc.frequency.setValueAtTime(880, now);
-                        osc.frequency.exponentialRampToValueAtTime(1760, now + 0.1);
-                        gain.gain.setValueAtTime(0.05, now);
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-                        osc.start(now);
-                        osc.stop(now + 0.3);
+                                                .then(r => r.json())
+                                                .then(data => {
+                                                    if (data && data.error) {
+                                                        const errMsg = data.message || data.error || 'Unknown Error';
+                                                        console.error(`[API Error]`, data);
+                                                        showToast(`❌ API 錯誤: ${errMsg}`, 'error');
+                                                        if (f) f(errMsg);
+                                                    } else {
+                                                        if (s) s(data);
+                                                    }
+                                                })
+                                                .catch(err => {
+                                                    console.error(`[Network Error]`, err);
+                                                    if (f) f(err.toString());
+                                                });
+                                        };
+                                    }
+                                });
+                            }
+                            return createRunner();
+                        })()
                     }
-                } else if (type === 'error') {
-                    // Buzz
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(150, now);
-                    osc.frequency.linearRampToValueAtTime(100, now + 0.2);
-                    gain.gain.setValueAtTime(0.05, now);
-                    gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
-                    osc.start(now);
-                    osc.stop(now + 0.2);
-                } else if (type === 'click') {
-                    // Click
-                    osc.frequency.setValueAtTime(800, now);
-                    gain.gain.setValueAtTime(0.015, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-                    osc.start(now);
-                    osc.stop(now + 0.03);
-                } else {
-                    // Info
-                    osc.frequency.setValueAtTime(440, now);
-                    gain.gain.setValueAtTime(0.03, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-                    osc.start(now);
-                    osc.stop(now + 0.1);
+                };
+            }
+            let db = {}; let currentDashData = []; let cm, pm, exportM; let sortConfig = { col: 'id', asc: true }; let exportType = 'pdf';
+            let currentUser = '';
+            let inactivityTimer = null;
+            const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
+            let personnelChanges = [];
+
+            // Audio Settings
+            let audioEnabled = true;
+            let audioTheme = 'classic';
+
+            window.onload = function () {
+                cm = new bootstrap.Modal(document.getElementById('courseModal'));
+                pm = new bootstrap.Modal(document.getElementById('personModal'));
+                exportM = new bootstrap.Modal(document.getElementById('exportModal'));
+
+                // Check for existing session
+                checkExistingSession();
+
+                // Setup inactivity detection
+                setupInactivityDetection();
+
+                // Init Audio
+                initAudio();
+            };
+
+            function load(x) { document.getElementById('loading').style.display = x ? 'flex' : 'none'; }
+
+            // Audio Control Scripts
+            function initAudio() {
+                const savedEnabled = localStorage.getItem('tms_audio_enabled');
+                const savedTheme = localStorage.getItem('tms_audio_theme');
+
+                if (savedEnabled !== null) audioEnabled = (savedEnabled === 'true');
+                if (savedTheme) audioTheme = savedTheme;
+
+                const chk = document.getElementById('chk_audio');
+                const sel = document.getElementById('sel_audio_theme');
+
+                if (chk) chk.checked = audioEnabled;
+                if (sel) sel.value = audioTheme;
+            }
+
+            function toggleAudioSetting() {
+                const chk = document.getElementById('chk_audio');
+                audioEnabled = chk.checked;
+                localStorage.setItem('tms_audio_enabled', audioEnabled);
+                if (audioEnabled) playSound('success');
+            }
+
+            function changeAudioTheme() {
+                const sel = document.getElementById('sel_audio_theme');
+                audioTheme = sel.value;
+                localStorage.setItem('tms_audio_theme', audioTheme);
+                playSound('success');
+            }
+
+            // Helper: Play Sound Effect
+            function playSound(type) {
+                if (!audioEnabled) return;
+
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) return;
+                    const ctx = new AudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    const now = ctx.currentTime;
+
+                    if (type === 'success') {
+                        if (audioTheme === 'game') {
+                            // 8-bit coin sound
+                            osc.type = 'square';
+                            osc.frequency.setValueAtTime(988, now);
+                            osc.frequency.setValueAtTime(1319, now + 0.08);
+                            gain.gain.setValueAtTime(0.1, now);
+                            gain.gain.linearRampToValueAtTime(0, now + 0.3);
+                            osc.start(now);
+                            osc.stop(now + 0.3);
+                        } else if (audioTheme === 'modern') {
+                            // Soft clean ping
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(523.25, now);
+                            osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.1);
+                            gain.gain.setValueAtTime(0.1, now);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                            osc.start(now);
+                            osc.stop(now + 0.4);
+                        } else {
+                            // Classic Ding
+                            osc.frequency.setValueAtTime(880, now);
+                            osc.frequency.exponentialRampToValueAtTime(1760, now + 0.1);
+                            gain.gain.setValueAtTime(0.05, now);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                            osc.start(now);
+                            osc.stop(now + 0.3);
+                        }
+                    } else if (type === 'error') {
+                        // Buzz
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(150, now);
+                        osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+                        gain.gain.setValueAtTime(0.05, now);
+                        gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
+                        osc.start(now);
+                        osc.stop(now + 0.2);
+                    } else if (type === 'click') {
+                        // Click
+                        osc.frequency.setValueAtTime(800, now);
+                        gain.gain.setValueAtTime(0.015, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+                        osc.start(now);
+                        osc.stop(now + 0.03);
+                    } else {
+                        // Info
+                        osc.frequency.setValueAtTime(440, now);
+                        gain.gain.setValueAtTime(0.03, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                        osc.start(now);
+                        osc.stop(now + 0.1);
+                    }
+                } catch (e) { /* ignore audio errors */ }
+            }
+
+            // Global Click Sound
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('button, a, .btn, .nav-link, input[type="checkbox"], input[type="radio"], select, .card-header')) {
+                    playSound('click');
                 }
-            } catch (e) { /* ignore audio errors */ }
-        }
+            });
 
-        // Global Click Sound
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('button, a, .btn, .nav-link, input[type="checkbox"], input[type="radio"], select, .card-header')) {
-                playSound('click');
-            }
-        });
+            // Global Click Sound
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('button, a, .btn, .nav-link, input[type="checkbox"], input[type="radio"], select, .card-header')) {
+                    playSound('click');
+                }
+            });
 
-        // Global Click Sound
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('button, a, .btn, .nav-link, input[type="checkbox"], input[type="radio"], select, .card-header')) {
-                playSound('click');
-            }
-        });
+            // Helper: Show Toast Notification
+            function showToast(message, type = 'info') {
+                playSound(type);
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `custom-toast ${type}`;
 
-        // Helper: Show Toast Notification
-        function showToast(message, type = 'info') {
-            playSound(type);
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `custom-toast ${type}`;
+                let icon = 'bi-info-circle';
+                let title = '通知';
 
-            let icon = 'bi-info-circle';
-            let title = '通知';
+                if (type === 'success') { icon = 'bi-check-circle-fill text-success'; title = '成功'; }
+                if (type === 'error') { icon = 'bi-x-circle-fill text-danger'; title = '錯誤'; }
 
-            if (type === 'success') { icon = 'bi-check-circle-fill text-success'; title = '成功'; }
-            if (type === 'error') { icon = 'bi-x-circle-fill text-danger'; title = '錯誤'; }
-
-            toast.innerHTML = `
+                toast.innerHTML = `
                 <div class="custom-toast-header">
                     <i class="bi ${icon} me-2 fs-5"></i>
                     <span>${title}</span>
@@ -1755,372 +1773,372 @@
                 </div>
             `;
 
-            container.appendChild(toast);
+                container.appendChild(toast);
 
-            // Trigger animation
-            setTimeout(() => toast.classList.add('show'), 10);
+                // Trigger animation
+                setTimeout(() => toast.classList.add('show'), 10);
 
-            // Auto remove
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-        function nav(id) {
-            // Fade out current page
-            const currentPage = document.querySelector('.page-section[style*="display: block"]');
-            if (currentPage) {
-                currentPage.style.opacity = '0';
-                currentPage.style.transform = 'translateY(10px)';
-            }
-
-            setTimeout(() => {
-                document.querySelectorAll('.page-section').forEach(e => {
-                    e.style.display = 'none';
-                    e.style.opacity = '0';
-                    e.style.transform = 'translateY(10px)';
-                });
-                document.querySelectorAll('.nav-link').forEach(e => e.classList.remove('active'));
-
-                const targetPage = document.getElementById('page-' + id);
-                targetPage.style.display = 'block';
-
-                // Fade in new page
+                // Auto remove
                 setTimeout(() => {
-                    targetPage.style.opacity = '1';
-                    targetPage.style.transform = 'translateY(0)';
-                }, 50);
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+            function nav(id) {
+                // Fade out current page
+                const currentPage = document.querySelector('.page-section[style*="display: block"]');
+                if (currentPage) {
+                    currentPage.style.opacity = '0';
+                    currentPage.style.transform = 'translateY(10px)';
+                }
 
-                document.getElementById('nav-' + id).classList.add('active');
-            }, 150);
+                setTimeout(() => {
+                    document.querySelectorAll('.page-section').forEach(e => {
+                        e.style.display = 'none';
+                        e.style.opacity = '0';
+                        e.style.transform = 'translateY(10px)';
+                    });
+                    document.querySelectorAll('.nav-link').forEach(e => e.classList.remove('active'));
 
-            resetInactivityTimer();
-        }
+                    const targetPage = document.getElementById('page-' + id);
+                    targetPage.style.display = 'block';
 
-        function checkExistingSession() {
-            const session = localStorage.getItem('TMS_SESSION');
-            if (session) {
-                try {
-                    const sessionData = JSON.parse(session);
-                    const now = new Date().getTime();
-                    // Check if session is still valid (within 24 hours)
-                    if (now - sessionData.timestamp < 24 * 60 * 60 * 1000) {
-                        currentUser = sessionData.username;
-                        document.getElementById('login-container').style.display = 'none';
-                        document.getElementById('app-container').style.display = 'block';
-                        document.getElementById('acc_currentUser').value = currentUser;
-                        document.getElementById('acc_newUser').value = currentUser;
-                        init();
-                        return;
+                    // Fade in new page
+                    setTimeout(() => {
+                        targetPage.style.opacity = '1';
+                        targetPage.style.transform = 'translateY(0)';
+                    }, 50);
+
+                    document.getElementById('nav-' + id).classList.add('active');
+                }, 150);
+
+                resetInactivityTimer();
+            }
+
+            function checkExistingSession() {
+                const session = localStorage.getItem('TMS_SESSION');
+                if (session) {
+                    try {
+                        const sessionData = JSON.parse(session);
+                        const now = new Date().getTime();
+                        // Check if session is still valid (within 24 hours)
+                        if (now - sessionData.timestamp < 24 * 60 * 60 * 1000) {
+                            currentUser = sessionData.username;
+                            document.getElementById('login-container').style.display = 'none';
+                            document.getElementById('app-container').style.display = 'block';
+                            document.getElementById('acc_currentUser').value = currentUser;
+                            document.getElementById('acc_newUser').value = currentUser;
+                            init();
+                            return;
+                        }
+                    } catch (e) {
+                        localStorage.removeItem('TMS_SESSION');
                     }
-                } catch (e) {
-                    localStorage.removeItem('TMS_SESSION');
                 }
             }
-        }
 
-        function setupInactivityDetection() {
-            const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-            events.forEach(event => {
-                document.addEventListener(event, resetInactivityTimer, true);
-            });
-            resetInactivityTimer();
-        }
-
-        function resetInactivityTimer() {
-            if (inactivityTimer) clearTimeout(inactivityTimer);
-            inactivityTimer = setTimeout(() => {
-                alert('閒置時間過長，系統將自動登出');
-                logout();
-            }, INACTIVITY_TIMEOUT);
-        }
-
-        function performLogin() {
-            const u = document.getElementById('loginUser').value;
-            const p = document.getElementById('loginPass').value;
-            if (!u || !p) return alert("請輸入帳號與密碼");
-            const btn = document.querySelector('button[onclick="performLogin()"]');
-            btn.innerText = "驗證中..."; btn.disabled = true;
-            google.script.run
-                .withSuccessHandler(res => {
-                    btn.innerText = "登入系統"; btn.disabled = false;
-                    if (res.success) {
-                        currentUser = res.username;
-
-                        // Save session to localStorage
-                        localStorage.setItem('TMS_SESSION', JSON.stringify({
-                            username: currentUser,
-                            timestamp: new Date().getTime()
-                        }));
-
-                        document.getElementById('login-container').style.display = 'none';
-                        document.getElementById('app-container').style.display = 'block';
-                        document.getElementById('acc_currentUser').value = currentUser;
-                        document.getElementById('acc_newUser').value = currentUser;
-                        init();
-                    } else { alert("帳號或密碼錯誤"); document.getElementById('loginPass').value = ''; }
-                })
-                .withFailureHandler(err => {
-                    btn.innerText = "登入系統"; btn.disabled = false;
-                    alert("連線錯誤: " + err);
-                })
-                .checkAdminLogin(u, p);
-        }
-
-        function logout() {
-            localStorage.removeItem('TMS_SESSION');
-            location.reload();
-        }
-
-        function reloadSystem() {
-            showToast('🔄 正在同步雲端資料...', 'info');
-            init();
-        }
-
-        function testConnection() {
-            const start = new Date().getTime();
-            showToast('📡 正在測試連線...', 'info');
-
-            google.script.run
-                .withSuccessHandler(() => {
-                    const end = new Date().getTime();
-                    const diff = end - start;
-                    let quality = '🚀 極佳';
-                    if (diff > 800) quality = '👌 良好';
-                    if (diff > 2000) quality = '⚠️ 稍慢';
-                    if (diff > 5000) quality = '🐢 緩慢';
-
-                    showToast(`✅ 連線正常 (${diff}ms - ${quality})`, 'success');
-                })
-                .withFailureHandler(err => {
-                    showToast('❌ 無法連接伺服器', 'error');
-                })
-                .ping();
-        }
-        function saveAccount() {
-            const oldU = document.getElementById('acc_currentUser').value;
-            const newU = document.getElementById('acc_newUser').value;
-            const newP = document.getElementById('acc_newPass').value;
-            if (!newU || !newP) { showToast("請輸入新的帳號與密碼", 'info'); return; }
-            load(true);
-            google.script.run.withSuccessHandler(res => {
-                load(false);
-                if (res.success) {
-                    showToast("✅ 帳號已更新，請重新登入", 'success');
-                    setTimeout(() => logout(), 2000);
-                } else {
-                    showToast("❌ 修改失敗：" + (res.message || "未知錯誤"), 'error');
-                }
-            }).withFailureHandler(err => {
-                load(false);
-                showToast("❌ 系統錯誤: " + err, 'error');
-            }).updateAdminAccount(oldU, newU, newP);
-        }
-
-        function init() {
-            load(true);
-            google.script.run
-                .withSuccessHandler(d => {
-                    // Robust check: Ensure data integrity
-                    if (!d || !d.people || !d.courses) {
-                        load(false);
-                        showToast('資料載入失敗，請檢查網路或 API', 'error');
-                        return;
-                    }
-                    db = d;
-                    personnelChanges = d.personnelChanges || [];
-                    // Pre-process Ranks
-                    db.ranks = [...new Set(db.people.map(p => p.rank).filter(Boolean))].sort();
-
-                    load(false);
-                    updateFilterOptions();
-
-                    // Init Record Page Cats
-                    const catSelect = document.getElementById('rec_cat');
-                    catSelect.innerHTML = '<option value="">(全部類別)</option>' + db.parentCourses.map(c => `<option value="${c.code}">${c.name}</option>`).join('');
-                    updateRecCourses();
-
-                    renderDash();
-                    renderAudit();
-                    renderRecord();
-                    refreshPersonnelReview(); // Load personnel changes for badge count
-
-
-                    // Populate course filter dropdown
-                    const cFilterParent = document.getElementById('c_filter_parent');
-                    const uniqueParents = [...new Set(db.courses.map(c => c.pCode))];
-                    cFilterParent.innerHTML = '<option value="">全部母課程</option>' + uniqueParents.map(code => {
-                        const parent = db.courses.find(c => c.pCode === code);
-                        return `<option value="${code}">${parent ? parent.pName : code}</option>`;
-                    }).join('');
-
-                    // Populate person filter dropdowns
-                    const pGroupSel = document.getElementById('p_filter_group_sel');
-                    const pRankSel = document.getElementById('p_filter_rank_sel');
-                    const groups = [...new Set(db.people.map(p => p.group))].sort();
-                    const ranks = [...new Set(db.people.map(p => p.rank))].sort();
-                    pGroupSel.innerHTML = '<option value="">全部單位</option>' + groups.map(g => `<option value="${g}">${g}</option>`).join('');
-                    pRankSel.innerHTML = '<option value="">全部職級</option>' + ranks.map(r => `<option value="${r}">${r}</option>`).join('');
-
-                    renderCourseTable();
-                    renderPersonTable();
-
-                    // Preload Training Data (Silent)
-                    loadTrEvents(true);
-                    loadPenalties(true);
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    alert("讀取資料失敗: " + err + "\n請確認 API URL 是否正確，或者網路連線是否正常。");
-                })
-                .getReportData();
-        }
-
-        function updateFilterOptions() {
-            const m = document.getElementById('viewMode').value;
-            const fContainer = document.getElementById('filterContainer');
-            const subContainer = document.getElementById('subFilterContainer');
-            const s = document.getElementById('filterValue');
-            const label = document.getElementById('filterLabel');
-
-            s.innerHTML = '';
-            subContainer.style.display = 'none';
-            fContainer.style.display = 'block';
-
-            if (m === 'group') {
-                label.innerText = "選擇單位";
-                db.groups.forEach(x => s.innerHTML += `<option>${x}</option>`);
-            } else if (m === 'rank') {
-                label.innerText = "選擇職級";
-                db.ranks.forEach(x => s.innerHTML += `<option>${x}</option>`);
-            } else if (m === 'course') {
-                label.innerText = "選擇母課程";
-                db.parentCourses.forEach(x => s.innerHTML += `<option value="${x.code}">${x.name}</option>`);
-                subContainer.style.display = 'block';
-                updateSubFilter(); // Trigget sub filter population
-            } else if (m === 'all') {
-                fContainer.style.display = 'none'; // No primary filter needed
-            }
-        }
-
-        function updateSubFilter() {
-            const pCode = document.getElementById('filterValue').value;
-            const sub = document.getElementById('subFilterValue');
-            sub.innerHTML = '<option value="all">(顯示所有子課程)</option>';
-            const childs = db.courses.filter(c => c.pCode === pCode);
-            childs.forEach(c => sub.innerHTML += `<option value="${c.fullCode}">${c.cName}</option>`);
-        }
-
-        function updateRecCourses() {
-            const cat = document.getElementById('rec_cat').value;
-            const courseSelect = document.getElementById('rec_course');
-            const filtered = (cat ? db.courses.filter(c => c.pCode === cat) : db.courses).filter(c => c.status !== 'Closed');
-            courseSelect.innerHTML = '<option value="">(請選擇課程)</option>' + filtered.map(c => `<option value="${c.fullCode}">${c.cName}</option>`).join('');
-
-            // Trigger UI update
-            onRecCourseChange();
-        }
-
-        function renderDash() {
-            const mode = document.getElementById('viewMode').value;
-            const mainFilter = document.getElementById('filterValue').value;
-            const subFilter = document.getElementById('subFilterValue').value;
-            const st = document.getElementById('statusFilter').value;
-            const k = document.getElementById('dashSearch').value.toLowerCase();
-
-            let targetPeople = [];
-            let targetCourses = [];
-
-            // 1. Determine People Scope
-            if (mode === 'group') {
-                targetPeople = db.people.filter(p => p.group === mainFilter);
-            } else if (mode === 'rank') {
-                targetPeople = db.people.filter(p => p.rank === mainFilter);
-            } else {
-                targetPeople = db.people; // 'all' or 'course' (we check all people for that course)
-            }
-
-            // 2. Determine Course Scope
-            if (mode === 'course') {
-                if (subFilter === 'all') {
-                    // All Child Courses under Parent Code (mainFilter)
-                    targetCourses = db.courses.filter(c => c.pCode === mainFilter);
-                } else {
-                    // Specific Course Mode: One Course, Many People
-                    targetCourses = db.courses.filter(c => c.fullCode === subFilter);
-                }
-            } else {
-                // General Mode: Many People, All Courses (Expensive! Limit needed?)
-                targetCourses = db.courses;
-            }
-
-            let list = [];
-
-            // Optimization: If showing "All People" * "All Courses", this loop is massive (e.g. 500 * 50 = 25000 items).
-            // We should enforce search or limit rendering if range is too big.
-            // For now, we rely on the 200 items slice limit in rendering.
-
-            targetPeople.forEach(p => {
-                // Search Filter: Name, ID, Manager
-                if (k && !p.name.includes(k) && !p.id.includes(k) && (!p.manager || !p.manager.includes(k))) return;
-
-                targetCourses.forEach(c => {
-                    const key = `${p.id}_${c.fullCode}`;
-                    const rec = db.recordMap[key];
-                    const ex = db.exemptSet.includes(key);
-
-                    let status = ex ? 'exempt' : (rec ? 'done' : 'miss');
-                    if (status === 'miss' && !c.isActive) {
-                        status = 'exempt'; // Treat as exempt if course is closed
-                    }
-                    if (st !== 'all' && status !== st) return;
-
-                    list.push({ p, c, rec, status, isClosedExempt: status === 'exempt' && !c.isActive });
+            function setupInactivityDetection() {
+                const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+                events.forEach(event => {
+                    document.addEventListener(event, resetInactivityTimer, true);
                 });
-            });
+                resetInactivityTimer();
+            }
 
-            // Sort
-            list.sort((a, b) => {
-                let valA, valB;
-                if (sortConfig.col === 'status') { valA = a.status; valB = b.status; }
-                else if (sortConfig.col === 'id') { valA = a.p.id; valB = b.p.id; }
-                else if (sortConfig.col === 'name') { valA = a.p.name; valB = b.p.name; }
-                else if (sortConfig.col === 'rank') { valA = a.p.rank; valB = b.p.rank; }
-                else if (sortConfig.col === 'group') { valA = a.p.group; valB = b.p.group; }
-                else { valA = a.p.id; valB = b.p.id; }
+            function resetInactivityTimer() {
+                if (inactivityTimer) clearTimeout(inactivityTimer);
+                inactivityTimer = setTimeout(() => {
+                    alert('閒置時間過長，系統將自動登出');
+                    logout();
+                }, INACTIVITY_TIMEOUT);
+            }
 
-                if (valA < valB) return sortConfig.asc ? -1 : 1;
-                if (valA > valB) return sortConfig.asc ? 1 : -1;
-                return 0;
-            });
+            function performLogin() {
+                const u = document.getElementById('loginUser').value;
+                const p = document.getElementById('loginPass').value;
+                if (!u || !p) return alert("請輸入帳號與密碼");
+                const btn = document.querySelector('button[onclick="performLogin()"]');
+                btn.innerText = "驗證中..."; btn.disabled = true;
+                google.script.run
+                    .withSuccessHandler(res => {
+                        btn.innerText = "登入系統"; btn.disabled = false;
+                        if (res.success) {
+                            currentUser = res.username;
 
-            currentDashData = list;
-            document.getElementById('dashCount').innerText = list.length + ' Data';
+                            // Save session to localStorage
+                            localStorage.setItem('TMS_SESSION', JSON.stringify({
+                                username: currentUser,
+                                timestamp: new Date().getTime()
+                            }));
 
-            const tb = document.getElementById('dashBody');
-            const limit = 200; // Hard render limit for performance
+                            document.getElementById('login-container').style.display = 'none';
+                            document.getElementById('app-container').style.display = 'block';
+                            document.getElementById('acc_currentUser').value = currentUser;
+                            document.getElementById('acc_newUser').value = currentUser;
+                            init();
+                        } else { alert("帳號或密碼錯誤"); document.getElementById('loginPass').value = ''; }
+                    })
+                    .withFailureHandler(err => {
+                        btn.innerText = "登入系統"; btn.disabled = false;
+                        alert("連線錯誤: " + err);
+                    })
+                    .checkAdminLogin(u, p);
+            }
 
-            const html = list.slice(0, limit).map(d => {
-                let statusHtml = '', actionHtml = '';
-                const code = d.c.fullCode;
+            function logout() {
+                localStorage.removeItem('TMS_SESSION');
+                location.reload();
+            }
 
-                if (d.status === 'done') {
-                    statusHtml = `<span class="status-pill pill-done"><i class="bi bi-check-circle-fill"></i> Done</span>`;
-                    actionHtml = `<button class="btn-icon-soft action-revert" title="撤銷完訓" onclick="handleAction(this,'${d.p.id}','${code}','done','completion')"><i class="bi bi-arrow-counterclockwise"></i></button><button class="btn-icon-soft action-exempt" title="設為免訓" onclick="handleAction(this,'${d.p.id}','${code}','done','exemption')"><i class="bi bi-slash-circle"></i></button>`;
-                } else if (d.status === 'exempt') {
-                    if (d.isClosedExempt) {
-                        statusHtml = `<span class="status-pill pill-exempt bg-secondary border-0 text-white" title="課程已關閉，自動免修"><i class="bi bi-archive-fill"></i> Closed</span>`;
-                        actionHtml = `<span class="text-muted small">已關閉</span>`;
+            function reloadSystem() {
+                showToast('🔄 正在同步雲端資料...', 'info');
+                init();
+            }
+
+            function testConnection() {
+                const start = new Date().getTime();
+                showToast('📡 正在測試連線...', 'info');
+
+                google.script.run
+                    .withSuccessHandler(() => {
+                        const end = new Date().getTime();
+                        const diff = end - start;
+                        let quality = '🚀 極佳';
+                        if (diff > 800) quality = '👌 良好';
+                        if (diff > 2000) quality = '⚠️ 稍慢';
+                        if (diff > 5000) quality = '🐢 緩慢';
+
+                        showToast(`✅ 連線正常 (${diff}ms - ${quality})`, 'success');
+                    })
+                    .withFailureHandler(err => {
+                        showToast('❌ 無法連接伺服器', 'error');
+                    })
+                    .ping();
+            }
+            function saveAccount() {
+                const oldU = document.getElementById('acc_currentUser').value;
+                const newU = document.getElementById('acc_newUser').value;
+                const newP = document.getElementById('acc_newPass').value;
+                if (!newU || !newP) { showToast("請輸入新的帳號與密碼", 'info'); return; }
+                load(true);
+                google.script.run.withSuccessHandler(res => {
+                    load(false);
+                    if (res.success) {
+                        showToast("✅ 帳號已更新，請重新登入", 'success');
+                        setTimeout(() => logout(), 2000);
                     } else {
-                        statusHtml = `<span class="status-pill pill-exempt"><i class="bi bi-slash-circle"></i> Exempt</span>`;
-                        actionHtml = `<button class="btn-icon-soft action-revert" title="撤銷免訓" onclick="handleAction(this,'${d.p.id}','${code}','exempt','exemption')"><i class="bi bi-arrow-counterclockwise"></i></button>`;
+                        showToast("❌ 修改失敗：" + (res.message || "未知錯誤"), 'error');
                     }
+                }).withFailureHandler(err => {
+                    load(false);
+                    showToast("❌ 系統錯誤: " + err, 'error');
+                }).updateAdminAccount(oldU, newU, newP);
+            }
+
+            function init() {
+                load(true);
+                google.script.run
+                    .withSuccessHandler(d => {
+                        // Robust check: Ensure data integrity
+                        if (!d || !d.people || !d.courses) {
+                            load(false);
+                            showToast('資料載入失敗，請檢查網路或 API', 'error');
+                            return;
+                        }
+                        db = d;
+                        personnelChanges = d.personnelChanges || [];
+                        // Pre-process Ranks
+                        db.ranks = [...new Set(db.people.map(p => p.rank).filter(Boolean))].sort();
+
+                        load(false);
+                        updateFilterOptions();
+
+                        // Init Record Page Cats
+                        const catSelect = document.getElementById('rec_cat');
+                        catSelect.innerHTML = '<option value="">(全部類別)</option>' + db.parentCourses.map(c => `<option value="${c.code}">${c.name}</option>`).join('');
+                        updateRecCourses();
+
+                        renderDash();
+                        renderAudit();
+                        renderRecord();
+                        refreshPersonnelReview(); // Load personnel changes for badge count
+
+
+                        // Populate course filter dropdown
+                        const cFilterParent = document.getElementById('c_filter_parent');
+                        const uniqueParents = [...new Set(db.courses.map(c => c.pCode))];
+                        cFilterParent.innerHTML = '<option value="">全部母課程</option>' + uniqueParents.map(code => {
+                            const parent = db.courses.find(c => c.pCode === code);
+                            return `<option value="${code}">${parent ? parent.pName : code}</option>`;
+                        }).join('');
+
+                        // Populate person filter dropdowns
+                        const pGroupSel = document.getElementById('p_filter_group_sel');
+                        const pRankSel = document.getElementById('p_filter_rank_sel');
+                        const groups = [...new Set(db.people.map(p => p.group))].sort();
+                        const ranks = [...new Set(db.people.map(p => p.rank))].sort();
+                        pGroupSel.innerHTML = '<option value="">全部單位</option>' + groups.map(g => `<option value="${g}">${g}</option>`).join('');
+                        pRankSel.innerHTML = '<option value="">全部職級</option>' + ranks.map(r => `<option value="${r}">${r}</option>`).join('');
+
+                        renderCourseTable();
+                        renderPersonTable();
+
+                        // Preload Training Data (Silent)
+                        loadTrEvents(true);
+                        loadPenalties(true);
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        alert("讀取資料失敗: " + err + "\n請確認 API URL 是否正確，或者網路連線是否正常。");
+                    })
+                    .getReportData();
+            }
+
+            function updateFilterOptions() {
+                const m = document.getElementById('viewMode').value;
+                const fContainer = document.getElementById('filterContainer');
+                const subContainer = document.getElementById('subFilterContainer');
+                const s = document.getElementById('filterValue');
+                const label = document.getElementById('filterLabel');
+
+                s.innerHTML = '';
+                subContainer.style.display = 'none';
+                fContainer.style.display = 'block';
+
+                if (m === 'group') {
+                    label.innerText = "選擇單位";
+                    db.groups.forEach(x => s.innerHTML += `<option>${x}</option>`);
+                } else if (m === 'rank') {
+                    label.innerText = "選擇職級";
+                    db.ranks.forEach(x => s.innerHTML += `<option>${x}</option>`);
+                } else if (m === 'course') {
+                    label.innerText = "選擇母課程";
+                    db.parentCourses.forEach(x => s.innerHTML += `<option value="${x.code}">${x.name}</option>`);
+                    subContainer.style.display = 'block';
+                    updateSubFilter(); // Trigget sub filter population
+                } else if (m === 'all') {
+                    fContainer.style.display = 'none'; // No primary filter needed
+                }
+            }
+
+            function updateSubFilter() {
+                const pCode = document.getElementById('filterValue').value;
+                const sub = document.getElementById('subFilterValue');
+                sub.innerHTML = '<option value="all">(顯示所有子課程)</option>';
+                const childs = db.courses.filter(c => c.pCode === pCode);
+                childs.forEach(c => sub.innerHTML += `<option value="${c.fullCode}">${c.cName}</option>`);
+            }
+
+            function updateRecCourses() {
+                const cat = document.getElementById('rec_cat').value;
+                const courseSelect = document.getElementById('rec_course');
+                const filtered = (cat ? db.courses.filter(c => c.pCode === cat) : db.courses).filter(c => c.status !== 'Closed');
+                courseSelect.innerHTML = '<option value="">(請選擇課程)</option>' + filtered.map(c => `<option value="${c.fullCode}">${c.cName}</option>`).join('');
+
+                // Trigger UI update
+                onRecCourseChange();
+            }
+
+            function renderDash() {
+                const mode = document.getElementById('viewMode').value;
+                const mainFilter = document.getElementById('filterValue').value;
+                const subFilter = document.getElementById('subFilterValue').value;
+                const st = document.getElementById('statusFilter').value;
+                const k = document.getElementById('dashSearch').value.toLowerCase();
+
+                let targetPeople = [];
+                let targetCourses = [];
+
+                // 1. Determine People Scope
+                if (mode === 'group') {
+                    targetPeople = db.people.filter(p => p.group === mainFilter);
+                } else if (mode === 'rank') {
+                    targetPeople = db.people.filter(p => p.rank === mainFilter);
                 } else {
-                    statusHtml = `<span class="status-pill pill-miss"><i class="bi bi-exclamation-circle"></i> Missing</span>`;
-                    actionHtml = `<button class="btn-icon-soft action-done" title="設為完成" onclick="handleAction(this,'${d.p.id}','${code}','miss','completion')"><i class="bi bi-check-lg"></i></button><button class="btn-icon-soft action-exempt" title="設為免訓" onclick="handleAction(this,'${d.p.id}','${code}','miss','exemption')"><i class="bi bi-slash-circle"></i></button>`;
+                    targetPeople = db.people; // 'all' or 'course' (we check all people for that course)
                 }
 
-                return `<tr class="align-middle text-nowrap">
+                // 2. Determine Course Scope
+                if (mode === 'course') {
+                    if (subFilter === 'all') {
+                        // All Child Courses under Parent Code (mainFilter)
+                        targetCourses = db.courses.filter(c => c.pCode === mainFilter);
+                    } else {
+                        // Specific Course Mode: One Course, Many People
+                        targetCourses = db.courses.filter(c => c.fullCode === subFilter);
+                    }
+                } else {
+                    // General Mode: Many People, All Courses (Expensive! Limit needed?)
+                    targetCourses = db.courses;
+                }
+
+                let list = [];
+
+                // Optimization: If showing "All People" * "All Courses", this loop is massive (e.g. 500 * 50 = 25000 items).
+                // We should enforce search or limit rendering if range is too big.
+                // For now, we rely on the 200 items slice limit in rendering.
+
+                targetPeople.forEach(p => {
+                    // Search Filter: Name, ID, Manager
+                    if (k && !p.name.includes(k) && !p.id.includes(k) && (!p.manager || !p.manager.includes(k))) return;
+
+                    targetCourses.forEach(c => {
+                        const key = `${p.id}_${c.fullCode}`;
+                        const rec = db.recordMap[key];
+                        const ex = db.exemptSet.includes(key);
+
+                        let status = ex ? 'exempt' : (rec ? 'done' : 'miss');
+                        if (status === 'miss' && !c.isActive) {
+                            status = 'exempt'; // Treat as exempt if course is closed
+                        }
+                        if (st !== 'all' && status !== st) return;
+
+                        list.push({ p, c, rec, status, isClosedExempt: status === 'exempt' && !c.isActive });
+                    });
+                });
+
+                // Sort
+                list.sort((a, b) => {
+                    let valA, valB;
+                    if (sortConfig.col === 'status') { valA = a.status; valB = b.status; }
+                    else if (sortConfig.col === 'id') { valA = a.p.id; valB = b.p.id; }
+                    else if (sortConfig.col === 'name') { valA = a.p.name; valB = b.p.name; }
+                    else if (sortConfig.col === 'rank') { valA = a.p.rank; valB = b.p.rank; }
+                    else if (sortConfig.col === 'group') { valA = a.p.group; valB = b.p.group; }
+                    else { valA = a.p.id; valB = b.p.id; }
+
+                    if (valA < valB) return sortConfig.asc ? -1 : 1;
+                    if (valA > valB) return sortConfig.asc ? 1 : -1;
+                    return 0;
+                });
+
+                currentDashData = list;
+                document.getElementById('dashCount').innerText = list.length + ' Data';
+
+                const tb = document.getElementById('dashBody');
+                const limit = 200; // Hard render limit for performance
+
+                const html = list.slice(0, limit).map(d => {
+                    let statusHtml = '', actionHtml = '';
+                    const code = d.c.fullCode;
+
+                    if (d.status === 'done') {
+                        statusHtml = `<span class="status-pill pill-done"><i class="bi bi-check-circle-fill"></i> Done</span>`;
+                        actionHtml = `<button class="btn-icon-soft action-revert" title="撤銷完訓" onclick="handleAction(this,'${d.p.id}','${code}','done','completion')"><i class="bi bi-arrow-counterclockwise"></i></button><button class="btn-icon-soft action-exempt" title="設為免訓" onclick="handleAction(this,'${d.p.id}','${code}','done','exemption')"><i class="bi bi-slash-circle"></i></button>`;
+                    } else if (d.status === 'exempt') {
+                        if (d.isClosedExempt) {
+                            statusHtml = `<span class="status-pill pill-exempt bg-secondary border-0 text-white" title="課程已關閉，自動免修"><i class="bi bi-archive-fill"></i> Closed</span>`;
+                            actionHtml = `<span class="text-muted small">已關閉</span>`;
+                        } else {
+                            statusHtml = `<span class="status-pill pill-exempt"><i class="bi bi-slash-circle"></i> Exempt</span>`;
+                            actionHtml = `<button class="btn-icon-soft action-revert" title="撤銷免訓" onclick="handleAction(this,'${d.p.id}','${code}','exempt','exemption')"><i class="bi bi-arrow-counterclockwise"></i></button>`;
+                        }
+                    } else {
+                        statusHtml = `<span class="status-pill pill-miss"><i class="bi bi-exclamation-circle"></i> Missing</span>`;
+                        actionHtml = `<button class="btn-icon-soft action-done" title="設為完成" onclick="handleAction(this,'${d.p.id}','${code}','miss','completion')"><i class="bi bi-check-lg"></i></button><button class="btn-icon-soft action-exempt" title="設為免訓" onclick="handleAction(this,'${d.p.id}','${code}','miss','exemption')"><i class="bi bi-slash-circle"></i></button>`;
+                    }
+
+                    return `<tr class="align-middle text-nowrap">
                     <td>${d.p.id}</td>
                     <td class="fw-bold">${d.p.name}</td>
                     <td>${d.p.rank}</td>
@@ -2129,211 +2147,224 @@
                     <td><small class="text-muted">${d.c.fullCode}</small><br>${d.c.cName}</td>
                     <td>${statusHtml}</td>
                     <td>${d.rec ? d.rec.date : '-'}</td>
+                    <td style="font-size: 0.8rem; font-family: monospace;">${d.rec && d.rec.time ? d.rec.time : '-'}</td>
                     <td>${d.rec ? d.rec.method : '-'}</td>
                     <td class="text-center">${actionHtml}</td>
                 </tr>`;
-            }).join('');
+                }).join('');
 
-            tb.innerHTML = html;
-            if (list.length > limit) {
-                tb.innerHTML += `<tr><td colspan="10" class="text-center text-muted p-3">... 還有 ${list.length - limit} 筆資料 (請使用搜尋縮小範圍) ...</td></tr>`;
-            }
-        }
-        function doSort(c) { if (sortConfig.col === c) sortConfig.asc = !sortConfig.asc; else { sortConfig.col = c; sortConfig.asc = true; } renderDash(); }
-
-        function handleAction(btn, empId, courseCode, currentStatus, type) {
-            if (btn.style.pointerEvents === 'none') return;
-            btn.style.opacity = "0.5"; btn.style.pointerEvents = "none";
-            const key = `${empId}_${courseCode}`; const today = new Date().toISOString().split('T')[0].replace(/-/g, '/');
-            if (type === 'completion') {
-                const isComplete = (currentStatus !== 'done'); // Fix: Restore definition
-                if (isComplete) { db.recordMap[key] = { date: today, method: '補登' }; const exIdx = db.exemptSet.indexOf(key); if (exIdx > -1) db.exemptSet.splice(exIdx, 1); } else { delete db.recordMap[key]; }
-                google.script.run.withSuccessHandler(res => { if (!res.success) { showToast('存檔失敗', 'error'); init(); } else { showToast(isComplete ? '✅ 已補登完訓' : '已取消完訓', 'success'); } }).toggleCompletion(empId, courseCode, isComplete);
-            } else if (type === 'exemption') {
-                const isExempt = (currentStatus !== 'exempt');
-                if (isExempt) { if (!db.exemptSet.includes(key)) db.exemptSet.push(key); } else { const exIdx = db.exemptSet.indexOf(key); if (exIdx > -1) db.exemptSet.splice(exIdx, 1); }
-                google.script.run.withSuccessHandler(res => { if (!res.success) { showToast('存檔失敗', 'error'); init(); } else { showToast(isExempt ? '✅ 已設為免修' : '已取消免修', 'success'); } }).toggleExemption(empId, courseCode, isExempt);
-            }
-            renderDash();
-        }
-
-
-
-        // Tab switching logic for Audit page
-        function switchAuditTab(tabId) {
-            // Hide all tab panes by default
-            const panes = document.querySelectorAll('#auditTabContent .tab-pane');
-            panes.forEach(el => {
-                el.classList.remove('show', 'active');
-                // Force hide to ensure no ghosts
-                el.style.display = 'none';
-            });
-
-            // Deactivate all tab buttons
-            const buttons = document.querySelectorAll('#auditTabs .nav-link');
-            buttons.forEach(el => {
-                el.classList.remove('active');
-            });
-
-            // Activate target tab button
-            const targetBtn = document.getElementById(tabId + '-tab');
-            if (targetBtn) targetBtn.classList.add('active');
-
-            // Show target pane
-            const targetPaneId = tabId === 'training' ? 'training-audit' : 'personnel-audit';
-            const targetPane = document.getElementById(targetPaneId);
-            if (targetPane) {
-                targetPane.classList.add('show', 'active');
-                targetPane.style.display = 'block'; // Force display
-            }
-
-            // Logic specific to each tab
-            if (tabId === 'personnel') {
-                refreshPersonnelReview();
-            }
-        }
-
-        function renderAudit() {
-            const list = db.auditList || []; const tb = document.getElementById('auditBody');
-            if (list.length === 0) tb.innerHTML = '<tr><td colspan="8" class="text-center text-muted p-4">目前沒有待確認的資料</td></tr>';
-            else tb.innerHTML = list.map(r => `<tr><td>${r.timestamp.split('T')[0]}</td><td>${r.empId}</td><td>${r.empName}</td><td>${r.courseCode}</td><td>${r.finishDate}</td><td>${r.filler}</td><td>${r.method}</td><td><button class="btn btn-sm btn-elegant me-1" onclick="doAudit('${r.rowIndex}', 'approve', '${r.empId}', '${r.courseCode}', '${r.finishDate}', '${r.method}')">准</button><button class="btn btn-sm btn-minimal" onclick="doAudit('${r.rowIndex}', 'reject')">駁</button></td></tr>`).join('');
-
-            // Update badges
-            updateAuditBadges();
-        }
-
-        function updateAuditBadges() {
-            const trainingCount = (db.auditList || []).length;
-            const personnelCount = personnelChanges ? personnelChanges.filter(c => c.status === 'pending').length : 0;
-            const totalCount = trainingCount + personnelCount;
-
-            // Sidebar badge (total)
-            const auditBadge = document.getElementById('auditBadge');
-            auditBadge.innerText = totalCount;
-            auditBadge.style.display = totalCount ? 'inline' : 'none';
-
-            // Training tab badge
-            const trainingBadge = document.getElementById('trainingAuditBadge');
-            if (trainingBadge) {
-                trainingBadge.innerText = trainingCount;
-                trainingBadge.style.display = trainingCount ? 'inline-block' : 'none';
-            }
-
-            // Personnel tab badge
-            const personnelBadge = document.getElementById('personnelAuditBadge');
-            if (personnelBadge) {
-                personnelBadge.innerText = personnelCount;
-                personnelBadge.style.display = personnelCount ? 'inline-block' : 'none';
-            }
-        }
-        function doAudit(rowIndex, action, empId, courseCode, finishDate, method) {
-            const targetIdx = Number(rowIndex);
-            db.auditList = db.auditList.filter(r => r.rowIndex !== targetIdx);
-            if (action === 'approve') {
-                const key = `${empId}_${courseCode}`;
-                db.recordMap[key] = { date: finishDate.replace(/-/g, '/'), method: method };
-                const exIdx = db.exemptSet.indexOf(key);
-                if (exIdx > -1) db.exemptSet.splice(exIdx, 1);
-            }
-            renderAudit();
-            google.script.run
-                .withSuccessHandler(res => {
-                    if (res.success) {
-                        showToast(action === 'approve' ? '✅ 已核准放行' : '✅ 已駁回', 'success');
-                    } else {
-                        showToast('❌ 操作失敗', 'error');
-                        init(); // Reload on error to sync state
-                    }
-                })
-                .withFailureHandler(err => {
-                    showToast('❌ 系統錯誤: ' + err, 'error');
-                    init();
-                })
-                .processAudit(rowIndex, action, { empId, courseCode, finishDate, method });
-        }
-
-        function openExportModal() { exportM.show(); }
-        function selectExport(t) { exportType = t; document.querySelectorAll('.export-option').forEach(e => e.classList.remove('selected')); document.getElementById('opt-' + t).classList.add('selected'); document.getElementById('pdf-options').style.display = t === 'pdf' ? 'block' : 'none'; }
-        function executeExport() {
-            // ★ 新增：讀取列印範圍 (statusFilter)
-            const statusFilter = document.querySelector('input[name="exportStatus"]:checked').value;
-
-            if (exportType === 'excel') {
-                let dataToExport = currentDashData;
-                // ★ 新增：Excel 前端過濾
-                if (statusFilter !== 'all') {
-                    dataToExport = currentDashData.filter(d => d.status === statusFilter);
+                tb.innerHTML = html;
+                if (list.length > limit) {
+                    tb.innerHTML += `<tr><td colspan="10" class="text-center text-muted p-3">... 還有 ${list.length - limit} 筆資料 (請使用搜尋縮小範圍) ...</td></tr>`;
                 }
-                if (dataToExport.length === 0) return alert("沒有符合條件的資料可匯出");
-
-                const wb = XLSX.utils.book_new(), data = dataToExport.map(d => ({ 'ID': d.p.id, 'Name': d.p.name, 'Group': d.p.group, 'Course': d.c.cName, 'Status': d.status, 'Date': d.rec ? d.rec.date : '', 'Method': d.rec ? d.rec.method : '' }));
-                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Data"); XLSX.writeFile(wb, "Training_Report.xlsx"); exportM.hide();
-            } else {
-                load(true);
-                google.script.run.withSuccessHandler(r => { load(false); exportM.hide(); if (r.error) return alert(r.error); let a = document.createElement('a'); a.href = "data:application/pdf;base64," + r.base64; a.download = r.filename; a.click(); })
-                    // ★ 新增：傳送 statusFilter 給後端
-                    .generatePDF({
-                        type: 'dashboard',
-                        mode: document.getElementById('viewMode').value,
-                        val: document.getElementById('filterValue').value,
-                        subFilter: document.getElementById('subFilterValue').value,
-                        search: document.getElementById('dashSearch').value,
-                        title: document.getElementById('exportTitle').value,
-                        showStats: document.getElementById('printStats').checked,
-                        showSign: document.getElementById('printSign').checked,
-                        statusFilter: statusFilter
-                    });
             }
-        }
+            function doSort(c) { if (sortConfig.col === c) sortConfig.asc = !sortConfig.asc; else { sortConfig.col = c; sortConfig.asc = true; } renderDash(); }
 
-        function searchHistory() {
-            const k = document.getElementById('histInput').value.trim();
-            if (!k) return;
-            load(true);
-            google.script.run
-                .withSuccessHandler(r => {
-                    load(false);
-                    if (!r.found) { showToast('查無此人 (Not Found)', 'error'); return; }
-                    document.getElementById('histResult').style.display = 'block';
-                    document.getElementById('h_name').innerText = r.person.name;
-                    document.getElementById('h_info').innerText = r.person.id;
-                    document.getElementById('histTableBody').innerHTML = r.history
-                        .filter(h => h.statusRaw === 'done')
-                        .map(h => `<tr><td>${h.code}</td><td>${h.name}</td><td>${h.pName}</td><td><span class="status-pill pill-done">Done</span></td><td>${h.date}</td><td>${h.method}</td></tr>`)
-                        .join('');
-                })
-                .withFailureHandler(e => { load(false); showToast('查詢失敗: ' + e, 'error'); })
-                .getPersonHistory(k);
-        }
-        function printHistoryPDF() { const n = document.getElementById('h_info').innerText; if (n) google.script.run.withSuccessHandler(r => { let a = document.createElement('a'); a.href = "data:application/pdf;base64," + r.base64; a.download = r.filename; a.click(); }).generatePDF({ type: 'individual', id: n }); }
-        function renderRecord() {
-            // Populate course category dropdown
-            const catSel = document.getElementById('rec_cat');
-            const uniqueParents = [...new Set(db.courses.map(c => c.pCode))];
-            catSel.innerHTML = '<option value="">全部類別</option>' + uniqueParents.map(code => {
-                const parent = db.courses.find(c => c.pCode === code);
-                return `<option value="${code}">${parent ? parent.pName : code}</option>`;
-            }).join('');
+            function handleAction(btn, empId, courseCode, currentStatus, type) {
+                if (btn.style.pointerEvents === 'none') return;
+                btn.style.opacity = "0.5"; btn.style.pointerEvents = "none";
+                const key = `${empId}_${courseCode}`; const today = new Date().toISOString().split('T')[0].replace(/-/g, '/');
+                if (type === 'completion') {
+                    const isComplete = (currentStatus !== 'done'); // Fix: Restore definition
+                    if (isComplete) { db.recordMap[key] = { date: today, method: '補登' }; const exIdx = db.exemptSet.indexOf(key); if (exIdx > -1) db.exemptSet.splice(exIdx, 1); } else { delete db.recordMap[key]; }
+                    google.script.run.withSuccessHandler(res => { if (!res.success) { showToast('存檔失敗', 'error'); init(); } else { showToast(isComplete ? '✅ 已補登完訓' : '已取消完訓', 'success'); } }).toggleCompletion(empId, courseCode, isComplete);
+                } else if (type === 'exemption') {
+                    const isExempt = (currentStatus !== 'exempt');
+                    if (isExempt) { if (!db.exemptSet.includes(key)) db.exemptSet.push(key); } else { const exIdx = db.exemptSet.indexOf(key); if (exIdx > -1) db.exemptSet.splice(exIdx, 1); }
+                    google.script.run.withSuccessHandler(res => { if (!res.success) { showToast('存檔失敗', 'error'); init(); } else { showToast(isExempt ? '✅ 已設為免修' : '已取消免修', 'success'); } }).toggleExemption(empId, courseCode, isExempt);
+                }
+                renderDash();
+            }
 
-            // Populate all courses initially
-            updateRecCourses();
-        }
-        // function renderCheckList(f) { ... } // REPLACED BELOW
-        function filterCheckList(v) { renderCheckList(v); }
-        // function toggleAllCheck() { ... } // REPLACED BELOW
-        function renderCourseTable() {
-            const parentFilter = document.getElementById('c_filter_parent').value;
-            const searchText = document.getElementById('c_filter_search').value.toLowerCase();
 
-            document.getElementById('courseBody').innerHTML = db.courses.filter(c => {
-                const matchParent = !parentFilter || c.pCode === parentFilter;
-                const matchSearch = !searchText ||
-                    c.pCode.toLowerCase().includes(searchText) ||
-                    c.pName.toLowerCase().includes(searchText) ||
-                    c.cCode.toLowerCase().includes(searchText) ||
-                    c.cName.toLowerCase().includes(searchText);
-                return matchParent && matchSearch;
-            }).map(c => `
+
+            // Tab switching logic for Audit page
+            function switchAuditTab(tabId) {
+                // Hide all tab panes by default
+                const panes = document.querySelectorAll('#auditTabContent .tab-pane');
+                panes.forEach(el => {
+                    el.classList.remove('show', 'active');
+                    // Force hide to ensure no ghosts
+                    el.style.display = 'none';
+                });
+
+                // Deactivate all tab buttons
+                const buttons = document.querySelectorAll('#auditTabs .nav-link');
+                buttons.forEach(el => {
+                    el.classList.remove('active');
+                });
+
+                // Activate target tab button
+                const targetBtn = document.getElementById(tabId + '-tab');
+                if (targetBtn) targetBtn.classList.add('active');
+
+                // Show target pane
+                const targetPaneId = tabId === 'training' ? 'training-audit' : 'personnel-audit';
+                const targetPane = document.getElementById(targetPaneId);
+                if (targetPane) {
+                    targetPane.classList.add('show', 'active');
+                    targetPane.style.display = 'block'; // Force display
+                }
+
+                // Logic specific to each tab
+                if (tabId === 'personnel') {
+                    refreshPersonnelReview();
+                }
+            }
+
+            function renderAudit() {
+                const list = db.auditList || []; const tb = document.getElementById('auditBody');
+                if (list.length === 0) tb.innerHTML = '<tr><td colspan="8" class="text-center text-muted p-4">目前沒有待確認的資料</td></tr>';
+                else tb.innerHTML = list.map(r => `<tr><td>${r.timestamp.split('T')[0]}</td><td>${r.empId}</td><td>${r.empName}</td><td>${r.courseCode}</td><td>${r.finishDate}</td><td>${r.filler}</td><td>${r.method}</td><td><button class="btn btn-sm btn-elegant me-1" onclick="doAudit('${r.rowIndex}', 'approve', '${r.empId}', '${r.courseCode}', '${r.finishDate}', '${r.method}')">准</button><button class="btn btn-sm btn-minimal" onclick="doAudit('${r.rowIndex}', 'reject')">駁</button></td></tr>`).join('');
+
+                // Update badges
+                updateAuditBadges();
+            }
+
+            function updateAuditBadges() {
+                const trainingCount = (db.auditList || []).length;
+                const personnelCount = personnelChanges ? personnelChanges.filter(c => c.status === 'pending').length : 0;
+                const totalCount = trainingCount + personnelCount;
+
+                // Sidebar badge (total)
+                const auditBadge = document.getElementById('auditBadge');
+                auditBadge.innerText = totalCount;
+                auditBadge.style.display = totalCount ? 'inline' : 'none';
+
+                // Training tab badge
+                const trainingBadge = document.getElementById('trainingAuditBadge');
+                if (trainingBadge) {
+                    trainingBadge.innerText = trainingCount;
+                    trainingBadge.style.display = trainingCount ? 'inline-block' : 'none';
+                }
+
+                // Personnel tab badge
+                const personnelBadge = document.getElementById('personnelAuditBadge');
+                if (personnelBadge) {
+                    personnelBadge.innerText = personnelCount;
+                    personnelBadge.style.display = personnelCount ? 'inline-block' : 'none';
+                }
+            }
+            function doAudit(rowIndex, action, empId, courseCode, finishDate, method) {
+                const targetIdx = Number(rowIndex);
+                db.auditList = db.auditList.filter(r => r.rowIndex !== targetIdx);
+                if (action === 'approve') {
+                    const key = `${empId}_${courseCode}`;
+                    db.recordMap[key] = { date: finishDate.replace(/-/g, '/'), method: method };
+                    const exIdx = db.exemptSet.indexOf(key);
+                    if (exIdx > -1) db.exemptSet.splice(exIdx, 1);
+                }
+                renderAudit();
+                google.script.run
+                    .withSuccessHandler(res => {
+                        if (res.success) {
+                            showToast(action === 'approve' ? '✅ 已核准放行' : '✅ 已駁回', 'success');
+                        } else {
+                            showToast('❌ 操作失敗', 'error');
+                            init(); // Reload on error to sync state
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        showToast('❌ 系統錯誤: ' + err, 'error');
+                        init();
+                    })
+                    .processAudit(rowIndex, action, { empId, courseCode, finishDate, method });
+            }
+
+            function openExportModal() { exportM.show(); }
+            function selectExport(t) { exportType = t; document.querySelectorAll('.export-option').forEach(e => e.classList.remove('selected')); document.getElementById('opt-' + t).classList.add('selected'); document.getElementById('pdf-options').style.display = t === 'pdf' ? 'block' : 'none'; }
+            function executeExport() {
+                // ★ 新增：讀取列印範圍 (statusFilter)
+                const statusFilter = document.querySelector('input[name="exportStatus"]:checked').value;
+
+                if (exportType === 'excel') {
+                    let dataToExport = currentDashData;
+                    // ★ 新增：Excel 前端過濾
+                    if (statusFilter !== 'all') {
+                        dataToExport = currentDashData.filter(d => d.status === statusFilter);
+                    }
+                    if (dataToExport.length === 0) return alert("沒有符合條件的資料可匯出");
+
+                    const wb = XLSX.utils.book_new(), data = dataToExport.map(d => ({
+                        'AGCODE': d.p.id,
+                        '姓名': d.p.name,
+                        '職級': d.p.rank,
+                        '單位': d.p.group,
+                        '直屬主管': d.p.manager || '',
+                        '課程代號': d.c.fullCode,
+                        '課程名稱': d.c.cName,
+                        '完訓狀態': d.status === 'done' ? '已完訓' : (d.status === 'exempt' ? '免訓' : '未完訓'),
+                        '日期': d.rec ? d.rec.date : '',
+                        '時間': d.rec && d.rec.time ? d.rec.time : '',
+                        '方式': d.rec ? d.rec.method : ''
+                    }));
+                    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Data"); XLSX.writeFile(wb, "Training_Report_" + statusFilter + ".xlsx"); exportM.hide();
+                } else {
+                    load(true);
+                    google.script.run.withSuccessHandler(r => { load(false); exportM.hide(); if (r.error) return alert(r.error); let a = document.createElement('a'); a.href = "data:application/pdf;base64," + r.base64; a.download = r.filename; a.click(); })
+                        // ★ 新增：傳送 statusFilter 給後端
+                        .generatePDF({
+                            type: 'dashboard',
+                            mode: document.getElementById('viewMode').value,
+                            val: document.getElementById('filterValue').value,
+                            subFilter: document.getElementById('subFilterValue').value,
+                            search: document.getElementById('dashSearch').value,
+                            title: document.getElementById('exportTitle').value,
+                            showStats: document.getElementById('printStats').checked,
+                            showSign: document.getElementById('printSign').checked,
+                            statusFilter: statusFilter
+                        });
+                }
+            }
+
+            function searchHistory() {
+                const k = document.getElementById('histInput').value.trim();
+                if (!k) return;
+                load(true);
+                google.script.run
+                    .withSuccessHandler(r => {
+                        load(false);
+                        if (!r.found) { showToast('查無此人 (Not Found)', 'error'); return; }
+                        document.getElementById('histResult').style.display = 'block';
+                        document.getElementById('h_name').innerText = r.person.name;
+                        document.getElementById('h_info').innerText = r.person.id;
+                        document.getElementById('histTableBody').innerHTML = r.history
+                            .filter(h => h.statusRaw === 'done')
+                            .map(h => `<tr><td>${h.code}</td><td>${h.name}</td><td>${h.pName}</td><td><span class="status-pill pill-done">Done</span></td><td>${h.date}</td><td>${h.method}</td></tr>`)
+                            .join('');
+                    })
+                    .withFailureHandler(e => { load(false); showToast('查詢失敗: ' + e, 'error'); })
+                    .getPersonHistory(k);
+            }
+            function printHistoryPDF() { const n = document.getElementById('h_info').innerText; if (n) google.script.run.withSuccessHandler(r => { let a = document.createElement('a'); a.href = "data:application/pdf;base64," + r.base64; a.download = r.filename; a.click(); }).generatePDF({ type: 'individual', id: n }); }
+            function renderRecord() {
+                // Populate course category dropdown
+                const catSel = document.getElementById('rec_cat');
+                const uniqueParents = [...new Set(db.courses.map(c => c.pCode))];
+                catSel.innerHTML = '<option value="">全部類別</option>' + uniqueParents.map(code => {
+                    const parent = db.courses.find(c => c.pCode === code);
+                    return `<option value="${code}">${parent ? parent.pName : code}</option>`;
+                }).join('');
+
+                // Populate all courses initially
+                updateRecCourses();
+            }
+            // function renderCheckList(f) { ... } // REPLACED BELOW
+            function filterCheckList(v) { renderCheckList(v); }
+            // function toggleAllCheck() { ... } // REPLACED BELOW
+            function renderCourseTable() {
+                const parentFilter = document.getElementById('c_filter_parent').value;
+                const searchText = document.getElementById('c_filter_search').value.toLowerCase();
+
+                document.getElementById('courseBody').innerHTML = db.courses.filter(c => {
+                    const matchParent = !parentFilter || c.pCode === parentFilter;
+                    const matchSearch = !searchText ||
+                        c.pCode.toLowerCase().includes(searchText) ||
+                        c.pName.toLowerCase().includes(searchText) ||
+                        c.cCode.toLowerCase().includes(searchText) ||
+                        c.cName.toLowerCase().includes(searchText);
+                    return matchParent && matchSearch;
+                }).map(c => `
                 <tr class="${!c.isActive ? 'text-muted bg-light' : ''}">
                     <td>${c.pCode}</td>
                     <td>${c.pName}</td>
@@ -2348,239 +2379,239 @@
                         </div>
                     </td>
                 </tr>`).join('');
-        }
-
-        function toggleCourseActive(idx, currentActive) {
-            const isTrue = String(currentActive) === 'true';
-            const newState = !isTrue;
-            // Optimistic UI: Find course and update local state
-            const course = db.courses.find(c => c.rowIndex == idx);
-            if (course) {
-                course.isActive = newState;
-                course.status = newState ? 'Active' : 'Closed';
-                renderCourseTable(); // Re-render immediately
             }
 
-            // Send to backend silently (or with toast)
-            google.script.run
-                .withSuccessHandler((res) => {
-                    const debugMsg = (res && res.debug_val) ? ` [Debug: R${res.debug_row} = ${res.debug_val}]` : '';
-                    showToast((newState ? '✅ 狀態已同步' : '⛔️ 狀態已同步') + debugMsg, 'success');
-                })
-                .withFailureHandler(e => {
-                    showToast('同步失敗: ' + e, 'error');
-                    // Revert on failure
-                    if (course) {
-                        course.isActive = !newState;
-                        course.status = !newState ? 'Active' : 'Closed';
-                        renderCourseTable();
-                    }
-                })
-                .toggleCourseStatus(idx, newState);
-        }
+            function toggleCourseActive(idx, currentActive) {
+                const isTrue = String(currentActive) === 'true';
+                const newState = !isTrue;
+                // Optimistic UI: Find course and update local state
+                const course = db.courses.find(c => c.rowIndex == idx);
+                if (course) {
+                    course.isActive = newState;
+                    course.status = newState ? 'Active' : 'Closed';
+                    renderCourseTable(); // Re-render immediately
+                }
 
-        function renderPersonTable() {
-            const groupFilter = document.getElementById('p_filter_group_sel').value;
-            const rankFilter = document.getElementById('p_filter_rank_sel').value;
-            const searchText = document.getElementById('p_filter_search').value.toLowerCase();
-
-            document.getElementById('personBody').innerHTML = db.people.filter(p => {
-                const matchGroup = !groupFilter || p.group === groupFilter;
-                const matchRank = !rankFilter || p.rank === rankFilter;
-                const matchSearch = !searchText ||
-                    p.id.toLowerCase().includes(searchText) ||
-                    p.name.toLowerCase().includes(searchText) ||
-                    (p.manager && p.manager.toLowerCase().includes(searchText));
-                return matchGroup && matchRank && matchSearch;
-            }).slice(0, 100).map(p => `<tr><td>${p.id}</td><td>${p.name}</td><td>${p.rank}</td><td>${p.group}</td><td>${p.manager || ''}</td><td class="text-end"><button class="btn btn-sm btn-minimal" onclick="openPersonModal('${p.id}')">Edit</button></td></tr>`).join('');
-        }
-        function openCourseModal(ix, pc, pn, cc, cn) {
-            document.getElementById('c_idx').value = ix || '';
-            document.getElementById('c_pCode').value = pc || '';
-            document.getElementById('c_pName').value = pn || '';
-            document.getElementById('c_cCode').value = cc || '';
-            document.getElementById('c_cName').value = cn || '';
-
-            if (db.parentCourses) {
-                document.getElementById('list-pcode').innerHTML = db.parentCourses.map(p => `<option value="${p.code}">${p.name}</option>`).join('');
-                document.getElementById('list-pname').innerHTML = db.parentCourses.map(p => `<option value="${p.name}">${p.code}</option>`).join('');
+                // Send to backend silently (or with toast)
+                google.script.run
+                    .withSuccessHandler((res) => {
+                        const debugMsg = (res && res.debug_val) ? ` [Debug: R${res.debug_row} = ${res.debug_val}]` : '';
+                        showToast((newState ? '✅ 狀態已同步' : '⛔️ 狀態已同步') + debugMsg, 'success');
+                    })
+                    .withFailureHandler(e => {
+                        showToast('同步失敗: ' + e, 'error');
+                        // Revert on failure
+                        if (course) {
+                            course.isActive = !newState;
+                            course.status = !newState ? 'Active' : 'Closed';
+                            renderCourseTable();
+                        }
+                    })
+                    .toggleCourseStatus(idx, newState);
             }
-            cm.show();
-        }
 
-        function autoFillParent(type) {
-            const cInput = document.getElementById('c_pCode');
-            const nInput = document.getElementById('c_pName');
-            const val = type === 'code' ? cInput.value : nInput.value;
-            if (!db.parentCourses) return;
-            const match = db.parentCourses.find(p => type === 'code' ? p.code === val : p.name === val);
-            if (match) {
-                if (type === 'code') nInput.value = match.name;
-                else cInput.value = match.code;
+            function renderPersonTable() {
+                const groupFilter = document.getElementById('p_filter_group_sel').value;
+                const rankFilter = document.getElementById('p_filter_rank_sel').value;
+                const searchText = document.getElementById('p_filter_search').value.toLowerCase();
+
+                document.getElementById('personBody').innerHTML = db.people.filter(p => {
+                    const matchGroup = !groupFilter || p.group === groupFilter;
+                    const matchRank = !rankFilter || p.rank === rankFilter;
+                    const matchSearch = !searchText ||
+                        p.id.toLowerCase().includes(searchText) ||
+                        p.name.toLowerCase().includes(searchText) ||
+                        (p.manager && p.manager.toLowerCase().includes(searchText));
+                    return matchGroup && matchRank && matchSearch;
+                }).slice(0, 100).map(p => `<tr><td>${p.id}</td><td>${p.name}</td><td>${p.rank}</td><td>${p.group}</td><td>${p.manager || ''}</td><td class="text-end"><button class="btn btn-sm btn-minimal" onclick="openPersonModal('${p.id}')">Edit</button></td></tr>`).join('');
             }
-        }
-        function saveCourse() {
-            google.script.run
-                .withSuccessHandler(() => {
-                    showToast('✅ 課程已儲存', 'success');
-                    cm.hide();
-                    init();
-                })
-                .withFailureHandler(err => showToast('❌ 儲存失敗: ' + err, 'error'))
-                .saveCourse({
-                    rowIndex: document.getElementById('c_idx').value,
-                    pCode: document.getElementById('c_pCode').value,
-                    pName: document.getElementById('c_pName').value,
-                    cCode: document.getElementById('c_cCode').value,
-                    cName: document.getElementById('c_cName').value
+            function openCourseModal(ix, pc, pn, cc, cn) {
+                document.getElementById('c_idx').value = ix || '';
+                document.getElementById('c_pCode').value = pc || '';
+                document.getElementById('c_pName').value = pn || '';
+                document.getElementById('c_cCode').value = cc || '';
+                document.getElementById('c_cName').value = cn || '';
+
+                if (db.parentCourses) {
+                    document.getElementById('list-pcode').innerHTML = db.parentCourses.map(p => `<option value="${p.code}">${p.name}</option>`).join('');
+                    document.getElementById('list-pname').innerHTML = db.parentCourses.map(p => `<option value="${p.name}">${p.code}</option>`).join('');
+                }
+                cm.show();
+            }
+
+            function autoFillParent(type) {
+                const cInput = document.getElementById('c_pCode');
+                const nInput = document.getElementById('c_pName');
+                const val = type === 'code' ? cInput.value : nInput.value;
+                if (!db.parentCourses) return;
+                const match = db.parentCourses.find(p => type === 'code' ? p.code === val : p.name === val);
+                if (match) {
+                    if (type === 'code') nInput.value = match.name;
+                    else cInput.value = match.code;
+                }
+            }
+            function saveCourse() {
+                google.script.run
+                    .withSuccessHandler(() => {
+                        showToast('✅ 課程已儲存', 'success');
+                        cm.hide();
+                        init();
+                    })
+                    .withFailureHandler(err => showToast('❌ 儲存失敗: ' + err, 'error'))
+                    .saveCourse({
+                        rowIndex: document.getElementById('c_idx').value,
+                        pCode: document.getElementById('c_pCode').value,
+                        pName: document.getElementById('c_pName').value,
+                        cCode: document.getElementById('c_cCode').value,
+                        cName: document.getElementById('c_cName').value
+                    });
+            }
+            function openPersonModal(id) { const p = id ? db.people.find(x => x.id === id) : { id: '', name: '', rank: '', group: '', manager: '' }; document.getElementById('p_id').value = p.id; document.getElementById('p_name').value = p.name; document.getElementById('p_rank').value = p.rank; document.getElementById('p_group').value = p.group; document.getElementById('p_manager').value = p.manager; document.getElementById('p_id').disabled = !!id; pm.show(); }
+            function savePerson() {
+                const isUpdate = document.getElementById('p_id').disabled;
+                google.script.run
+                    .withSuccessHandler(() => {
+                        showToast(isUpdate ? '✅ 人員資料已更新' : '✅ 人員已新增', 'success');
+                        pm.hide();
+                        init();
+                    })
+                    .withFailureHandler(err => showToast('❌ 儲存失敗: ' + err, 'error'))
+                [isUpdate ? 'updatePerson' : 'addPerson']({
+                    id: document.getElementById('p_id').value,
+                    name: document.getElementById('p_name').value,
+                    rank: document.getElementById('p_rank').value,
+                    group: document.getElementById('p_group').value,
+                    manager: document.getElementById('p_manager').value
                 });
-        }
-        function openPersonModal(id) { const p = id ? db.people.find(x => x.id === id) : { id: '', name: '', rank: '', group: '', manager: '' }; document.getElementById('p_id').value = p.id; document.getElementById('p_name').value = p.name; document.getElementById('p_rank').value = p.rank; document.getElementById('p_group').value = p.group; document.getElementById('p_manager').value = p.manager; document.getElementById('p_id').disabled = !!id; pm.show(); }
-        function savePerson() {
-            const isUpdate = document.getElementById('p_id').disabled;
-            google.script.run
-                .withSuccessHandler(() => {
-                    showToast(isUpdate ? '✅ 人員資料已更新' : '✅ 人員已新增', 'success');
-                    pm.hide();
-                    init();
-                })
-                .withFailureHandler(err => showToast('❌ 儲存失敗: ' + err, 'error'))
-            [isUpdate ? 'updatePerson' : 'addPerson']({
-                id: document.getElementById('p_id').value,
-                name: document.getElementById('p_name').value,
-                rank: document.getElementById('p_rank').value,
-                group: document.getElementById('p_group').value,
-                manager: document.getElementById('p_manager').value
-            });
-        }
-
-        // Wizard Logic
-        // Wizard Logic
-        function recNextStep() {
-            // Robustness check
-            if (!db || !db.people) {
-                showToast('系統資料尚未完全載入，請重新整理頁面', 'error');
-                return;
             }
 
-            const courseSelect = document.getElementById('rec_course');
-            const course = courseSelect.value;
-            const date = document.getElementById('rec_date').value;
+            // Wizard Logic
+            // Wizard Logic
+            function recNextStep() {
+                // Robustness check
+                if (!db || !db.people) {
+                    showToast('系統資料尚未完全載入，請重新整理頁面', 'error');
+                    return;
+                }
 
-            // Validate inputs
-            if (!course) {
-                showToast('請先選擇課程！', 'info');
-                return;
-            }
-            if (!date) {
-                showToast('請先選擇日期！', 'info');
-                return;
-            }
+                const courseSelect = document.getElementById('rec_course');
+                const course = courseSelect.value;
+                const date = document.getElementById('rec_date').value;
 
-            // Update Summary
-            const courseName = courseSelect.options[courseSelect.selectedIndex].text;
-            const method = document.getElementById('rec_method').value;
-            document.getElementById('rec-summary-info').innerHTML = `<b>${courseName}</b> &nbsp;|&nbsp; ${date} &nbsp;|&nbsp; ${method}`;
+                // Validate inputs
+                if (!course) {
+                    showToast('請先選擇課程！', 'info');
+                    return;
+                }
+                if (!date) {
+                    showToast('請先選擇日期！', 'info');
+                    return;
+                }
+
+                // Update Summary
+                const courseName = courseSelect.options[courseSelect.selectedIndex].text;
+                const method = document.getElementById('rec_method').value;
+                document.getElementById('rec-summary-info').innerHTML = `<b>${courseName}</b> &nbsp;|&nbsp; ${date} &nbsp;|&nbsp; ${method}`;
 
 
 
-            // Switch View - Add animation class
-            const step1 = document.getElementById('rec-step-1');
-            const step2 = document.getElementById('rec-step-2');
+                // Switch View - Add animation class
+                const step1 = document.getElementById('rec-step-1');
+                const step2 = document.getElementById('rec-step-2');
 
-            step1.style.display = 'none';
-            step2.style.display = 'block';
-            step2.classList.add('fade-in-up');
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+                step2.classList.add('fade-in-up');
 
-            // Reset Filters
-            document.getElementById('rec_filter_group').value = "";
-            document.getElementById('rec_filter_rank').value = "";
-            document.getElementById('rec_filter_manager').value = "";
-            document.getElementById('rec_search_text').value = "";
+                // Reset Filters
+                document.getElementById('rec_filter_group').value = "";
+                document.getElementById('rec_filter_rank').value = "";
+                document.getElementById('rec_filter_manager').value = "";
+                document.getElementById('rec_search_text').value = "";
 
-            // Populate Filters
-            populateRecFilters();
-
-            // Initial Render
-            filterRecList();
-        }
-
-        function recPrevStep() {
-            document.getElementById('rec-step-2').style.display = 'none';
-            document.getElementById('rec-step-1').style.display = 'block';
-            document.getElementById('rec-step-1').classList.add('fade-in-up');
-        }
-
-        function onRecCourseChange() {
-            const course = document.getElementById('rec_course').value;
-            const mainArea = document.getElementById('rec-main-area');
-            const placeholder = document.getElementById('rec-placeholder');
-
-            if (course) {
-                mainArea.style.display = 'block';
-                setTimeout(() => mainArea.style.opacity = '1', 10);
-                placeholder.style.display = 'none';
-                // Init Filters if needed
+                // Populate Filters
                 populateRecFilters();
+
+                // Initial Render
                 filterRecList();
-            } else {
-                mainArea.style.opacity = '0';
-                setTimeout(() => mainArea.style.display = 'none', 300);
-                placeholder.style.display = 'block';
             }
-        }
 
-        function populateRecFilters() {
-            const gSel = document.getElementById('rec_filter_group');
-            const rSel = document.getElementById('rec_filter_rank');
-            const mSel = document.getElementById('rec_filter_manager');
+            function recPrevStep() {
+                document.getElementById('rec-step-2').style.display = 'none';
+                document.getElementById('rec-step-1').style.display = 'block';
+                document.getElementById('rec-step-1').classList.add('fade-in-up');
+            }
 
-            if (!db.people) return;
+            function onRecCourseChange() {
+                const course = document.getElementById('rec_course').value;
+                const mainArea = document.getElementById('rec-main-area');
+                const placeholder = document.getElementById('rec-placeholder');
 
-            // Unique values
-            const groups = [...new Set(db.people.map(p => p.group))].sort();
-            const ranks = [...new Set(db.people.map(p => p.rank))].sort();
-            const managers = [...new Set(db.people.map(p => p.manager).filter(m => m))].sort();
+                if (course) {
+                    mainArea.style.display = 'block';
+                    setTimeout(() => mainArea.style.opacity = '1', 10);
+                    placeholder.style.display = 'none';
+                    // Init Filters if needed
+                    populateRecFilters();
+                    filterRecList();
+                } else {
+                    mainArea.style.opacity = '0';
+                    setTimeout(() => mainArea.style.display = 'none', 300);
+                    placeholder.style.display = 'block';
+                }
+            }
 
-            gSel.innerHTML = '<option value="">全部單位</option>' + groups.map(x => `<option value="${x}">${x}</option>`).join('');
-            rSel.innerHTML = '<option value="">全部職級</option>' + ranks.map(x => `<option value="${x}">${x}</option>`).join('');
-            mSel.innerHTML = '<option value="">全部主管</option>' + managers.map(x => `<option value="${x}">${x}</option>`).join('');
-        }
+            function populateRecFilters() {
+                const gSel = document.getElementById('rec_filter_group');
+                const rSel = document.getElementById('rec_filter_rank');
+                const mSel = document.getElementById('rec_filter_manager');
 
-        function filterRecList() {
-            const g = document.getElementById('rec_filter_group').value;
-            const r = document.getElementById('rec_filter_rank').value;
-            const m = document.getElementById('rec_filter_manager').value;
-            const k = document.getElementById('rec_search_text').value.toLowerCase();
-            const selectedCourse = document.getElementById('rec_course').value;
+                if (!db.people) return;
 
-            // Safety check
-            if (!db.people) return;
-            // Filter people and exclude those who already completed this course
-            const list = db.people.filter(p => {
-                const matchG = !g || p.group === g;
-                const matchR = !r || p.rank === r;
-                const matchM = !m || p.manager === m;
-                const matchK = !k || p.name.includes(k) || p.id.includes(k) || p.group.includes(k);
+                // Unique values
+                const groups = [...new Set(db.people.map(p => p.group))].sort();
+                const ranks = [...new Set(db.people.map(p => p.rank))].sort();
+                const managers = [...new Set(db.people.map(p => p.manager).filter(m => m))].sort();
 
-                // Check if person already completed this course (or is exempt)
-                const key = `${p.id}_${selectedCourse}`;
-                const isCompleted = (db.recordMap && db.recordMap[key]) || (db.exemptSet && db.exemptSet.includes(key));
+                gSel.innerHTML = '<option value="">全部單位</option>' + groups.map(x => `<option value="${x}">${x}</option>`).join('');
+                rSel.innerHTML = '<option value="">全部職級</option>' + ranks.map(x => `<option value="${x}">${x}</option>`).join('');
+                mSel.innerHTML = '<option value="">全部主管</option>' + managers.map(x => `<option value="${x}">${x}</option>`).join('');
+            }
 
-                return matchG && matchR && matchM && matchK && !isCompleted;
-            });
+            function filterRecList() {
+                const g = document.getElementById('rec_filter_group').value;
+                const r = document.getElementById('rec_filter_rank').value;
+                const m = document.getElementById('rec_filter_manager').value;
+                const k = document.getElementById('rec_search_text').value.toLowerCase();
+                const selectedCourse = document.getElementById('rec_course').value;
 
-            // Render
-            const container = document.getElementById('rec_list');
-            if (list.length === 0) {
-                container.innerHTML = '<div class="col-12 text-center text-muted py-5"><i class="bi bi-search fs-1"></i><p class="mt-2">沒有符合條件的人員（或所有人已完成此課程）</p></div>';
-            } else {
-                container.innerHTML = list.map(p => {
-                    // Check if already checked (we need to persist state if we want, but simpler is to use DOM... wait, re-render clears checks!)
-                    // Ideally we should store checked Set.
-                    const isChecked = currentRecChecked.has(p.id) ? 'checked' : '';
-                    const activeClass = isChecked ? 'border-primary bg-primary bg-opacity-10' : 'border-0';
-                    return `
+                // Safety check
+                if (!db.people) return;
+                // Filter people and exclude those who already completed this course
+                const list = db.people.filter(p => {
+                    const matchG = !g || p.group === g;
+                    const matchR = !r || p.rank === r;
+                    const matchM = !m || p.manager === m;
+                    const matchK = !k || p.name.includes(k) || p.id.includes(k) || p.group.includes(k);
+
+                    // Check if person already completed this course (or is exempt)
+                    const key = `${p.id}_${selectedCourse}`;
+                    const isCompleted = (db.recordMap && db.recordMap[key]) || (db.exemptSet && db.exemptSet.includes(key));
+
+                    return matchG && matchR && matchM && matchK && !isCompleted;
+                });
+
+                // Render
+                const container = document.getElementById('rec_list');
+                if (list.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted py-5"><i class="bi bi-search fs-1"></i><p class="mt-2">沒有符合條件的人員（或所有人已完成此課程）</p></div>';
+                } else {
+                    container.innerHTML = list.map(p => {
+                        // Check if already checked (we need to persist state if we want, but simpler is to use DOM... wait, re-render clears checks!)
+                        // Ideally we should store checked Set.
+                        const isChecked = currentRecChecked.has(p.id) ? 'checked' : '';
+                        const activeClass = isChecked ? 'border-primary bg-primary bg-opacity-10' : 'border-0';
+                        return `
                     <div class="col-xxl-3 col-md-4 col-sm-6">
                         <label class="card shadow-sm h-100 cursor-pointer user-card ${activeClass}" id="card-${p.id}">
                             <div class="card-body p-3 d-flex align-items-start">
@@ -2598,252 +2629,252 @@
                             </div>
                         </label>
                     </div>`;
-                }).join('');
-            }
-            updateRecUI();
-        }
-
-        let currentRecChecked = new Set(); // Store selected IDs
-
-        function toggleRecItem(cb) {
-            const card = document.getElementById(`card-${cb.value}`);
-            if (cb.checked) {
-                currentRecChecked.add(cb.value);
-                card.classList.remove('border-0');
-                card.classList.add('border-primary', 'bg-primary', 'bg-opacity-10');
-            } else {
-                currentRecChecked.delete(cb.value);
-                card.classList.remove('border-primary', 'bg-primary', 'bg-opacity-10');
-                card.classList.add('border-0');
-            }
-            updateRecUI();
-        }
-
-        function toggleAllRecList() {
-            const allBoxes = document.querySelectorAll('#rec_list .u-chk');
-            const mainToggle = document.getElementById('checkAllToggle');
-            const targetState = mainToggle.checked;
-
-            allBoxes.forEach(box => {
-                if (box.checked !== targetState) {
-                    box.checked = targetState;
-                    toggleRecItem(box);
+                    }).join('');
                 }
-            });
-        }
-
-        function updateRecUI() {
-            document.getElementById('rec-selected-count').innerText = currentRecChecked.size;
-            // Update "Check All" checkbox state based on visible items
-            const allBoxes = document.querySelectorAll('#rec_list .u-chk');
-            if (allBoxes.length > 0) {
-                const allChecked = Array.from(allBoxes).every(b => b.checked);
-                document.getElementById('checkAllToggle').checked = allChecked;
-                document.getElementById('checkAllToggle').indeterminate = !allChecked && Array.from(allBoxes).some(b => b.checked);
-            }
-        }
-
-        function resetRecFilters() {
-            document.getElementById('rec_filter_group').value = '';
-            document.getElementById('rec_filter_rank').value = '';
-            document.getElementById('rec_filter_manager').value = '';
-            document.getElementById('rec_search_text').value = '';
-            filterRecList();
-        }
-
-        // Update submitBatch to use currentRecChecked
-        // Update submitBatch to use currentRecChecked
-        function submitBatch() {
-            if (!db || !db.people) {
-                showToast('系統資料未就緒', 'error');
-                return;
+                updateRecUI();
             }
 
-            const course = document.getElementById('rec_course').value;
-            const date = document.getElementById('rec_date').value;
-            const method = document.getElementById('rec_method').value;
+            let currentRecChecked = new Set(); // Store selected IDs
 
-            if (currentRecChecked.size === 0) {
-                showToast('請至少選擇一位人員', 'info');
-                return;
-            }
-            if (!course || !date) {
-                showToast('請確認課程和日期', 'info');
-                return;
-            }
-
-            // Confirm
-            if (!confirm(`確定要為 ${currentRecChecked.size} 位人員登記完訓？\n課程：${course}\n日期：${date}`)) {
-                return;
+            function toggleRecItem(cb) {
+                const card = document.getElementById(`card-${cb.value}`);
+                if (cb.checked) {
+                    currentRecChecked.add(cb.value);
+                    card.classList.remove('border-0');
+                    card.classList.add('border-primary', 'bg-primary', 'bg-opacity-10');
+                } else {
+                    currentRecChecked.delete(cb.value);
+                    card.classList.remove('border-primary', 'bg-primary', 'bg-opacity-10');
+                    card.classList.add('border-0');
+                }
+                updateRecUI();
             }
 
-            load(true);
-            const ids = Array.from(currentRecChecked);
+            function toggleAllRecList() {
+                const allBoxes = document.querySelectorAll('#rec_list .u-chk');
+                const mainToggle = document.getElementById('checkAllToggle');
+                const targetState = mainToggle.checked;
 
-            // Use server-side batch function
-            google.script.run
-                .withSuccessHandler((res) => {
-                    load(false);
-                    if (res && res.success === false) {
-                        showToast('部分或全部失敗: ' + (res.message || '未知錯誤'), 'error');
-                    } else {
-                        showToast(`✅ 已完成 ${ids.length} 筆登記`, 'success');
+                allBoxes.forEach(box => {
+                    if (box.checked !== targetState) {
+                        box.checked = targetState;
+                        toggleRecItem(box);
+                    }
+                });
+            }
 
-                        // Update local data optimistically
-                        const fmtDate = date.replace(/-/g, '/');
-                        ids.forEach(id => {
-                            const key = `${id}_${course}`;
-                            if (!db.recordMap) db.recordMap = {};
-                            db.recordMap[key] = { date: fmtDate, method: method };
+            function updateRecUI() {
+                document.getElementById('rec-selected-count').innerText = currentRecChecked.size;
+                // Update "Check All" checkbox state based on visible items
+                const allBoxes = document.querySelectorAll('#rec_list .u-chk');
+                if (allBoxes.length > 0) {
+                    const allChecked = Array.from(allBoxes).every(b => b.checked);
+                    document.getElementById('checkAllToggle').checked = allChecked;
+                    document.getElementById('checkAllToggle').indeterminate = !allChecked && Array.from(allBoxes).some(b => b.checked);
+                }
+            }
 
-                            // Remove from exempt if exists
-                            if (db.exemptSet) {
-                                const exIdx = db.exemptSet.indexOf(key);
-                                if (exIdx > -1) db.exemptSet.splice(exIdx, 1);
+            function resetRecFilters() {
+                document.getElementById('rec_filter_group').value = '';
+                document.getElementById('rec_filter_rank').value = '';
+                document.getElementById('rec_filter_manager').value = '';
+                document.getElementById('rec_search_text').value = '';
+                filterRecList();
+            }
+
+            // Update submitBatch to use currentRecChecked
+            // Update submitBatch to use currentRecChecked
+            function submitBatch() {
+                if (!db || !db.people) {
+                    showToast('系統資料未就緒', 'error');
+                    return;
+                }
+
+                const course = document.getElementById('rec_course').value;
+                const date = document.getElementById('rec_date').value;
+                const method = document.getElementById('rec_method').value;
+
+                if (currentRecChecked.size === 0) {
+                    showToast('請至少選擇一位人員', 'info');
+                    return;
+                }
+                if (!course || !date) {
+                    showToast('請確認課程和日期', 'info');
+                    return;
+                }
+
+                // Confirm
+                if (!confirm(`確定要為 ${currentRecChecked.size} 位人員登記完訓？\n課程：${course}\n日期：${date}`)) {
+                    return;
+                }
+
+                load(true);
+                const ids = Array.from(currentRecChecked);
+
+                // Use server-side batch function
+                google.script.run
+                    .withSuccessHandler((res) => {
+                        load(false);
+                        if (res && res.success === false) {
+                            showToast('部分或全部失敗: ' + (res.message || '未知錯誤'), 'error');
+                        } else {
+                            showToast(`✅ 已完成 ${ids.length} 筆登記`, 'success');
+
+                            // Update local data optimistically
+                            const fmtDate = date.replace(/-/g, '/');
+                            ids.forEach(id => {
+                                const key = `${id}_${course}`;
+                                if (!db.recordMap) db.recordMap = {};
+                                db.recordMap[key] = { date: fmtDate, method: method };
+
+                                // Remove from exempt if exists
+                                if (db.exemptSet) {
+                                    const exIdx = db.exemptSet.indexOf(key);
+                                    if (exIdx > -1) db.exemptSet.splice(exIdx, 1);
+                                }
+                            });
+
+                            // Clear selection
+                            currentRecChecked.clear();
+
+                            // Re-render list (will filter out completed)
+                            filterRecList();
+
+                            // Also update dashboard if visible
+                            if (document.getElementById('page-dashboard').style.display !== 'none') {
+                                renderDash();
                             }
-                        });
-
-                        // Clear selection
-                        currentRecChecked.clear();
-
-                        // Re-render list (will filter out completed)
-                        filterRecList();
-
-                        // Also update dashboard if visible
-                        if (document.getElementById('page-dashboard').style.display !== 'none') {
-                            renderDash();
                         }
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('系統錯誤: ' + err, 'error');
+                    })
+                    .batchRecordCompletion(ids, course, date, method);
+            }
+
+            // Audit Batch Actions
+            function approveAll() {
+                if (!db.auditList || db.auditList.length === 0) { showToast("無待確認項目", 'info'); return; }
+                if (!confirm(`確定要全部放行 ${db.auditList.length} 筆資料嗎？`)) return;
+
+                load(true);
+                const ids = db.auditList.map(item => item.rowIndex);
+
+                google.script.run
+                    .withSuccessHandler((res) => {
+                        load(false);
+                        if (res && res.success) {
+                            showToast(`✅ 已全部放行 ${res.count} 筆資料`, 'success');
+                            init();
+                        } else {
+                            showToast('批量放行失敗: ' + (res ? res.msg : '未知錯誤'), 'error');
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('系統錯誤: ' + err, 'error');
+                    })
+                    .handleAudit('approve', ids);
+            }
+
+            function rejectAll() {
+                if (!db.auditList || db.auditList.length === 0) { showToast("無待確認項目", 'info'); return; }
+                if (!confirm(`確定要全部駁回 ${db.auditList.length} 筆資料嗎？`)) return;
+
+                load(true);
+                const ids = db.auditList.map(item => item.rowIndex);
+
+                google.script.run
+                    .withSuccessHandler((res) => {
+                        load(false);
+                        if (res && res.success) {
+                            showToast(`✅ 已全部駁回 ${res.count} 筆資料`, 'success');
+                            init();
+                        } else {
+                            showToast('批量駁回失敗: ' + (res ? res.msg : '未知錯誤'), 'error');
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('系統錯誤: ' + err, 'error');
+                    })
+                    .handleAudit('reject', ids);
+            }
+
+            // Personnel Review Functions
+            function refreshPersonnelReview() {
+                load(true);
+                google.script.run
+                    .withSuccessHandler(changes => {
+                        load(false);
+                        personnelChanges = changes || [];
+                        renderPersonnelReview();
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('載入失敗: ' + err, 'error');
+                    })
+                    .getPersonnelChanges();
+            }
+
+            function renderPersonnelReview() {
+                const container = document.getElementById('personnelReviewList');
+                const noDataDiv = document.getElementById('noPersonnelReview');
+                const badge = document.getElementById('personnelAuditBadge');
+
+                const pending = (personnelChanges || []).filter(c => c.status === 'pending');
+
+                if (pending.length === 0) {
+                    container.innerHTML = '';
+                    noDataDiv.style.display = 'block';
+                    if (badge) badge.style.display = 'none';
+                } else {
+                    noDataDiv.style.display = 'none';
+                    if (badge) {
+                        badge.style.display = 'inline-block';
+                        badge.textContent = pending.length;
                     }
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('系統錯誤: ' + err, 'error');
-                })
-                .batchRecordCompletion(ids, course, date, method);
-        }
 
-        // Audit Batch Actions
-        function approveAll() {
-            if (!db.auditList || db.auditList.length === 0) { showToast("無待確認項目", 'info'); return; }
-            if (!confirm(`確定要全部放行 ${db.auditList.length} 筆資料嗎？`)) return;
+                    container.innerHTML = pending.map(change => {
+                        const details = JSON.parse(change.detailsJson);
+                        let typeIcon = '';
+                        let typeBadge = '';
+                        let detailsHtml = '';
 
-            load(true);
-            const ids = db.auditList.map(item => item.rowIndex);
-
-            google.script.run
-                .withSuccessHandler((res) => {
-                    load(false);
-                    if (res && res.success) {
-                        showToast(`✅ 已全部放行 ${res.count} 筆資料`, 'success');
-                        init();
-                    } else {
-                        showToast('批量放行失敗: ' + (res ? res.msg : '未知錯誤'), 'error');
-                    }
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('系統錯誤: ' + err, 'error');
-                })
-                .handleAudit('approve', ids);
-        }
-
-        function rejectAll() {
-            if (!db.auditList || db.auditList.length === 0) { showToast("無待確認項目", 'info'); return; }
-            if (!confirm(`確定要全部駁回 ${db.auditList.length} 筆資料嗎？`)) return;
-
-            load(true);
-            const ids = db.auditList.map(item => item.rowIndex);
-
-            google.script.run
-                .withSuccessHandler((res) => {
-                    load(false);
-                    if (res && res.success) {
-                        showToast(`✅ 已全部駁回 ${res.count} 筆資料`, 'success');
-                        init();
-                    } else {
-                        showToast('批量駁回失敗: ' + (res ? res.msg : '未知錯誤'), 'error');
-                    }
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('系統錯誤: ' + err, 'error');
-                })
-                .handleAudit('reject', ids);
-        }
-
-        // Personnel Review Functions
-        function refreshPersonnelReview() {
-            load(true);
-            google.script.run
-                .withSuccessHandler(changes => {
-                    load(false);
-                    personnelChanges = changes || [];
-                    renderPersonnelReview();
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('載入失敗: ' + err, 'error');
-                })
-                .getPersonnelChanges();
-        }
-
-        function renderPersonnelReview() {
-            const container = document.getElementById('personnelReviewList');
-            const noDataDiv = document.getElementById('noPersonnelReview');
-            const badge = document.getElementById('personnelAuditBadge');
-
-            const pending = (personnelChanges || []).filter(c => c.status === 'pending');
-
-            if (pending.length === 0) {
-                container.innerHTML = '';
-                noDataDiv.style.display = 'block';
-                if (badge) badge.style.display = 'none';
-            } else {
-                noDataDiv.style.display = 'none';
-                if (badge) {
-                    badge.style.display = 'inline-block';
-                    badge.textContent = pending.length;
-                }
-
-                container.innerHTML = pending.map(change => {
-                    const details = JSON.parse(change.detailsJson);
-                    let typeIcon = '';
-                    let typeBadge = '';
-                    let detailsHtml = '';
-
-                    if (change.type === '新增人員') {
-                        typeIcon = 'bi-person-plus';
-                        typeBadge = 'bg-success';
-                        detailsHtml = `
+                        if (change.type === '新增人員') {
+                            typeIcon = 'bi-person-plus';
+                            typeBadge = 'bg-success';
+                            detailsHtml = `
                             <div class="small text-muted mb-2">
                                 <div><strong>職級:</strong> ${details.rank}</div>
                                 <div><strong>單位:</strong> ${details.group}</div>
                                 ${details.manager ? `<div><strong>主管:</strong> ${details.manager}</div>` : ''}
                             </div>
                         `;
-                    } else if (change.type === '職級/單位異動') {
-                        typeIcon = 'bi-arrow-left-right';
-                        typeBadge = 'bg-primary';
-                        detailsHtml = `
+                        } else if (change.type === '職級/單位異動') {
+                            typeIcon = 'bi-arrow-left-right';
+                            typeBadge = 'bg-primary';
+                            detailsHtml = `
                             <div class="small text-muted mb-2">
                                 <div><strong>職級:</strong> ${details.oldRank} → <span class="text-primary fw-bold">${details.newRank}</span></div>
                                 <div><strong>單位:</strong> ${details.oldGroup} → <span class="text-primary fw-bold">${details.newGroup}</span></div>
                                 ${details.reason ? `<div class="mt-1"><strong>原因:</strong> ${details.reason}</div>` : ''}
                             </div>
                         `;
-                    } else if (change.type === '離職') {
-                        typeIcon = 'bi-person-dash';
-                        typeBadge = 'bg-danger';
-                        detailsHtml = `
+                        } else if (change.type === '離職') {
+                            typeIcon = 'bi-person-dash';
+                            typeBadge = 'bg-danger';
+                            detailsHtml = `
                             <div class="small text-muted mb-2">
                                 <div><strong>職級:</strong> ${details.rank}</div>
                                 <div><strong>單位:</strong> ${details.group}</div>
                                 ${details.reason ? `<div class="mt-1"><strong>原因:</strong> ${details.reason}</div>` : ''}
                             </div>
                         `;
-                    }
+                        }
 
-                    return `
+                        return `
                         <div class="col-md-6 col-lg-4">
                             <div class="card personnel-card h-100">
                                 <div class="card-body">
@@ -2875,160 +2906,160 @@
                             </div>
                         </div>
                     `;
-                }).join('');
+                    }).join('');
+                }
+
+                // Update all badges including sidebar total
+                updateAuditBadges();
             }
 
-            // Update all badges including sidebar total
-            updateAuditBadges();
-        }
+            function approvePersonnelChange(uuid) {
+                if (!confirm('確定要核准此異動申請嗎？')) return;
 
-        function approvePersonnelChange(uuid) {
-            if (!confirm('確定要核准此異動申請嗎？')) return;
-
-            load(true);
-            google.script.run
-                .withSuccessHandler(res => {
-                    if (res.success) {
-                        showToast('✅ 已核准並執行', 'success');
-                        // Refresh data then update personnel review
-                        init();
-                    } else {
-                        load(false);
-                        showToast('處理失敗: ' + (res.message || '未知錯誤'), 'error');
-                    }
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('系統錯誤: ' + err, 'error');
-                })
-                .approvePersonnelChange(uuid, 'approve', currentUser, '');
-        }
-
-        function rejectPersonnelChange(uuid) {
-            const reason = prompt('請輸入駁回原因（選填）:');
-            if (reason === null) return; // User cancelled
-
-            load(true);
-            google.script.run
-                .withSuccessHandler(res => {
-                    if (res.success) {
-                        showToast('✅ 已駁回此申請', 'success');
-                        // Just refresh personnel review, no need to reload all data
-                        refreshPersonnelReview();
-                        load(false);
-                    } else {
-                        load(false);
-                        showToast('處理失敗: ' + (res.message || '未知錯誤'), 'error');
-                    }
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('系統錯誤: ' + err, 'error');
-                })
-                .approvePersonnelChange(uuid, 'reject', currentUser, reason);
-        }
-
-        // OVERRIDE for Netlify Navigation
-        function openPage(p) {
-            window.open(p + ".html", "_blank");
-        }
-
-        // --- Training Attendance Management Logic ---
-
-        function switchTrTab(tab) {
-            const manageBtn = document.querySelector('[onclick="switchTrTab(\'manage\')"]');
-            const statsBtn = document.querySelector('[onclick="switchTrTab(\'stats\')"]');
-            const manageContent = document.getElementById('tr-tab-manage');
-            const statsContent = document.getElementById('tr-tab-stats');
-
-            if (!manageBtn || !statsBtn) return;
-
-            manageBtn.classList.toggle('active', tab === 'manage');
-            statsBtn.classList.toggle('active', tab === 'stats');
-
-            manageContent.style.display = tab === 'manage' ? 'block' : 'none';
-            statsContent.style.display = tab === 'stats' ? 'block' : 'none';
-
-            // Now preloaded, but we can refresh if the table is empty
-            if (tab === 'manage' && document.getElementById('trListBody').children.length <= 1) loadTrEvents();
-            if (tab === 'stats') {
-                const today = new Date();
-                const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-                document.getElementById('trStatStart').value = firstDay.toISOString().split('T')[0];
-                document.getElementById('trStatEnd').value = today.toISOString().split('T')[0];
-            }
-        }
-
-        async function getAdminLoc() {
-            if (!navigator.geolocation) {
-                showToast('您的瀏覽器不支援定位功能', 'error');
-                return;
-            }
-            showToast('正在獲取目前位置...', 'info');
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    document.getElementById('trLat').value = pos.coords.latitude;
-                    document.getElementById('trLng').value = pos.coords.longitude;
-                    showToast('📍 定位成功', 'success');
-                },
-                (err) => {
-                    showToast('定位失敗: ' + err.message, 'error');
-                },
-                { enableHighAccuracy: true }
-            );
-        }
-
-        async function handleCreateTr(e) {
-            e.preventDefault();
-            const data = {
-                title: document.getElementById('trTitle').value,
-                startTime: document.getElementById('trStart').value,
-                endTime: document.getElementById('trEnd').value,
-                location: {
-                    latitude: parseFloat(document.getElementById('trLat').value),
-                    longitude: parseFloat(document.getElementById('trLng').value),
-                    radius: parseInt(document.getElementById('trRadius').value)
-                },
-                checkLocation: document.getElementById('trCheckLoc').checked
-            };
-
-            load(true);
-            google.script.run
-                .withSuccessHandler(res => {
-                    load(false);
-                    if (res.success) {
-                        showToast(res.message, 'success');
-                        document.getElementById('addTrForm').reset();
-                        loadTrEvents();
-                    } else {
-                        showToast(res.message, 'error');
-                    }
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('連線失敗: ' + err, 'error');
-                })
-                .manageTrainingEvent('create', data);
-        }
-
-        function loadTrEvents(silent = false) {
-            const tb = document.getElementById('trListBody');
-            if (tb && !silent) tb.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-muted"><div class="spinner-border spinner-border-sm me-2"></div> 更新中...</td></tr>';
-
-            google.script.run
-                .withSuccessHandler(res => {
-                    if (res && res.success && res.events) {
-                        if (!tb) return;
-                        if (res.events.length === 0) {
-                            tb.innerHTML = '<div class="text-center p-5 text-muted">目前沒有建立任何場次</div>';
-                            return;
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        if (res.success) {
+                            showToast('✅ 已核准並執行', 'success');
+                            // Refresh data then update personnel review
+                            init();
+                        } else {
+                            load(false);
+                            showToast('處理失敗: ' + (res.message || '未知錯誤'), 'error');
                         }
-                        tb.innerHTML = res.events.map(ev => {
-                            const start = new Date(ev.startTime).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-                            const end = new Date(ev.endTime).toLocaleString('zh-TW', { hour: '2-digit', minute: '2-digit' });
-                            const isOpen = ev.manualOpen !== false;
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('系統錯誤: ' + err, 'error');
+                    })
+                    .approvePersonnelChange(uuid, 'approve', currentUser, '');
+            }
 
-                            return `
+            function rejectPersonnelChange(uuid) {
+                const reason = prompt('請輸入駁回原因（選填）:');
+                if (reason === null) return; // User cancelled
+
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        if (res.success) {
+                            showToast('✅ 已駁回此申請', 'success');
+                            // Just refresh personnel review, no need to reload all data
+                            refreshPersonnelReview();
+                            load(false);
+                        } else {
+                            load(false);
+                            showToast('處理失敗: ' + (res.message || '未知錯誤'), 'error');
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('系統錯誤: ' + err, 'error');
+                    })
+                    .approvePersonnelChange(uuid, 'reject', currentUser, reason);
+            }
+
+            // OVERRIDE for Netlify Navigation
+            function openPage(p) {
+                window.open(p + ".html", "_blank");
+            }
+
+            // --- Training Attendance Management Logic ---
+
+            function switchTrTab(tab) {
+                const manageBtn = document.querySelector('[onclick="switchTrTab(\'manage\')"]');
+                const statsBtn = document.querySelector('[onclick="switchTrTab(\'stats\')"]');
+                const manageContent = document.getElementById('tr-tab-manage');
+                const statsContent = document.getElementById('tr-tab-stats');
+
+                if (!manageBtn || !statsBtn) return;
+
+                manageBtn.classList.toggle('active', tab === 'manage');
+                statsBtn.classList.toggle('active', tab === 'stats');
+
+                manageContent.style.display = tab === 'manage' ? 'block' : 'none';
+                statsContent.style.display = tab === 'stats' ? 'block' : 'none';
+
+                // Now preloaded, but we can refresh if the table is empty
+                if (tab === 'manage' && document.getElementById('trListBody').children.length <= 1) loadTrEvents();
+                if (tab === 'stats') {
+                    const today = new Date();
+                    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+                    document.getElementById('trStatStart').value = firstDay.toISOString().split('T')[0];
+                    document.getElementById('trStatEnd').value = today.toISOString().split('T')[0];
+                }
+            }
+
+            async function getAdminLoc() {
+                if (!navigator.geolocation) {
+                    showToast('您的瀏覽器不支援定位功能', 'error');
+                    return;
+                }
+                showToast('正在獲取目前位置...', 'info');
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        document.getElementById('trLat').value = pos.coords.latitude;
+                        document.getElementById('trLng').value = pos.coords.longitude;
+                        showToast('📍 定位成功', 'success');
+                    },
+                    (err) => {
+                        showToast('定位失敗: ' + err.message, 'error');
+                    },
+                    { enableHighAccuracy: true }
+                );
+            }
+
+            async function handleCreateTr(e) {
+                e.preventDefault();
+                const data = {
+                    title: document.getElementById('trTitle').value,
+                    startTime: document.getElementById('trStart').value,
+                    endTime: document.getElementById('trEnd').value,
+                    location: {
+                        latitude: parseFloat(document.getElementById('trLat').value),
+                        longitude: parseFloat(document.getElementById('trLng').value),
+                        radius: parseInt(document.getElementById('trRadius').value)
+                    },
+                    checkLocation: document.getElementById('trCheckLoc').checked
+                };
+
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        load(false);
+                        if (res.success) {
+                            showToast(res.message, 'success');
+                            document.getElementById('addTrForm').reset();
+                            loadTrEvents();
+                        } else {
+                            showToast(res.message, 'error');
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('連線失敗: ' + err, 'error');
+                    })
+                    .manageTrainingEvent('create', data);
+            }
+
+            function loadTrEvents(silent = false) {
+                const tb = document.getElementById('trListBody');
+                if (tb && !silent) tb.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-muted"><div class="spinner-border spinner-border-sm me-2"></div> 更新中...</td></tr>';
+
+                google.script.run
+                    .withSuccessHandler(res => {
+                        if (res && res.success && res.events) {
+                            if (!tb) return;
+                            if (res.events.length === 0) {
+                                tb.innerHTML = '<div class="text-center p-5 text-muted">目前沒有建立任何場次</div>';
+                                return;
+                            }
+                            tb.innerHTML = res.events.map(ev => {
+                                const start = new Date(ev.startTime).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                                const end = new Date(ev.endTime).toLocaleString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+                                const isOpen = ev.manualOpen !== false;
+
+                                return `
                                 <div class="tr-item-card ${isOpen ? 'active' : ''}" style="border-left: 4px solid ${isOpen ? '#10b981' : '#cbd5e1'};">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="flex-grow-1">
@@ -3070,71 +3101,71 @@
                                     </div>
                                 </div>
                             `;
-                        }).join('');
-                        if (!silent) showToast('📅 活動列表已更新', 'success');
-                    } else if (!silent) {
-                        showToast('載入失敗: ' + (res ? res.message : '未知錯誤'), 'error');
-                    }
-                })
-                .withFailureHandler(err => {
-                    if (!silent) showToast('連線失敗: ' + err, 'error');
-                })
-                .getTrainingEvents(false);
-        }
-
-        function toggleTrManual(id, currentOpen) {
-            load(true);
-            google.script.run
-                .withSuccessHandler(res => {
-                    load(false);
-                    if (res.success) {
-                        showToast(res.message, 'success');
-                        loadTrEvents();
-                    } else {
-                        showToast(res.message, 'error');
-                    }
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('系統錯誤: ' + err, 'error');
-                })
-                .manageTrainingEvent('toggle', { id, open: !currentOpen });
-        }
-
-        function deleteTr(id, title) {
-            if (!confirm(`確定要刪除「${title}」嗎？這將會導致該場次的簽到統計失效。`)) return;
-            load(true);
-            google.script.run
-                .withSuccessHandler(res => {
-                    load(false);
-                    if (res.success) {
-                        showToast(res.message, 'success');
-                        loadTrEvents();
-                    } else {
-                        showToast(res.message, 'error');
-                    }
-                })
-                .manageTrainingEvent('delete', { id });
-        }
-
-        function loadTrStats() {
-            const start = document.getElementById('trStatStart').value;
-            const end = document.getElementById('trStatEnd').value;
-            if (!start || !end) return showToast('請選擇日期區間', 'info');
-
-            load(true);
-            google.script.run
-                .withSuccessHandler(res => {
-                    load(false);
-                    if (res.success) {
-                        const tb = document.getElementById('trStatsBody');
-                        if (res.stats.length === 0) {
-                            tb.innerHTML = '<tr><td colspan="6" class="text-center p-4">此區間內無任何簽到紀錄</td></tr>';
-                            return;
+                            }).join('');
+                            if (!silent) showToast('📅 活動列表已更新', 'success');
+                        } else if (!silent) {
+                            showToast('載入失敗: ' + (res ? res.message : '未知錯誤'), 'error');
                         }
-                        tb.innerHTML = res.stats.map(s => {
-                            const details = s.details.map(d => `${new Date(d.timestamp).toLocaleString()}: ${d.eventTitle}`).join('\n');
-                            return `
+                    })
+                    .withFailureHandler(err => {
+                        if (!silent) showToast('連線失敗: ' + err, 'error');
+                    })
+                    .getTrainingEvents(false);
+            }
+
+            function toggleTrManual(id, currentOpen) {
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        load(false);
+                        if (res.success) {
+                            showToast(res.message, 'success');
+                            loadTrEvents();
+                        } else {
+                            showToast(res.message, 'error');
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('系統錯誤: ' + err, 'error');
+                    })
+                    .manageTrainingEvent('toggle', { id, open: !currentOpen });
+            }
+
+            function deleteTr(id, title) {
+                if (!confirm(`確定要刪除「${title}」嗎？這將會導致該場次的簽到統計失效。`)) return;
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        load(false);
+                        if (res.success) {
+                            showToast(res.message, 'success');
+                            loadTrEvents();
+                        } else {
+                            showToast(res.message, 'error');
+                        }
+                    })
+                    .manageTrainingEvent('delete', { id });
+            }
+
+            function loadTrStats() {
+                const start = document.getElementById('trStatStart').value;
+                const end = document.getElementById('trStatEnd').value;
+                if (!start || !end) return showToast('請選擇日期區間', 'info');
+
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        load(false);
+                        if (res.success) {
+                            const tb = document.getElementById('trStatsBody');
+                            if (res.stats.length === 0) {
+                                tb.innerHTML = '<tr><td colspan="6" class="text-center p-4">此區間內無任何簽到紀錄</td></tr>';
+                                return;
+                            }
+                            tb.innerHTML = res.stats.map(s => {
+                                const details = s.details.map(d => `${new Date(d.timestamp).toLocaleString()}: ${d.eventTitle}`).join('\n');
+                                return `
                                 <tr>
                                     <td><code class="text-primary fw-bold" style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">${s.agcode}</code></td>
                                     <td><div class="fw-bold">${s.name}</div></td>
@@ -3156,38 +3187,117 @@
                                     </td>
                                 </tr>
                             `;
-                        }).join('');
-                        showToast(`📊 統計完成，共有 ${res.totalEvents} 場訓練`, 'success');
-                    }
-                })
-                .withFailureHandler(err => {
-                    load(false);
-                    showToast('統計載入失敗: ' + err, 'error');
-                })
-                .getTrainingStats(start, end);
-        }
-
-        function loadPenalties(silent = false) {
-            const tb = document.getElementById('penaltyListBody');
-            if (tb && !silent) tb.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-muted"><div class="spinner-border spinner-border-sm me-2"></div> 更新中...</td></tr>';
-
-            // Update datalist for searching
-            const list = document.getElementById('pen-people-list');
-            if (list && db.people) {
-                list.innerHTML = db.people.map(p =>
-                    `<option value="${p.id}">${p.name} (${p.group})</option>`
-                ).join('');
+                            }).join('');
+                            showToast(`📊 統計完成，共有 ${res.totalEvents} 場訓練`, 'success');
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('統計載入失敗: ' + err, 'error');
+                    })
+                    .getTrainingStats(start, end);
             }
 
-            google.script.run
-                .withSuccessHandler(res => {
-                    if (res && res.success && res.penalties) {
-                        if (!tb) return;
-                        if (res.penalties.length === 0) {
-                            tb.innerHTML = '<tr><td colspan="5" class="text-center p-4">目前沒有任何處分紀錄</td></tr>';
-                            return;
+            async function exportTrainingStats() {
+                const start = document.getElementById('trStatStart').value;
+                const end = document.getElementById('trStatEnd').value;
+                if (!start || !end) return showToast('請選擇日期區間', 'info');
+
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        load(false);
+                        if (res && res.success && res.stats.length > 0) {
+                            const summary = res.stats.map(s => ({
+                                'AGCODE': s.agcode,
+                                '姓名': s.name,
+                                '單位': s.department,
+                                '出席次數': s.count,
+                                '出席率': s.rate + '%',
+                                '總計場次': res.totalEvents
+                            }));
+
+                            const details = [];
+                            res.stats.forEach(s => {
+                                if (s.details && s.details.length > 0) {
+                                    s.details.forEach(d => {
+                                        details.push({
+                                            'AGCODE': s.agcode,
+                                            '姓名': s.name,
+                                            '單位': s.department,
+                                            '活動名稱': d.eventTitle,
+                                            '簽到時間': d.timestamp ? new Date(d.timestamp).toLocaleString() : ''
+                                        });
+                                    });
+                                }
+                            });
+
+                            const wb = XLSX.utils.book_new();
+                            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(summary), "出席率總覽");
+                            if (details.length > 0) {
+                                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(details), "簽到明細錄");
+                            }
+
+                            XLSX.writeFile(wb, `Training_Attendance_Details_${start}_${end}.xlsx`);
+                            showToast('✅ 簽到明細 Excel 已下載', 'success');
+                        } else {
+                            showToast('無資料可匯出', 'info');
                         }
-                        tb.innerHTML = res.penalties.map(p => `
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('匯出失敗: ' + err, 'error');
+                    })
+                    .getTrainingStats(start, end);
+            }
+
+            async function downloadTrainingStatsPDF() {
+                const start = document.getElementById('trStatStart').value;
+                const end = document.getElementById('trStatEnd').value;
+                if (!start || !end) return showToast('請選擇日期區間', 'info');
+
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        load(false);
+                        if (res && res.success && res.pdfData) {
+                            const link = document.createElement('a');
+                            link.href = 'data:application/pdf;base64,' + res.pdfData;
+                            link.download = res.fileName || `Attendance_Report_${start}_${end}.pdf`;
+                            link.click();
+                            showToast('✅ PDF 已下載', 'success');
+                        } else {
+                            showToast('產生 PDF 失敗: ' + (res ? res.message : '未知錯誤'), 'error');
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        load(false);
+                        showToast('產生 PDF 失敗: ' + err, 'error');
+                    })
+                    .generateTrainingStatsPDF(start, end);
+            }
+
+            function loadPenalties(silent = false) {
+                const tb = document.getElementById('penaltyListBody');
+                if (tb && !silent) tb.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-muted"><div class="spinner-border spinner-border-sm me-2"></div> 更新中...</td></tr>';
+
+                // Update datalist for searching
+                const list = document.getElementById('pen-people-list');
+                if (list && db.people) {
+                    list.innerHTML = db.people.map(p =>
+                        `<option value="${p.id}">${p.name} (${p.group})</option>`
+                    ).join('');
+                }
+
+                google.script.run
+                    .withSuccessHandler(res => {
+                        if (res && res.success && res.penalties) {
+                            if (!tb) return;
+                            if (res.penalties.length === 0) {
+                                tb.innerHTML = '<tr><td colspan="5" class="text-center p-4">目前沒有任何處分紀錄</td></tr>';
+                                return;
+                            }
+                            tb.innerHTML = res.penalties.map(p => `
                             <tr>
                                 <td><code class="text-danger fw-bold" style="background: #fff5f5; padding: 2px 6px; border-radius: 4px;">${p.agcode}</code></td>
                                 <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${p.reason}">${p.reason}</td>
@@ -3200,56 +3310,56 @@
                                 </td>
                             </tr>
                         `).join('');
-                        if (!silent) showToast('⚖️ 處分名單已更新', 'success');
-                    } else if (!silent) {
-                        showToast('載入失敗: ' + (res ? res.message : '未知錯誤'), 'error');
-                    }
-                })
-                .withFailureHandler(err => {
-                    if (!silent) showToast('連線失敗: ' + err, 'error');
-                })
-                .getPenalties();
-        }
+                            if (!silent) showToast('⚖️ 處分名單已更新', 'success');
+                        } else if (!silent) {
+                            showToast('載入失敗: ' + (res ? res.message : '未知錯誤'), 'error');
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        if (!silent) showToast('連線失敗: ' + err, 'error');
+                    })
+                    .getPenalties();
+            }
 
-        async function handleAddPenalty(e) {
-            e.preventDefault();
-            const agcode = document.getElementById('penAgcode').value.trim();
-            const reason = document.getElementById('penReason').value.trim();
-            const method = document.getElementById('penMethod').value.trim();
+            async function handleAddPenalty(e) {
+                e.preventDefault();
+                const agcode = document.getElementById('penAgcode').value.trim();
+                const reason = document.getElementById('penReason').value.trim();
+                const method = document.getElementById('penMethod').value.trim();
 
-            if (!agcode || !reason || !method) return;
+                if (!agcode || !reason || !method) return;
 
-            load(true);
-            google.script.run
-                .withSuccessHandler(res => {
-                    load(false);
-                    if (res.success) {
-                        showToast(res.message, 'success');
-                        document.getElementById('addPenaltyForm').reset();
-                        loadPenalties();
-                    } else {
-                        showToast(res.message, 'error');
-                    }
-                })
-                .managePenalty('create', { agcode, reason, method });
-        }
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        load(false);
+                        if (res.success) {
+                            showToast(res.message, 'success');
+                            document.getElementById('addPenaltyForm').reset();
+                            loadPenalties();
+                        } else {
+                            showToast(res.message, 'error');
+                        }
+                    })
+                    .managePenalty('create', { agcode, reason, method });
+            }
 
-        function deletePenalty(agcode) {
-            if (!confirm('確定要執行(刪除)此處分紀錄嗎？')) return;
-            load(true);
-            google.script.run
-                .withSuccessHandler(res => {
-                    load(false);
-                    if (res.success) {
-                        showToast(res.message, 'success');
-                        loadPenalties();
-                    } else {
-                        showToast(res.message, 'error');
-                    }
-                })
-                .managePenalty('delete', { agcode });
-        }
-    </script>
+            function deletePenalty(agcode) {
+                if (!confirm('確定要執行(刪除)此處分紀錄嗎？')) return;
+                load(true);
+                google.script.run
+                    .withSuccessHandler(res => {
+                        load(false);
+                        if (res.success) {
+                            showToast(res.message, 'success');
+                            loadPenalties();
+                        } else {
+                            showToast(res.message, 'error');
+                        }
+                    })
+                    .managePenalty('delete', { agcode });
+            }
+        </script>
 </body>
 
 </html>

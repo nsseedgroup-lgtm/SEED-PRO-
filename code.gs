@@ -59,6 +59,7 @@ function routeAction(action, args) {
     case 'getPenalties': return getPenalties();
     case 'managePenalty': return managePenalty(args[0], args[1]);
     case 'getLiveAttendance': return getLiveAttendance(args[0]);
+    case 'generateTrainingStatsPDF': return generateTrainingStatsPDF(args[0], args[1]);
     case 'ping': return { success: true, timestamp: new Date().getTime() };
     default: throw new Error("Unknown action: " + action);
   }
@@ -170,6 +171,9 @@ function doPost(e) {
       case 'getLiveAttendance':
         result = getLiveAttendance(args[0]); // eventId
         break;
+      case 'generateTrainingStatsPDF':
+        result = generateTrainingStatsPDF(args[0], args[1]);
+        break;
       case 'ping':
         result = ping();
         break;
@@ -256,7 +260,8 @@ function getReportData() {
     rData.slice(1).forEach(r => {
       const key = `${cleanVal(r[0])}_${cleanVal(r[1])}`;
       const dateStr = r[2] ? Utilities.formatDate(new Date(r[2]), Session.getScriptTimeZone(), "yyyy/MM/dd") : "已完成";
-      recordMap[key] = { date: dateStr, method: r[3] || '一般' };
+      const timeStr = (r[2] instanceof Date) ? Utilities.formatDate(r[2], Session.getScriptTimeZone(), "HH:mm:ss") : '';
+      recordMap[key] = { date: dateStr, time: timeStr, method: r[3] || '一般' };
     });
   }
 
@@ -695,12 +700,10 @@ function generatePDF(req) {
          if (isExempt) status = 'exempt';
          else if (rec) status = 'done';
 
-         // ★ Dashboard 邏輯：如果狀態是 'miss' 且課程已關閉，則視為 'exempt'
          if (status === 'miss' && c[4] === 'Closed') {
             status = 'exempt';
          }
 
-         // ★ 根據 statusFilter 過濾 (必須在上述轉換後執行)
          if (req.statusFilter && req.statusFilter !== 'all') {
             if (status !== req.statusFilter) return; 
          }
@@ -714,6 +717,7 @@ function generatePDF(req) {
            cCode: fullCode,
            status: status,
            date: rec ? rec.date : '',
+           time: rec ? rec.time : '',
            method: rec ? rec.method : ''
          });
        });
@@ -1290,39 +1294,147 @@ function saveTrainingCheckin(data) {
 
 function getTrainingStats(start, end) {
   try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
     const checkinSheet = getTrainingSheet('訓練簽到紀錄');
     const eventSheet = getTrainingSheet('訓練活動');
+    const peopleSheet = ss.getSheetByName('人員名單');
     
     const startDate = new Date(start);
     const endDate = new Date(end);
     endDate.setHours(23, 59, 59, 999);
 
-    const checkins = checkinSheet.getDataRange().getValues().slice(1).filter(r => {
-      const d = new Date(r[0]);
-      return d >= startDate && d <= endDate;
-    });
-
-    const totalEventsInRange = eventSheet.getDataRange().getValues().slice(1).filter(r => {
+    // 1. Get all events in range
+    const allEvents = eventSheet.getDataRange().getValues().slice(1).filter(r => {
       const d = new Date(r[2]);
       return d >= startDate && d <= endDate;
-    }).length;
+    });
+    const totalEventsInRange = allEvents.length;
+    const eventIdsInRange = new Set(allEvents.map(r => cleanVal(r[0])));
 
-    const statsMap = {};
+    // 2. Get all checkins in range and for those events
+    const checkins = checkinSheet.getDataRange().getValues().slice(1).filter(r => {
+      const eventId = cleanVal(r[1]);
+      return eventIdsInRange.has(eventId);
+    });
+
+    // 3. Get all people
+    const pData = peopleSheet.getDataRange().getValues();
+    const allPeopleMap = {};
+    pData.slice(1).forEach(r => {
+      if (r[0]) {
+        const agcode = cleanVal(r[0]);
+        allPeopleMap[agcode] = { 
+          agcode, 
+          name: r[1], 
+          department: r[3], 
+          count: 0, 
+          details: [] 
+        };
+      }
+    });
+
+    // 4. Map checkins to people
     checkins.forEach(r => {
       const agcode = cleanVal(r[3]);
-      if (!statsMap[agcode]) {
-        statsMap[agcode] = { agcode, name: r[4], department: r[5], count: 0, details: [] };
+      if (allPeopleMap[agcode]) {
+        allPeopleMap[agcode].count++;
+        allPeopleMap[agcode].details.push({ 
+          timestamp: r[0], 
+          eventTitle: r[2] 
+        });
       }
-      statsMap[agcode].count++;
-      statsMap[agcode].details.push({ timestamp: r[0], eventTitle: r[2] });
     });
 
-    const stats = Object.values(statsMap).map(s => {
+    const stats = Object.values(allPeopleMap).map(s => {
       s.rate = totalEventsInRange > 0 ? Math.round((s.count / totalEventsInRange) * 100) : 0;
       return s;
-    });
+    }).sort((a, b) => b.rate - a.rate);
 
     return { success: true, stats, totalEvents: totalEventsInRange };
+  } catch (e) {
+    return { success: false, message: e.toString() };
+  }
+}
+
+function generateTrainingStatsPDF(start, end) {
+  try {
+    const res = getTrainingStats(start, end);
+    if (!res.success) return res;
+
+    const stats = res.stats;
+    const totalEvents = res.totalEvents;
+
+    let rowsHtml = stats.map(s => `
+      <tr>
+        <td style="border: 1px solid #ddd; padding: 8px;">${s.agcode}</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">${s.name}</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">${s.department}</td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${s.count} / ${totalEvents}</td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: right; font-weight: bold;">${s.rate}%</td>
+      </tr>
+    `).join('');
+
+    let detailRowsHtml = stats.map(s => {
+      return (s.details || []).map(d => `
+        <tr>
+          <td style="border: 1px solid #ddd; padding: 6px;">${s.agcode}</td>
+          <td style="border: 1px solid #ddd; padding: 6px;">${s.name}</td>
+          <td style="border: 1px solid #ddd; padding: 6px;">${s.department}</td>
+          <td style="border: 1px solid #ddd; padding: 6px;">${d.eventTitle}</td>
+          <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">${d.timestamp ? Utilities.formatDate(new Date(d.timestamp), Session.getScriptTimeZone(), "yyyy/MM/dd HH:mm:ss") : ''}</td>
+        </tr>
+      `).join('');
+    }).join('');
+
+    const html = `
+      <html>
+        <body style="font-family: 'Noto Sans TC', sans-serif; padding: 20px;">
+          <h2 style="text-align: center;">訓練簽到出席率統計表</h2>
+          <p style="text-align: center; color: #666;">統計區間: ${start} ~ ${end} | 總計場次: ${totalEvents}</p>
+          
+          <h3 style="margin-top: 30px; border-left: 5px solid #000; padding-left: 10px;">1. 出席率總覽 (Summary)</h3>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+              <tr style="background-color: #f2f2f2; font-size: 0.9rem;">
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">AGCODE</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">姓名</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">單位</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">出席次數</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">出席率</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: 0.85rem;">
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <h3 style="margin-top: 50px; border-left: 5px solid #000; padding-left: 10px;">2. 簽到明細錄 (Sign-in Details)</h3>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+              <tr style="background-color: #f2f2f2; font-size: 0.9rem;">
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">AGCODE</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">姓名</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">單位</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">活動名稱</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">簽到時間</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: 0.8rem;">
+              ${detailRowsHtml || '<tr><td colspan="5" style="text-align:center; padding:20px;">無明細紀錄</td></tr>'}
+            </tbody>
+          </table>
+          <p style="text-align: right; margin-top: 30px; font-size: 0.8rem; color: #888;">製表日期: ${new Date().toLocaleString()}</p>
+        </body>
+      </html>
+    `;
+
+    const blob = Utilities.newBlob(html, 'text/html', 'report.html');
+    const pdf = blob.getAs('application/pdf').setName(`Training_Attendance_${start}_${end}.pdf`);
+    return { 
+      success: true, 
+      pdfData: Utilities.base64Encode(pdf.getBytes()),
+      fileName: pdf.getName()
+    };
   } catch (e) {
     return { success: false, message: e.toString() };
   }

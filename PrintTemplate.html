@@ -24,6 +24,7 @@
             margin: 0;
             color: var(--text-dark);
             -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
             background-color: white;
             line-height: 1.6;
         }
@@ -298,14 +299,15 @@
     <table>
         <thead>
             <tr>
-                <th width="10%">AGCODE</th>
-                <th width="10%">姓名</th>
+                <th width="8%">AGCODE</th>
+                <th width="8%">姓名</th>
                 <th width="8%">職級</th>
-                <th width="12%">單位</th>
-                <th width="12%">課程代號</th>
-                <th width="20%">課程名稱</th>
+                <th width="10%">單位</th>
+                <th width="12%">課程</th>
+                <th width="18%">課程名稱</th>
                 <th width="8%">狀態</th>
                 <th width="10%">日期</th>
+                <th width="8%">時間</th>
                 <th width="10%">方式</th>
             </tr>
         </thead>
@@ -342,6 +344,9 @@
                 </td>
                 <td>
                     <?= item.date ?>
+                </td>
+                <td class="col-code" style="background:transparent; font-size: 11px;">
+                    <?= item.time || '' ?>
                 </td>
                 <td>
                     <?= item.method ?>

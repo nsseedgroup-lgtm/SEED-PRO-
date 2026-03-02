@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動工具箱 | Seed Pro+</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-dark: #2d3436;
+            --primary-bg: #fcfcfc;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+            --accent-blue: #0984e3;
+            --accent-purple: #6c5ce7;
+            --border-color: #f0f0f0;
+            --glass-white: rgba(255, 255, 255, 0.85);
+            --accent-green: #00b894;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(108, 92, 231, 0.03) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(9, 132, 227, 0.03) 0px, transparent 50%);
+            color: var(--text-main);
+            font-family: "Inter", "Segoe UI", "Microsoft JhengHei", sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass-header {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        #liveClock {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+
+        #liveDate {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .game-id-badge {
+            background: var(--primary-dark);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .glass-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .tool-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-btn.active {
+            background: var(--primary-dark);
+            color: white;
+            border-color: var(--primary-dark);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Lottery Slot Style */
+        .slot-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .slot-rail {
+            position: absolute;
+            width: 100%;
+            transition: top 3s cubic-bezier(0.1, 0, 0, 1);
+            top: 0;
+        }
+
+        .slot-item {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: 950;
+            color: var(--primary-dark);
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            letter-spacing: -2px;
+        }
+
+        /* Grouping Style */
+        .group-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .group-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-dark);
+        }
+
+        .group-title {
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-member {
+            padding: 6px 12px;
+            margin-bottom: 6px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        .dealing-card {
+            background: linear-gradient(135deg, var(--primary-dark), #000);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 800;
+            position: fixed;
+            z-index: 1500;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes dealToGroup {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+            }
+
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.4) rotate(15deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: var(--target-pos) scale(0.2) rotate(720deg);
+            }
+        }
+
+        .team-card-flash {
+            animation: cardFlash 0.4s ease-out;
+        }
+
+        @keyframes cardFlash {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.5);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 30px 10px rgba(108, 92, 231, 0.3);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: none;
+            }
+        }
+
+        .deck-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 200px;
+            background: var(--primary-dark);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1400;
+            border: 5px solid white;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .deck-box.active {
+            display: flex;
+            animation: deckPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes deckPop {
+            from {
+                transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounceIn {
+            from {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* People Selection */
+        .person-pill {
+            display: inline-flex;
+            align-items: center;
+            background: #f1f2f6;
+            padding: 6px 12px;
+            border-radius: 30px;
+            margin: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .person-pill.inactive {
+            opacity: 0.4;
+            text-decoration: line-through;
+            background: #f8f9fa;
+        }
+
+        .person-pill.custom {
+            background: #e6fffa;
+            color: #00b894;
+            border-color: #00b894;
+        }
+
+        /* Controls */
+        .btn-elegant {
+            background: var(--primary-dark);
+            color: white;
+            border-radius: 14px;
+            padding: 12px 30px;
+            font-weight: 800;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-elegant:hover {
+            background: #000;
+            transform: scale(1.02);
+        }
+
+        /* --- Customizable Celebration Animations --- */
+        @keyframes anim-classic {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes anim-bottom {
+            0% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes anim-pop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            80% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes anim-flip {
+            0% {
+                transform: rotateX(90deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: rotateX(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes anim-blur {
+            0% {
+                filter: blur(20px);
+                opacity: 0;
+                transform: scale(1.2);
+            }
+
+            100% {
+                filter: blur(0);
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes anim-roll {
+            0% {
+                transform: translateX(-100%) rotate(-180deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes anim-top {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes anim-pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes anim-zoom {
+            0% {
+                clip-path: circle(0% at 50% 50%);
+                opacity: 0;
+            }
+
+            100% {
+                clip-path: circle(100% at 50% 50%);
+                opacity: 1;
+            }
+        }
+
+        @keyframes anim-bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-30px);
+            }
+
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .celebration-banner {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 2100;
+        }
+
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        #history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.8rem;
+        }
+
+        /* Sidebar & Toggle */
+        .settings-sidebar {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            width: 380px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-color);
+            z-index: 1050;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            padding: 2rem;
+            box-shadow: 20px 0 50px rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-dark);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1) rotate(45deg);
+        }
+
+        .sidebar-toggle.active {
+            background: var(--accent-purple);
+            transform: rotate(90deg);
+            left: 410px;
+        }
+
+        @media (max-width: 1200px) {
+            .sidebar-toggle.active {
+                left: calc(100% - 80px);
+                /* Move it to the right side when open on mobile */
+                background: var(--primary-dark);
+            }
+        }
+
+        .main-wrapper {
+            transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sidebar-open .main-wrapper {
+            margin-left: 380px;
+        }
+
+        @media (max-width: 1200px) {
+            .sidebar-open .main-wrapper {
+                margin-left: 0;
+                filter: brightness(0.7);
+                pointer-events: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="sidebar-open">
+    <div class="sidebar-toggle active" id="sidebarToggle" onclick="toggleSidebar()">
+        <i class="bi bi-gear-fill"></i>
+    </div>
+
+    <div class="settings-sidebar open" id="settingsSidebar">
+        <div class="p-0">
+            <h5 class="section-title"><i class="bi bi-gear-fill text-primary"></i> 設定參數</h5>
+
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-muted d-block">特效類型</label>
+                <div class="d-flex align-items-center gap-2">
+                    <div id="currentEffectDisplay"
+                        class="flex-grow-1 p-2 bg-light border-2 rounded-3 small fw-bold text-center">Tech 數位</div>
+                    <a href="interaction-picker.html" class="btn btn-dark shadow-sm">
+                        <i class="bi bi-palette-fill"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-muted">對象來源</label>
+                <div class="btn-group w-100">
+                    <input type="radio" class="btn-check" name="source" id="source-people" checked
+                        onclick="toggleSource('people')">
+                    <label class="btn btn-outline-dark" for="source-people">人員名冊</label>
+                    <input type="radio" class="btn-check" name="source" id="source-custom"
+                        onclick="toggleSource('custom')">
+                    <label class="btn btn-outline-dark" for="source-custom">自訂項目</label>
+                </div>
+            </div>
+
+            <div id="people-selector">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="small fw-bold text-muted">選擇成員 (<span id="count-active">0</span>)</div>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-link p-0 text-decoration-none small"
+                            onclick="selectAll(true)">全選</button>
+                        <button class="btn btn-link p-0 text-decoration-none small ms-2"
+                            onclick="selectAll(false)">清空</button>
+                    </div>
+                </div>
+                <input type="text" id="search-person" class="form-control form-control-sm mb-2 rounded-pill"
+                    placeholder="搜尋..." oninput="renderPeople()">
+                <div id="people-list" class="mb-3 p-2 border rounded-3 bg-light"
+                    style="max-height: 250px; overflow-y: auto;"></div>
+                <div class="input-group input-group-sm">
+                    <input type="text" id="temp-name" class="form-control" placeholder="臨時對象">
+                    <button class="btn btn-dark" onclick="addTempPerson()">新增</button>
+                </div>
+            </div>
+
+            <div id="custom-selector" style="display:none;">
+                <textarea id="custom-items" class="form-control border-2 mb-2" rows="6"
+                    placeholder="每行輸入一個項目..."></textarea>
+            </div>
+
+            <hr>
+            <div id="lottery-config">
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="allow-repeat">
+                    <label class="form-check-label fw-bold" for="allow-repeat">允許重複抽取</label>
+                </div>
+            </div>
+            <div id="grouping-config" style="display:none;">
+                <label class="form-label small fw-bold text-muted">分組數量</label>
+                <input type="number" id="group-count" class="form-control border-2 mb-3" value="2" min="2">
+            </div>
+
+            <button id="main-action-btn" class="btn btn-elegant w-100 py-3 mb-4" onclick="executeTool()">
+                <i class="bi bi-play-circle-fill me-2" id="action-icon"></i> <span id="action-text">開始抽籤</span>
+            </button>
+
+            <h5 class="section-title"><i class="bi bi-clock-history text-muted"></i> 歷史紀錄</h5>
+            <div id="history-list" class="small text-muted">尚無紀錄</div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <header class="glass-header">
+            <div class="container d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <a href="index.html" class="btn btn-sm btn-outline-dark rounded-pill">
+                        <i class="bi bi-arrow-left"></i> 返回
+                    </a>
+                    <div>
+                        <h5 class="fw-800 mb-0">互動工具箱</h5>
+                        <div id="liveDate">LOADING...</div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div id="liveClock">00:00:00</div>
+                </div>
+                <div class="text-end">
+                    <span class="text-muted small fw-bold me-2">GAME ID:</span>
+                    <span id="gameId" class="game-id-badge">------</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid py-5 px-lg-5">
+            <div class="tool-nav">
+                <div class="nav-btn active" id="nav-lottery" onclick="switchTool('lottery')">
+                    <i class="bi bi-gift me-2"></i> 隨機抽籤
+                </div>
+                <div class="nav-btn" id="nav-grouping" onclick="switchTool('grouping')">
+                    <i class="bi bi-people me-2"></i> 隨機分組
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div id="lottery-display">
+                        <div class="glass-card d-flex flex-column align-items-center justify-content-center p-5"
+                            style="min-height: 500px;">
+                            <div id="lottery-intro" class="text-center">
+                                <i class="bi bi-gift text-primary display-1 opacity-25"></i>
+                                <h2 class="fw-900 mt-4">準備好開始抽籤了嗎？</h2>
+                                <p class="text-muted">點擊左下角齒輪進行設定</p>
+                            </div>
+                            <div id="slot-wrapper" style="display:none; width: 100%; max-width: 500px;">
+                                <div class="slot-container">
+                                    <div id="slot-rail" class="slot-rail"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="grouping-display" style="display:none;">
+                        <div class="row g-3" id="group-results">
+                            <div class="col-12 text-center py-5 opacity-25">
+                                <i class="bi bi-people display-1"></i>
+                                <h2 class="fw-900 mt-3">尚未進行分組</h2>
+                                <p class="text-muted">點擊左下角齒輪進行設定</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="deckBox" class="deck-box">
+        <i class="bi bi-suit-spade-fill"></i>
+    </div>
+
+    <div id="result-overlay" class="result-overlay" onclick="closeOverlay()">
+        <div id="celebration-container"></div>
+    </div>
+
+    <audio id="sound-spin" src="https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3"></audio>
+    <audio id="sound-win" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+    <audio id="sound-deal" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwwy_8wjD_NkVgW-1fSySwQhRF3dYxzJqQ8bjeQQhG-F3NYaBpYMPORraUha8-oY3Jv/exec';
+        let participants = [];
+        let drawnItems = [];
+        let currentGameMode = 'lottery';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateClock(); setInterval(updateClock, 1000);
+            refreshGameId(); fetchPeople();
+            loadPreferredEffect();
+            // Sidebar is open by default via HTML classes
+        });
+
+        function loadPreferredEffect() {
+            const effect = localStorage.getItem('interaction_preferred_anim') || 'anim-bounce';
+            const names = {
+                'anim-classic': 'Classic 經典',
+                'anim-bottom': 'Gentle 溫馨',
+                'anim-pop': 'Minimal 清脆',
+                'anim-flip': 'Mech 專業',
+                'anim-blur': 'Fun 氣泡',
+                'anim-roll': 'Natural 水滴',
+                'anim-top': 'Action 快門',
+                'anim-pulse': 'Subtle 敲擊',
+                'anim-zoom': 'Premium 玻璃',
+                'anim-bounce': 'Tech 數位'
+            };
+            document.getElementById('currentEffectDisplay').textContent = names[effect] || 'Tech 數位';
+            window.selectedEffectClass = effect;
+        }
+
+        function refreshGameId() {
+            document.getElementById('gameId').textContent = Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+            document.getElementById('liveDate').textContent = now.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'long' }).toUpperCase();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('settingsSidebar');
+            const toggle = document.getElementById('sidebarToggle');
+            const mainWrapper = document.querySelector('.main-wrapper');
+
+            sidebar.classList.toggle('open');
+            toggle.classList.toggle('active');
+            document.body.classList.toggle('sidebar-open');
+        }
+
+        function closeSidebar() {
+            if (document.body.classList.contains('sidebar-open')) {
+                toggleSidebar();
+            }
+        }
+
+        const soundData = {
+            'anim-classic': { url: 'https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/bell_ring.mp3', confetti: 'classic' },
+            'anim-bottom': { url: 'https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/door_bell.mp3', confetti: 'gentle' },
+            'anim-pop': { url: 'https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/button_tiny.mp3', confetti: 'minimal' },
+            'anim-flip': { url: 'https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/camera_flashing.mp3', confetti: 'mech' },
+            'anim-blur': { url: 'https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/pop_drop.mp3', confetti: 'fun' },
+            'anim-roll': { url: 'https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/water_droplet.mp3', confetti: 'natural' },
+            'anim-top': { url: 'https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/snap.mp3', confetti: 'action' },
+            'anim-pulse': { url: 'https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/tap.mp3', confetti: 'subtle' },
+            'anim-zoom': { url: 'https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3', confetti: 'premium' },
+            'anim-bounce': { url: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', confetti: 'tech' }
+        };
+
+        function showWinner(name) {
+            const effectClass = window.selectedEffectClass || 'anim-bounce';
+            const data = soundData[effectClass];
+
+            // Play Dynamic Sound
+            const audio = new Audio(data.url);
+            audio.play().catch(() => { });
+
+            // Create Animated Banner
+            const container = document.getElementById('celebration-container');
+            container.innerHTML = `
+                <div class="celebration-banner" style="animation: ${effectClass} 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards">
+                    <h4 class="text-muted fw-bold mb-0" style="letter-spacing: 5px;">WINNER</h4>
+                    <div style="font-size: 6rem; font-weight: 950; line-height: 1;">${name}</div>
+                    <div class="mt-2 text-muted small">點擊任何地方關閉</div>
+                </div>
+            `;
+
+            document.getElementById('result-overlay').style.display = 'flex';
+
+            // Confetti
+            if (data.confetti === 'premium') {
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, scalar: 1.2 });
+            } else {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+
+        function closeOverlay() {
+            document.getElementById('result-overlay').style.display = 'none';
+        }
+
+        async function fetchPeople() {
+            try {
+                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'getReportData', args: [] }) }).then(r => r.json());
+                if (res.status === 'success') {
+                    participants = res.people.map(p => ({ id: p.id, name: p.name, active: true, source: 'list' }));
+                    renderPeople();
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function renderPeople() {
+            const list = document.getElementById('people-list');
+            const k = document.getElementById('search-person').value.toLowerCase();
+            const filtered = participants.filter(p => p.name.includes(k) || p.id.includes(k));
+            list.innerHTML = filtered.map(p => `
+                <div class="person-pill ${p.active ? '' : 'inactive'} ${p.source === 'temp' ? 'custom' : ''}" onclick="togglePerson('${p.id}')">
+                    ${p.name} <small class="opacity-50">${p.id.startsWith('TEMP') ? '' : '(' + p.id + ')'}</small>
+                </div>
+            `).join('');
+            document.getElementById('count-active').textContent = participants.filter(p => p.active).length;
+        }
+
+        function togglePerson(id) {
+            const p = participants.find(x => x.id === id);
+            if (p) p.active = !p.active;
+            renderPeople();
+        }
+
+        function selectAll(v) { participants.forEach(p => p.active = v); renderPeople(); }
+
+        function addTempPerson() {
+            const n = document.getElementById('temp-name').value.trim();
+            if (!n) return;
+            participants.unshift({ id: 'TEMP' + Date.now(), name: n, active: true, source: 'temp' });
+            document.getElementById('temp-name').value = ''; renderPeople();
+        }
+
+        function toggleSource(type) {
+            document.getElementById('people-selector').style.display = type === 'people' ? 'block' : 'none';
+            document.getElementById('custom-selector').style.display = type === 'custom' ? 'block' : 'none';
+        }
+
+        function switchTool(tool) {
+            currentGameMode = tool;
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === 'nav-' + tool));
+            document.getElementById('lottery-config').style.display = tool === 'lottery' ? 'block' : 'none';
+            document.getElementById('grouping-config').style.display = tool === 'grouping' ? 'block' : 'none';
+            document.getElementById('lottery-display').style.display = tool === 'lottery' ? 'block' : 'none';
+            document.getElementById('grouping-display').style.display = tool === 'grouping' ? 'block' : 'none';
+            document.getElementById('action-text').textContent = tool === 'lottery' ? '開始抽籤' : '開始分組';
+            document.getElementById('action-icon').className = tool === 'lottery' ? 'bi bi-play-circle-fill me-2' : 'bi bi-shuffle me-2';
+        }
+
+        async function executeTool() {
+            let pool = [];
+            if (document.getElementById('source-people').checked) {
+                pool = participants.filter(p => p.active).map(p => p.name);
+            } else {
+                pool = document.getElementById('custom-items').value.split('\n').filter(i => i.trim());
+            }
+            if (!pool.length) return alert('名單不可為空');
+
+            closeSidebar();
+            refreshGameId();
+            if (currentGameMode === 'lottery') startLottery(pool); else startGrouping(pool);
+        }
+
+        function startLottery(pool) {
+            const repeat = document.getElementById('allow-repeat').checked;
+            let available = repeat ? pool : pool.filter(i => !drawnItems.includes(i));
+            if (!available.length) { drawnItems = []; available = pool; }
+
+            const winner = available[Math.floor(Math.random() * available.length)];
+            document.getElementById('lottery-intro').style.display = 'none';
+            document.getElementById('slot-wrapper').style.display = 'block';
+
+            const rail = document.getElementById('slot-rail');
+            rail.style.transition = 'none'; rail.style.top = '0px';
+
+            let items = [];
+            for (let i = 0; i < 30; i++) items.push(pool[Math.floor(Math.random() * pool.length)]);
+            items[27] = winner;
+            rail.innerHTML = items.map(i => `<div class="slot-item">${i}</div>`).join('');
+
+            document.getElementById('sound-spin').play();
+            setTimeout(() => {
+                rail.style.transition = 'top 3s cubic-bezier(0.1, 0, 0, 1)';
+                rail.style.top = '-5400px';
+            }, 50);
+
+            setTimeout(() => {
+                showWinner(winner);
+                if (!repeat) drawnItems.push(winner);
+                addHistory('抽籤', winner);
+            }, 3200);
+        }
+
+        async function startGrouping(pool) {
+            const num = parseInt(document.getElementById('group-count').value);
+            const shuffled = [...pool].sort(() => Math.random() - 0.5);
+            const display = document.getElementById('group-results');
+            const icons = ['🔥', '⚡', '💎', '🏆', '🚀', '👽', '🎯', '🌟', '🍀', '🐲'];
+
+            display.innerHTML = Array.from({ length: num }).map((_, idx) => `
+                <div class="col-md-${num <= 3 ? (12 / num) : 4}">
+                    <div class="group-card shadow-sm" id="card-${idx}">
+                        <div class="group-title">
+                            <span><span style="font-size: 1.5rem; margin-right: 5px;">${icons[idx % icons.length]}</span> Team ${idx + 1}</span>
+                            <span class="badge bg-dark rounded-pill" id="badge-${idx}">0</span>
+                        </div>
+                        <div id="list-${idx}"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Show Deck
+            const deck = document.getElementById('deckBox');
+            deck.classList.add('active');
+            await new Promise(r => setTimeout(r, 600));
+
+            const sDeal = document.getElementById('sound-deal');
+            for (let i = 0; i < shuffled.length; i++) {
+                const name = shuffled[i];
+                const targetIdx = i % num;
+                const card = document.getElementById(`card-${targetIdx}`);
+                const list = document.getElementById(`list-${targetIdx}`);
+                const badge = document.getElementById(`badge-${targetIdx}`);
+
+                const fly = document.createElement('div');
+                fly.className = 'dealing-card'; fly.textContent = name;
+                document.body.appendChild(fly);
+
+                const rect = card.getBoundingClientRect();
+                const tx = rect.left + rect.width / 2 - window.innerWidth / 2;
+                const ty = rect.top + rect.height / 2 - window.innerHeight / 2;
+                fly.style.setProperty('--target-pos', `translate(${tx}px, ${ty}px)`);
+                fly.style.animation = 'dealToGroup 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards';
+
+                sDeal.currentTime = 0; sDeal.play();
+                await new Promise(r => setTimeout(r, 300));
+
+                const member = document.createElement('div');
+                member.className = 'group-member';
+                member.innerHTML = `<i class="bi bi-person-fill"></i> ${name}`;
+                list.appendChild(member);
+                badge.textContent = list.children.length;
+
+                // Flash Team Card
+                card.classList.add('team-card-flash');
+                setTimeout(() => card.classList.remove('team-card-flash'), 400);
+
+                setTimeout(() => fly.remove(), 600);
+            }
+
+            // Hide Deck
+            deck.classList.remove('active');
+
+            addHistory('分組', `分為 ${num} 組`);
+            setTimeout(() => {
+                const effectClass = window.selectedEffectClass || 'anim-bounce';
+                const data = soundData[effectClass];
+                const audio = new Audio(data.url);
+                audio.play().catch(() => { });
+
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+            }, 300);
+        }
+
+        function addHistory(type, res) {
+            const list = document.getElementById('history-list');
+            if (list.innerHTML.includes('尚無')) list.innerHTML = '';
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.innerHTML = `<div class="d-flex justify-content-between"><b>[${type}] ${res}</b> <span class="text-muted">${new Date().toLocaleTimeString()}</span></div>`;
+            list.prepend(item);
+        }
+    </script>
+</body>
+
+</html>
