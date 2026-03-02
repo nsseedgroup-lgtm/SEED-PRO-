@@ -404,7 +404,7 @@
                                 <div class="col-12">
                                     <label class="form-label fw-800">違規事實摘要 (Detailed Reason)</label>
                                     <textarea id="penReason" class="form-control border-2" rows="8"
-                                        placeholder="請詳細具體描述違規事實，確保內容完整不超出欄位..." required></textarea>
+                                        placeholder="請詳細具體描述違規事實..." required></textarea>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label fw-800">執行處置與措施 (Execution Measure)</label>
@@ -605,7 +605,7 @@
             const opCode = document.getElementById('opAgcode').value.trim();
             const operator = db.people.find(x => x.id === opCode);
             if (!operator) return showToast('驗證失敗', 'error');
-            if (!confirm('確認便更狀態？')) return;
+            if (!confirm('確認變更狀態？')) return;
             load(true);
             window.onTicketAct = (res) => {
                 load(false);
