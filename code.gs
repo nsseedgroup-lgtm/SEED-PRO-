@@ -1263,7 +1263,10 @@ function saveTrainingCheckin(data) {
     // Check for penalties
     const penaltySheet = getTrainingSheet('違規處分');
     const pData = penaltySheet.getDataRange().getValues();
-    const penalty = pData.slice(1).find(r => cleanVal(r[0]) === cleanVal(data.agcode));
+    const penalty = pData.slice(1).find(r => 
+      cleanVal(r[0]) === cleanVal(data.agcode) && 
+      (r[6] === 'Active' || !r[6])
+    );
 
     let penaltyInfo = null;
     if (penalty) {
