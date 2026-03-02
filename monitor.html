@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>即時紀錄 | Seed Pro+</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        /* === Modern Elegant White Theme (Aligned with index.html) === */
+        :root {
+            --primary-dark: #2d3436;
+            --primary-bg: #fcfcfc;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --accent-blue: #0984e3;
+            --accent-green-bg: #e6fffa;
+            --accent-green-text: #00b894;
+            --accent-red-bg: #fff5f5;
+            --accent-red-text: #e17055;
+            --border-color: #f0f0f0;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+            font-size: 0.92rem;
+            letter-spacing: 0.3px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass-header {
+            background: white;
+            border-bottom: 2px solid var(--border-color);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .centered-clock {
+            text-align: center;
+        }
+
+        #liveClock {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+
+        #liveDate {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 700;
+        }
+
+        .glass-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card {
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 4px solid var(--primary-dark);
+        }
+
+        .stat-card.text-success {
+            border-top-color: var(--accent-green-text);
+        }
+
+        .stat-card.text-danger {
+            border-top-color: var(--accent-red-text);
+        }
+
+        .stat-value {
+            font-size: 3.8rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+            color: var(--primary-dark);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .premium-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .premium-table th {
+            background: #f8f9fa;
+            color: #b2bec3;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            padding: 15px 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .premium-table tr td {
+            padding: 18px 20px;
+            color: var(--text-main);
+            border-bottom: 1px solid #f1f1f1;
+            transition: background 0.3s;
+        }
+
+        .new-row-flash {
+            animation: row-flash 2s ease-out;
+        }
+
+        @keyframes row-flash {
+            0% {
+                background-color: rgba(9, 132, 227, 0.1);
+            }
+
+            100% {
+                background-color: transparent;
+            }
+        }
+
+        .agcode-tag {
+            font-family: 'JetBrains Mono', monospace;
+            background: #f1f2f6;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .dot-pulse {
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-red-text);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 12px;
+            animation: pulse-animation 2.5s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(225, 112, 85, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(225, 112, 85, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(225, 112, 85, 0);
+            }
+        }
+
+        .scroll-container {
+            max-height: 600px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+        }
+
+        /* QR Code Corner Styling */
+        .qr-corner {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 100;
+            border: 1px solid var(--border-color);
+        }
+
+        .qr-corner img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 10px;
+        }
+
+        .qr-corner .small {
+            font-weight: 800;
+            color: var(--primary-dark);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loadingOverlay">
+        <div class="text-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+            <p class="mt-4 text-dim fw-bold">INITIATING MONITORING COMMAND...</p>
+        </div>
+    </div>
+
+    <header class="glass-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <div class="d-flex align-items-center">
+                        <div class="dot-pulse"></div>
+                        <div>
+                            <h4 class="fw-800 mb-0">即時紀錄</h4>
+                            <p class="text-muted small mb-0 fw-bold" id="currentEventTitle">Seed Pro+</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 centered-clock">
+                    <div id="liveClock">00:00:00</div>
+                    <div id="liveDate">2026.03.02 MONDAY</div>
+                </div>
+                <div class="col-4 d-flex justify-content-end align-items-center gap-3">
+                    <div class="text-end me-3">
+                        <div class="small text-muted fw-bold">LAST UPDATE</div>
+                        <div class="fw-800 text-primary" id="lastUpdateTime">--:--:--</div>
+                    </div>
+                    <select id="eventSelector" class="form-select rounded-pill px-4"
+                        style="width: 240px; font-weight: 700;" onchange="changeEvent()">
+                        <option value="">選擇活動...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="qr-corner" id="qrContainer" style="display: none;">
+        <div id="qrcode"></div>
+        <div class="small mt-2">掃描簽到 (SCAN TO JOIN)</div>
+    </div>
+
+    <main class="container py-5">
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="glass-card stat-card text-primary">
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">應到 (Expected)</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card stat-card text-success">
+                    <div class="stat-value" id="statCheckedIn" style="color: var(--accent-green);">0</div>
+                    <div class="stat-label">實到 (Present)</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card stat-card text-danger">
+                    <div class="stat-value" id="statMissing" style="color: var(--accent-red);">0</div>
+                    <div class="stat-label">缺席 (Missing)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0 text-success"><i class="bi bi-people-fill me-2"></i>已簽到名單</h5>
+                    <span class="badge rounded-pill badge-present px-3 py-2">LIVE DATA</span>
+                </div>
+                <div class="glass-card p-4 scroll-container">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>AGCODE</th>
+                                <th>姓名</th>
+                                <th>單位</th>
+                                <th class="text-end">簽到時間</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkedInBody">
+                            <tr>
+                                <td colspan="4" class="text-center text-dim p-5">COMMAND WAITING...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="d-flex justify-content-between align-items-center mb-4 text-danger">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-person-x-fill me-2"></i>未簽到名單</h5>
+                    <span class="badge rounded-pill badge-missing px-3 py-2">URGENT</span>
+                </div>
+                <div class="glass-card p-4 scroll-container">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>AGCODE</th>
+                                <th>姓名</th>
+                                <th>單位</th>
+                                <th class="text-end">狀態</th>
+                            </tr>
+                        </thead>
+                        <tbody id="missingBody">
+                            <tr>
+                                <td colspan="4" class="text-center text-dim p-5">COMMAND WAITING...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxBq1iD8aW2QMmk0wvSftj9xgeQN-GQ8RU0zSoONsVByVD1OvjVkmzfIS62MRZ2R45t/exec';
+        let currentEventId = '';
+        let monitorInterval = null;
+        let lastCheckedInCodes = new Set();
+        let qrcodeInstance = null;
+
+        const gas = {
+            run: function (cbName) {
+                const self = this;
+                return {
+                    getTrainingEvents: () => self.call('getTrainingEvents', [true], cbName),
+                    getLiveAttendance: (id) => self.call('getLiveAttendance', [id], cbName)
+                }
+            },
+            call: function (action, args, cbName) {
+                fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: action, args: args })
+                })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (window[cbName]) window[cbName](res);
+                    })
+                    .catch(err => {
+                        console.error("API Error:", err);
+                    });
+            }
+        };
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+            document.getElementById('liveDate').textContent = now.toLocaleDateString('en-US', {
+                year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'long'
+            }).toUpperCase();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        window.onload = () => {
+            window.handleInit = (res) => {
+                const s = document.getElementById('eventSelector');
+                if (res.success && res.events) {
+                    res.events.forEach(ev => {
+                        const opt = document.createElement('option');
+                        opt.value = ev.id; opt.textContent = ev.title; s.appendChild(opt);
+                    });
+                }
+                document.getElementById('loadingOverlay').style.opacity = '0';
+                setTimeout(() => document.getElementById('loadingOverlay').style.display = 'none', 500);
+            };
+            gas.run('handleInit').getTrainingEvents();
+        };
+
+        function changeEvent() {
+            currentEventId = document.getElementById('eventSelector').value;
+            const qrContainer = document.getElementById('qrContainer');
+
+            if (currentEventId) {
+                document.getElementById('currentEventTitle').textContent = document.getElementById('eventSelector').selectedOptions[0].text;
+
+                // Update QR Code
+                const checkInUrl = `https://seed-pro.vercel.app/checkin.html?id=${currentEventId}`;
+                qrContainer.style.display = 'block';
+                document.getElementById('qrcode').innerHTML = "";
+                new QRCode(document.getElementById("qrcode"), {
+                    text: checkInUrl,
+                    width: 120,
+                    height: 120
+                });
+
+                lastCheckedInCodes = new Set();
+                refreshData();
+                if (monitorInterval) clearInterval(monitorInterval);
+                monitorInterval = setInterval(refreshData, 5000);
+            } else {
+                if (monitorInterval) clearInterval(monitorInterval);
+                qrContainer.style.display = 'none';
+                resetUI();
+            }
+        }
+
+        function refreshData() {
+            if (!currentEventId) return;
+            window.handleData = (res) => {
+                if (res.success) {
+                    // Update Stats
+                    const sT = document.getElementById('statTotal');
+                    const sC = document.getElementById('statCheckedIn');
+                    const sM = document.getElementById('statMissing');
+
+                    sT.textContent = res.stats.total;
+                    sC.textContent = res.stats.checkedIn;
+                    sM.textContent = res.stats.missing;
+
+                    // Header Update
+                    document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString();
+
+                    // Process Checked-in List for Animations
+                    const newCheckins = res.checkedInList.map(p => {
+                        const isNew = !lastCheckedInCodes.has(p.agcode) && lastCheckedInCodes.size > 0;
+                        return `
+                            <tr class="${isNew ? 'new-row-flash' : ''}">
+                                <td><span class="agcode-tag">${p.agcode}</span></td>
+                                <td class="fw-800">${p.name}</td>
+                                <td class="small text-muted fw-bold">${p.dept || 'N/A'}</td>
+                                <td class="text-end text-success fw-800 font-monospace">${p.time}</td>
+                            </tr>
+                        `;
+                    }).join('');
+
+                    document.getElementById('checkedInBody').innerHTML = res.checkedInList.length ? newCheckins : '<tr><td colspan="4" class="text-center text-muted p-5 small">今日尚待簽到中...</td></tr>';
+
+                    // Update local cache of codes
+                    lastCheckedInCodes = new Set(res.checkedInList.map(p => p.agcode));
+
+                    // Missing List
+                    document.getElementById('missingBody').innerHTML = res.missingList.length ? res.missingList.map(p => `
+                        <tr>
+                            <td><span class="agcode-tag">${p.agcode}</span></td>
+                            <td class="fw-800 text-muted">${p.name}</td>
+                            <td class="small text-muted">${p.dept || 'N/A'}</td>
+                            <td class="text-end"><span class="badge bg-light text-muted border px-3">AWAITING</span></td>
+                        </tr>
+                    `).join('') : '<tr><td colspan="4" class="text-center text-success fw-800 p-5">MISSION COMPLETE!</td></tr>';
+                }
+            };
+            gas.run('handleData').getLiveAttendance(currentEventId);
+        }
+
+        function resetUI() {
+            document.getElementById('currentEventTitle').textContent = 'LIVE MONITORING COMMAND';
+            document.getElementById('statTotal').textContent = '0';
+            document.getElementById('statCheckedIn').textContent = '0';
+            document.getElementById('statMissing').textContent = '0';
+            document.getElementById('checkedInBody').innerHTML = '<tr><td colspan="4" class="text-center text-muted p-5">COMMAND WAITING...</td></tr>';
+            document.getElementById('missingBody').innerHTML = '<tr><td colspan="4" class="text-center text-muted p-5">COMMAND WAITING...</td></tr>';
+        }
+    </script>
+</body>
+
+</html>

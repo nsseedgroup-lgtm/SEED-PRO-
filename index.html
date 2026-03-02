@@ -300,8 +300,173 @@
             padding: 14px 15px;
             vertical-align: middle;
             border-bottom: 1px solid #f9f9f9;
-            color: var(--text-main);
-            font-size: 0.9rem;
+        }
+
+        /* Premium Training Tab Enhancements */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+        }
+
+        .tr-nav-pills .nav-link {
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 700;
+            color: #64748b;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            border: 1px solid transparent;
+            margin-right: 10px;
+        }
+
+        .tr-nav-pills .nav-link:hover {
+            background: rgba(241, 245, 249, 0.8);
+            color: #1e293b;
+            transform: translateY(-1px);
+        }
+
+        .tr-nav-pills .nav-link.active {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
+            border-color: #1e293b;
+        }
+
+        .stat-card-premium {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .stat-card-premium:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .premium-table thead th {
+            background: #fcfcfc !important;
+            color: #94a3b8 !important;
+            font-size: 0.75rem !important;
+            font-weight: 800 !important;
+            border-top: none !important;
+            padding: 18px 15px !important;
+        }
+
+        .premium-table tbody td {
+            padding: 16px 15px !important;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .premium-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .btn-refresh-soft {
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .btn-refresh-soft:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        /* Activity Card List Styles */
+        .tr-card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .tr-item-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f1f5f9;
+        }
+
+        .tr-item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+            border-color: #e2e8f0;
+        }
+
+        .tr-item-card.active {
+            background: #fdfdfd;
+        }
+
+        .tr-item-card .dropdown-item:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .pulse-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .btn-icon-soft {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            color: #64748b;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-icon-soft:hover {
+            background: #f1f5f9;
+            transform: scale(1.05);
+        }
+
+        .btn-icon-soft.text-danger:hover {
+            background: #fff1f2;
+            color: #e11d48;
         }
 
         .table tbody tr:hover {
@@ -1000,21 +1165,18 @@
             <div id="page-tr-checkin" class="page-section">
                 <div class="d-flex justify-content-between align-items-end mb-4">
                     <div>
-                        <h3>訓練簽到管理</h3>
-                        <div class="text-sub">管理訓練場次與查看出席統計</div>
+                        <h3 class="fw-800">訓練簽到管理</h3>
+                        <div class="text-sub">精確追蹤、即時回饋、深度統計</div>
                     </div>
                 </div>
 
                 <!-- Tab Navigation inside Training page -->
-                <ul class="nav nav-pills mb-4" id="trTabs">
+                <ul class="nav tr-nav-pills mb-4" id="trTabs">
                     <li class="nav-item">
                         <button class="nav-link active" onclick="switchTrTab('manage')">活動控制台</button>
                     </li>
                     <li class="nav-item">
                         <button class="nav-link" onclick="switchTrTab('stats')">出席率統計</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" onclick="switchTrTab('penalty')">違規處分管理</button>
                     </li>
                 </ul>
 
@@ -1023,78 +1185,83 @@
                     <div class="row g-4">
                         <!-- Create Event Form -->
                         <div class="col-md-4">
-                            <div class="card p-4">
-                                <h5 class="fw-bold mb-3">建立新訓練</h5>
+                            <div class="card glass-card p-4 border-0">
+                                <h5 class="fw-bold mb-4" style="color: #1e293b;">
+                                    <i class="bi bi-plus-circle-fill me-2 text-primary"></i>建立新訓練
+                                </h5>
                                 <form id="addTrForm" onsubmit="handleCreateTr(event)">
                                     <div class="mb-3">
                                         <label class="form-label">活動標題</label>
-                                        <input type="text" id="trTitle" class="form-control" placeholder="例如: 3月區訓"
-                                            required>
+                                        <input type="text" id="trTitle" class="form-control bg-white shadow-none"
+                                            placeholder="例如: 3月區訓" required
+                                            style="border-radius: 12px; border: 1px solid #e2e8f0; padding: 12px;">
                                     </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">開始時間</label>
-                                        <input type="datetime-local" id="trStart" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">結束時間</label>
-                                        <input type="datetime-local" id="trEnd" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">地點座標 (Lat, Lng)</label>
-                                        <div class="input-group">
-                                            <input type="number" id="trLat" step="any" class="form-control"
-                                                placeholder="緯度" required>
-                                            <input type="number" id="trLng" step="any" class="form-control"
-                                                placeholder="經度" required>
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <label class="form-label">開始時間</label>
+                                            <input type="datetime-local" id="trStart"
+                                                class="form-control bg-white shadow-none" required
+                                                style="border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
                                         </div>
-                                        <button type="button" class="btn btn-sm btn-outline-primary mt-2 w-100"
-                                            onclick="getAdminLoc()">
-                                            <i class="bi bi-cursor"></i> 抓取目前位置
+                                        <div class="col-6">
+                                            <label class="form-label">結束時間</label>
+                                            <input type="datetime-local" id="trEnd"
+                                                class="form-control bg-white shadow-none" required
+                                                style="border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">地點座標 (緯度, 經度)</label>
+                                        <div class="input-group">
+                                            <input type="number" id="trLat" step="any"
+                                                class="form-control bg-white shadow-none" placeholder="緯度" required
+                                                style="border-top-left-radius: 12px; border-bottom-left-radius: 12px; font-size: 0.9rem;">
+                                            <input type="number" id="trLng" step="any"
+                                                class="form-control bg-white shadow-none" placeholder="經度" required
+                                                style="border-top-right-radius: 12px; border-bottom-right-radius: 12px; font-size: 0.9rem;">
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-light mt-2 w-100 py-2 border"
+                                            onclick="getAdminLoc()"
+                                            style="border-radius: 10px; font-weight: 700; font-size: 0.8rem;">
+                                            <i class="bi bi-cursor-fill me-1 text-danger"></i> 擷取目前位置
                                         </button>
                                     </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">簽到半徑 (公尺)</label>
-                                        <input type="number" id="trRadius" class="form-control" value="200" required>
+                                    <div class="row g-2 mb-4 align-items-end">
+                                        <div class="col-6">
+                                            <label class="form-label">簽到半徑 (公尺)</label>
+                                            <input type="number" id="trRadius" class="form-control bg-white shadow-none"
+                                                value="200" required style="border-radius: 12px; padding: 10px;">
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-check form-switch mb-1 ms-2">
+                                                <input class="form-check-input" type="checkbox" id="trCheckLoc" checked>
+                                                <label class="form-check-label fw-600 small"
+                                                    style="white-space: nowrap;">GPS 限制</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check form-switch mb-3">
-                                        <input class="form-check-input" type="checkbox" id="trCheckLoc" checked>
-                                        <label class="form-check-label">開啟 GPS 距離限制</label>
-                                    </div>
-                                    <button type="submit" class="btn btn-elegant w-100">建立活動</button>
+                                    <button type="submit"
+                                        class="btn btn-elegant w-100 py-3 rounded-3 shadow-sm fw-bold">建立訓練場次</button>
                                 </form>
                             </div>
                         </div>
 
                         <!-- Event List -->
                         <div class="col-md-8">
-                            <div class="card">
+                            <div class="card glass-card border-0 overflow-hidden">
                                 <div
-                                    class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                                    <h5 class="fw-bold mb-0">活動控制台</h5>
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="loadTrEvents()">
-                                        <i class="bi bi-arrow-clockwise"></i> 重新載入
+                                    class="card-header bg-transparent d-flex justify-content-between align-items-center py-4 px-4 border-0">
+                                    <h5 class="fw-bold mb-0" style="color: #1e293b;">活動控制台</h5>
+                                    <button class="btn-refresh-soft" onclick="loadTrEvents()">
+                                        <i class="bi bi-arrow-clockwise me-1"></i> 重新載入
                                     </button>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div class="table-responsive">
-                                        <table class="table mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>活動標題</th>
-                                                    <th>時間</th>
-                                                    <th>地點/半徑</th>
-                                                    <th>狀態</th>
-                                                    <th width="80">操作</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="trListBody">
-                                                <tr>
-                                                    <td colspan="5" class="text-center p-4 text-muted">
-                                                        <div class="spinner-border spinner-border-sm me-2"></div> 載入中...
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div id="trListBody" class="tr-card-list">
+                                        <!-- Dynamic Cards go here -->
+                                        <div class="text-center p-5 text-muted">
+                                            <div class="spinner-border text-primary me-2"></div> 資料同步中...
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1104,32 +1271,42 @@
 
                 <!-- Training Stats Tab -->
                 <div id="tr-tab-stats" style="display:none;">
-                    <div class="card p-4 mb-4">
-                        <div class="row g-2 align-items-end">
-                            <div class="col-md-4">
-                                <label class="form-label">統計開始日期</label>
-                                <input type="date" id="trStatStart" class="form-control">
+                    <div class="card glass-card p-4 mb-4 border-0">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-3">
+                                <label class="form-label">起始日期</label>
+                                <input type="date" id="trStatStart" class="form-control bg-white shadow-none"
+                                    style="border-radius: 10px;">
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label">統計結束日期</label>
-                                <input type="date" id="trStatEnd" class="form-control">
+                            <div class="col-md-3">
+                                <label class="form-label">結束日期</label>
+                                <input type="date" id="trStatEnd" class="form-control bg-white shadow-none"
+                                    style="border-radius: 10px;">
                             </div>
-                            <div class="col-md-4">
-                                <button class="btn btn-elegant w-100" onclick="loadTrStats()">產生統計報表</button>
+                            <div class="col-md-3">
+                                <button class="btn btn-elegant w-100 py-2" onclick="loadTrStats()"
+                                    style="border-radius: 10px;">
+                                    <i class="bi bi-file-earmark-bar-graph me-1"></i> 產生統計
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-refresh-soft w-100 py-2" onclick="exportTrainingStats()">
+                                    <i class="bi bi-download me-1"></i> 匯出 Excel
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card glass-card border-0 overflow-hidden">
                         <div class="table-responsive">
-                            <table class="table mb-0">
+                            <table class="table premium-table mb-0">
                                 <thead>
                                     <tr>
                                         <th>AGCODE</th>
-                                        <th>姓名</th>
-                                        <th>單位</th>
-                                        <th>出席數</th>
+                                        <th>業務員姓名</th>
+                                        <th>所屬單位</th>
+                                        <th>出席場次</th>
                                         <th>出席率</th>
-                                        <th width="100">明細</th>
+                                        <th width="100" class="text-center">明細</th>
                                     </tr>
                                 </thead>
                                 <tbody id="trStatsBody"></tbody>
@@ -1138,68 +1315,7 @@
                     </div>
                 </div>
 
-                <!-- Penalty Management Tab -->
-                <div id="tr-tab-penalty" style="display:none;">
-                    <div class="row g-4">
-                        <div class="col-md-4">
-                            <div class="card p-4">
-                                <h5 class="fw-bold mb-3">新增違規處分</h5>
-                                <form id="addPenaltyForm" onsubmit="handleAddPenalty(event)">
-                                    <div class="mb-3">
-                                        <label class="form-label">員工工號 (AGCODE)</label>
-                                        <input type="text" id="penAgcode" class="form-control" required
-                                            placeholder="輸入工號或姓名搜尋" list="pen-people-list">
-                                        <datalist id="pen-people-list"></datalist>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">違規原因</label>
-                                        <textarea id="penReason" class="form-control" rows="3" required
-                                            placeholder="請輸入違規詳細原因"></textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">處分方式</label>
-                                        <input type="text" id="penMethod" class="form-control" required
-                                            placeholder="例如: 申誡一次">
-                                    </div>
-                                    <button type="submit" class="btn btn-elegant w-100">新增處分</button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div
-                                    class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                                    <h5 class="fw-bold mb-0">處分紀錄名單</h5>
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="loadPenalties()">
-                                        <i class="bi bi-arrow-clockwise"></i> 重新載入
-                                    </button>
-                                </div>
-                                <div class="card-body p-0">
-                                    <div class="table-responsive">
-                                        <table class="table mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>AGCODE</th>
-                                                    <th>原因</th>
-                                                    <th>處分方式</th>
-                                                    <th>建立日期</th>
-                                                    <th width="80">操作</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="penaltyListBody">
-                                                <tr>
-                                                    <td colspan="5" class="text-center p-4 text-muted">
-                                                        <div class="spinner-border spinner-border-sm me-2"></div> 載入中...
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- End of Training Tabs -->
             </div>
 
             <div id="page-links" class="page-section">
@@ -1245,6 +1361,26 @@
                                 <i class="bi bi-geo-alt display-4 text-danger mb-3"></i>
                                 <h5 class="fw-bold">訓練簽到</h5>
                                 <p class="text-muted small">開啟訓練活動簽到頁面</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm hover-card"
+                            onclick="window.open('monitor.html', '_blank')" style="cursor: pointer;">
+                            <div class="card-body p-4 text-center">
+                                <i class="bi bi-broadcast display-4 text-info mb-3"></i>
+                                <h5 class="fw-bold">即時監控</h5>
+                                <p class="text-muted small">即時追蹤簽到進度</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm hover-card" onclick="openPage('penalty')"
+                            style="cursor: pointer;">
+                            <div class="card-body p-4 text-center">
+                                <i class="bi bi-shield-lock display-4 text-dark mb-3"></i>
+                                <h5 class="fw-bold">違規紀錄</h5>
+                                <p class="text-muted small">管理與查詢違規處分詳情</p>
                             </div>
                         </div>
                     </div>
@@ -1410,7 +1546,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         /* Netlify API Shim for Google Apps Script */
-        const API_URL = "https://script.google.com/macros/s/AKfycbzVAapCV7aMTPsS20qadqvd_OCJ8Ja-jYK2T__CfL-lmiAF2WEttmJ106KDjrseUpKb/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxBq1iD8aW2QMmk0wvSftj9xgeQN-GQ8RU0zSoONsVByVD1OvjVkmzfIS62MRZ2R45t/exec";
         // Polyfill google.script.run for Netlify environment
         if (typeof google === 'undefined' || !google.script) {
             console.log("Initializing Netlify-to-GAS Bridge...");
@@ -2802,24 +2938,19 @@
         function switchTrTab(tab) {
             const manageBtn = document.querySelector('[onclick="switchTrTab(\'manage\')"]');
             const statsBtn = document.querySelector('[onclick="switchTrTab(\'stats\')"]');
-            const penaltyBtn = document.querySelector('[onclick="switchTrTab(\'penalty\')"]');
             const manageContent = document.getElementById('tr-tab-manage');
             const statsContent = document.getElementById('tr-tab-stats');
-            const penaltyContent = document.getElementById('tr-tab-penalty');
 
-            if (!manageBtn || !statsBtn || !penaltyBtn) return;
+            if (!manageBtn || !statsBtn) return;
 
             manageBtn.classList.toggle('active', tab === 'manage');
             statsBtn.classList.toggle('active', tab === 'stats');
-            penaltyBtn.classList.toggle('active', tab === 'penalty');
 
             manageContent.style.display = tab === 'manage' ? 'block' : 'none';
             statsContent.style.display = tab === 'stats' ? 'block' : 'none';
-            penaltyContent.style.display = tab === 'penalty' ? 'block' : 'none';
 
             // Now preloaded, but we can refresh if the table is empty
             if (tab === 'manage' && document.getElementById('trListBody').children.length <= 1) loadTrEvents();
-            if (tab === 'penalty' && document.getElementById('penaltyListBody').children.length <= 1) loadPenalties();
             if (tab === 'stats') {
                 const today = new Date();
                 const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -2889,30 +3020,55 @@
                     if (res && res.success && res.events) {
                         if (!tb) return;
                         if (res.events.length === 0) {
-                            tb.innerHTML = '<tr><td colspan="5" class="text-center p-4">目前沒有建立任何場次</td></tr>';
+                            tb.innerHTML = '<div class="text-center p-5 text-muted">目前沒有建立任何場次</div>';
                             return;
                         }
                         tb.innerHTML = res.events.map(ev => {
                             const start = new Date(ev.startTime).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
                             const end = new Date(ev.endTime).toLocaleString('zh-TW', { hour: '2-digit', minute: '2-digit' });
                             const isOpen = ev.manualOpen !== false;
+
                             return `
-                                <tr>
-                                    <td><strong>${ev.title}</strong></td>
-                                    <td><small>${start} ~ ${end}</small></td>
-                                    <td><small>${ev.location.latitude.toFixed(4)}, ${ev.location.longitude.toFixed(4)}<br>半徑: ${ev.location.radius}m</small></td>
-                                    <td>
-                                        ${ev.checkLocation ? '<span class="badge bg-warning text-dark me-1">GPS</span>' : ''}
-                                        <button class="btn btn-sm ${isOpen ? 'btn-success' : 'btn-outline-secondary'}" onclick="toggleTrManual('${ev.id}', ${isOpen})">
-                                            ${isOpen ? '已開啟' : '已關閉'}
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-minimal text-danger" onclick="deleteTr('${ev.id}', '${ev.title}')">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                <div class="tr-item-card ${isOpen ? 'active' : ''}" style="border-left: 4px solid ${isOpen ? '#10b981' : '#cbd5e1'};">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-baseline mb-1">
+                                                <h5 class="fw-bold mb-0 me-2" style="color: #0f172a; font-size: 1.1rem;">${ev.title}</h5>
+                                                <span class="text-muted" style="font-size: 0.75rem; font-family: 'Outfit';">#${ev.id.split('-')[1] || ev.id}</span>
+                                            </div>
+                                            <div class="d-flex flex-wrap align-items-center gap-x-4 gap-y-1 mt-2">
+                                                <div style="font-size: 0.8rem; color: #64748b; min-width: 140px;">
+                                                    <i class="bi bi-clock me-1"></i> ${start} - ${end}
+                                                </div>
+                                                <div style="font-size: 0.8rem; color: #64748b;">
+                                                    <i class="bi bi-geo-alt me-1"></i> ${ev.location.radius}m
+                                                </div>
+                                                ${ev.checkLocation ? '<span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 ms-1" style="font-size: 0.6rem; padding: 3px 8px;">GPS 強制</span>' : ''}
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-3 ps-3 border-start">
+                                            <div class="text-end" style="min-width: 70px;">
+                                                <div class="small fw-800 ${isOpen ? 'text-success' : 'text-muted'}" style="font-size: 0.7rem;">
+                                                    ${isOpen ? '<span class="pulse-indicator"></span>正在開放' : '已關閉'}
+                                                </div>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-icon-soft" data-bs-toggle="dropdown">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius: 12px;">
+                                                    <li><a class="dropdown-item py-2" href="#" onclick="toggleTrManual('${ev.id}', ${isOpen})">
+                                                        <i class="bi ${isOpen ? 'bi-lock' : 'bi-unlock'} me-2"></i> ${isOpen ? '停止開放' : '開啟簽到'}
+                                                    </a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item py-2 text-danger" href="#" onclick="deleteTr('${ev.id}', '${ev.title}')">
+                                                        <i class="bi bi-trash3 me-2"></i> 刪除場次
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             `;
                         }).join('');
                         if (!silent) showToast('📅 活動列表已更新', 'success');
@@ -2980,19 +3136,22 @@
                             const details = s.details.map(d => `${new Date(d.timestamp).toLocaleString()}: ${d.eventTitle}`).join('\n');
                             return `
                                 <tr>
-                                    <td><code>${s.agcode}</code></td>
-                                    <td><strong>${s.name}</strong></td>
-                                    <td>${s.department}</td>
-                                    <td>${s.count} 次</td>
+                                    <td><code class="text-primary fw-bold" style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">${s.agcode}</code></td>
+                                    <td><div class="fw-bold">${s.name}</div></td>
+                                    <td><span class="text-muted">${s.department}</span></td>
+                                    <td class="fw-bold text-dark">${s.count} <small class="text-muted fw-normal">場次</small></td>
                                     <td>
-                                        <div class="progress" style="height: 6px; width: 60px; display: inline-block; vertical-align: middle; margin-right: 8px;">
-                                            <div class="progress-bar ${s.rate >= 80 ? 'bg-success' : s.rate >= 50 ? 'bg-warning' : 'bg-danger'}" style="width: ${s.rate}%"></div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="progress flex-grow-1" style="height: 8px; background: #f1f5f9; border-radius: 4px; max-width: 80px;">
+                                                <div class="progress-bar ${s.rate >= 80 ? 'bg-success' : s.rate >= 50 ? 'bg-warning' : 'bg-danger'}" 
+                                                     style="width: ${s.rate}%; border-radius: 4px;"></div>
+                                            </div>
+                                            <span class="fw-800" style="font-size: 0.9rem; color: ${s.rate >= 80 ? '#10b981' : s.rate >= 50 ? '#f59e0b' : '#ef4444'};">${s.rate}%</span>
                                         </div>
-                                        <span class="fw-bold">${s.rate}%</span>
                                     </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-minimal" onclick="alert(\`簽到明細：\n${details}\`)">
-                                            <i class="bi bi-info-circle"></i>
+                                    <td class="text-center">
+                                        <button class="btn btn-icon-soft text-primary" onclick="alert(\`簽到明細：\n${details}\`)" title="查看明細">
+                                            <i class="bi bi-list-stars"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -3030,13 +3189,13 @@
                         }
                         tb.innerHTML = res.penalties.map(p => `
                             <tr>
-                                <td><code>${p.agcode}</code></td>
-                                <td>${p.reason}</td>
-                                <td><span class="badge bg-danger">${p.method}</span></td>
-                                <td><small>${new Date(p.createdAt).toLocaleString()}</small></td>
-                                <td>
-                                    <button class="btn btn-sm btn-minimal text-danger" onclick="deletePenalty('${p.agcode}')">
-                                        <i class="bi bi-trash"></i>
+                                <td><code class="text-danger fw-bold" style="background: #fff5f5; padding: 2px 6px; border-radius: 4px;">${p.agcode}</code></td>
+                                <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${p.reason}">${p.reason}</td>
+                                <td><span class="premium-badge bg-danger text-white" style="font-size: 0.7rem;">${p.method}</span></td>
+                                <td><div class="text-muted" style="font-size: 0.8rem;">${new Date(p.createdAt).toLocaleDateString()}</div></td>
+                                <td class="text-center">
+                                    <button class="btn btn-icon-soft text-danger" onclick="deletePenalty('${p.agcode}')" title="撤銷處分">
+                                        <i class="bi bi-shield-x"></i>
                                     </button>
                                 </td>
                             </tr>

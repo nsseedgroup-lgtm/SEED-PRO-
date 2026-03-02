@@ -92,6 +92,80 @@
             gap: 10px;
         }
 
+        .user-preview-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 28px;
+            padding: 40px 30px;
+            margin-top: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .avatar-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(58, 123, 213, 0.3);
+        }
+
+        .emp-name {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .emp-dept {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 41, 59, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* Original styles below */
         #loading-overlay {
             position: fixed;
             top: 0;
@@ -155,15 +229,18 @@
                     <span class="text-muted">查詢中...</span>
                 </div>
 
-                <div id="emp-preview" class="text-center"
-                    style="display:none; border-radius:20px; background: rgba(0, 242, 255, 0.08); border: 1px solid rgba(0, 180, 216, 0.2); padding: 25px;">
-                    <div class="fw-bold mb-1" id="emp-name" style="font-size: 1.8rem; color: #005f73;"></div>
-                    <div class="text-muted mb-4" id="emp-dept" style="font-size: 1rem;"></div>
-                    <button class="btn btn-primary w-100 py-3 fw-bold rounded-3" onclick="goToStage2()"
-                        style="background: #007bff; border: none; font-size: 1.1rem;">確定</button>
+                <div id="emp-preview" style="display:none;">
+                    <div class="user-preview-card">
+                        <div class="avatar-circle">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div class="emp-name" id="emp-name"></div>
+                        <div class="emp-dept" id="emp-dept"></div>
+                        <button class="btn-confirm" onclick="goToStage2()">本人確認，進入簽到</button>
+                    </div>
                 </div>
-                <div id="emp-not-found" class="text-danger small text-center mt-2" style="display:none;">
-                    <i class="bi bi-exclamation-circle"></i> 找不到此AGCODE
+                <div id="emp-not-found" class="text-danger small text-center mt-3" style="display:none;">
+                    <i class="bi bi-exclamation-circle-fill me-1"></i> 您輸入的 AGCODE 不存在或格式錯誤
                 </div>
             </div>
 
@@ -205,13 +282,10 @@
                     <p class="text-muted" id="result-message"></p>
                 </div>
 
-                <div id="penalty-alert" class="alert alert-warning text-start p-4 mb-4"
-                    style="display:none; border-radius:16px; border-left: 5px solid #ffc107;">
-                    <h5 class="alert-heading fw-bold text-danger"><i
-                            class="bi bi-exclamation-triangle-fill me-2"></i>違規提醒</h5>
-                    <hr>
-                    <div class="mb-2"><strong>違規原因：</strong> <span id="pen-reason"></span></div>
-                    <div><strong>處分方式：</strong> <span id="pen-method"></span></div>
+                <div id="penalty-alert" class="alert alert-danger text-center p-4 mb-4"
+                    style="display:none; border-radius:16px; border-left: 5px solid #dc3545;">
+                    <h5 class="alert-heading fw-bold mb-3"><i class="bi bi-exclamation-octagon-fill me-2"></i>違規提醒</h5>
+                    <div class="fs-4 fw-800">有違規處分 請洽教委</div>
                 </div>
 
                 <button class="btn btn-dark w-100 p-3 rounded-3 fw-bold" onclick="location.reload()">返回首頁</button>
@@ -220,7 +294,7 @@
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbzVAapCV7aMTPsS20qadqvd_OCJ8Ja-jYK2T__CfL-lmiAF2WEttm106KDjrseUpKb/exec";
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxBq1iD8aW2QMmk0wvSftj9xgeQN-GQ8RU0zSoONsVByVD1OvjVkmzfIS62MRZ2R45t/exec';
         let userLoc = null;
         let currentEmp = null;
 
@@ -401,8 +475,6 @@
             document.getElementById('result-message').innerText = msg;
 
             if (penalty) {
-                document.getElementById('pen-reason').innerText = penalty.reason;
-                document.getElementById('pen-method').innerText = penalty.method;
                 document.getElementById('penalty-alert').style.display = 'block';
             }
         }

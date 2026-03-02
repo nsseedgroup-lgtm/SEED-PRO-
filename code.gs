@@ -1,7 +1,67 @@
 /* TMS Pro+ V4.8 for Netlify API Backend */
 
 function doGet(e) {
+  const p = e.parameter;
+  const action = p.action || p.function; // Support both naming conventions
+  const callback = p.callback;
+  
+  if (action) {
+    let args = [];
+    try {
+      if (p.args) args = JSON.parse(p.args);
+    } catch (err) {}
+    
+    let result = null;
+    try {
+      result = routeAction(action, args);
+    } catch (err) {
+      result = { success: false, message: err.toString() };
+    }
+    
+    const output = JSON.stringify(result);
+    if (callback) {
+      return ContentService.createTextOutput(callback + "(" + output + ")")
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    return ContentService.createTextOutput(output)
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  
   return ContentService.createTextOutput("TMS Pro+ API Service is Running.");
+}
+
+function routeAction(action, args) {
+  switch (action) {
+    case 'checkAdminLogin': return checkAdminLogin(args[0], args[1]);
+    case 'getReportData': return getReportData();
+    case 'updateAdminAccount': return updateAdminAccount(args[0], args[1], args[2]);
+    case 'toggleCompletion': return toggleCompletion(args[0], args[1], args[2]);
+    case 'toggleExemption': return toggleExemption(args[0], args[1], args[2]);
+    case 'batchRecordCompletion': return batchRecordCompletion(args[0], args[1], args[2], args[3]);
+    case 'processAudit': return processAudit(args[0], args[1], args[2]);
+    case 'saveCourse': return saveCourse(args[0]);
+    case 'toggleCourseStatus': return toggleCourseStatus(args[0], args[1]);
+    case 'addPerson': return addPerson(args[0]);
+    case 'updatePerson': return updatePerson(args[0]);
+    case 'getPendingCoursesForForm': return getPendingCoursesForForm(args[0]);
+    case 'processFormSubmission': return processFormSubmission(args[0]);
+    case 'getPersonHistory': return getPersonHistory(args[0]);
+    case 'generatePDF': return generatePDF(args[0]);
+    case 'checkPersonExists': return checkPersonExists(args[0]);
+    case 'submitPersonnelChange': return submitPersonnelChange(args[0]);
+    case 'getPersonnelChanges': return getPersonnelChanges();
+    case 'approvePersonnelChange': return approvePersonnelChange(args[0], args[1], args[2], args[3]);
+    case 'handleAudit': return handleAudit(args[0], args[1]);
+    case 'getTrainingEvents': return getTrainingEvents(args[0]);
+    case 'manageTrainingEvent': return manageTrainingEvent(args[0], args[1]);
+    case 'trainingCheckin': return saveTrainingCheckin(args[0]);
+    case 'getTrainingStats': return getTrainingStats(args[0], args[1]);
+    case 'getPenalties': return getPenalties();
+    case 'managePenalty': return managePenalty(args[0], args[1]);
+    case 'getLiveAttendance': return getLiveAttendance(args[0]);
+    case 'ping': return { success: true, timestamp: new Date().getTime() };
+    default: throw new Error("Unknown action: " + action);
+  }
 }
 
 function doPost(e) {
@@ -106,6 +166,9 @@ function doPost(e) {
         break;
       case 'getPenalties':
         result = getPenalties();
+        break;
+      case 'getLiveAttendance':
+        result = getLiveAttendance(args[0]); // eventId
         break;
       case 'ping':
         result = ping();
@@ -1278,16 +1341,37 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 function getPenalties() {
   try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = getTrainingSheet('違規處分');
-    const data = sheet.getDataRange().getValues();
-    if (data.length <= 1) return { success: true, penalties: [] };
-    const penalties = data.slice(1).map(r => ({
-      agcode: r[0],
-      reason: r[1],
-      method: r[2],
-      createdAt: r[3]
-    }));
-    return { success: true, penalties: penalties.reverse() };
+    const rows = sheet.getDataRange().getValues();
+    
+    // Get People Map for names
+    const peopleSheet = ss.getSheetByName('人員名單');
+    const pRows = peopleSheet.getDataRange().getValues();
+    const nameMap = {};
+    for (let i = 1; i < pRows.length; i++) {
+       nameMap[cleanVal(pRows[i][0])] = pRows[i][1];
+    }
+    
+    const data = [];
+    for (let i = 1; i < rows.length; i++) {
+      const agcode = cleanVal(rows[i][0]);
+      data.push({
+        agcode: agcode,
+        name: nameMap[agcode] || '未知人員',
+        reason: rows[i][1],
+        method: rows[i][2],
+        createdAt: rows[i][3] instanceof Date ? rows[i][3].getTime() : rows[i][3],
+        date: rows[i][4],
+        category: rows[i][5],
+        status: rows[i][6] || 'Active',
+        opAgcode: rows[i][7],
+        opName: rows[i][8],
+        opRank: rows[i][9],
+        opDate: rows[i][10]
+      });
+    }
+    return { success: true, penalties: data };
   } catch (e) {
     return { success: false, message: e.toString() };
   }
@@ -1299,22 +1383,139 @@ function managePenalty(operation, data) {
   try {
     const sheet = getTrainingSheet('違規處分');
     if (operation === 'create') {
+      const row = [
+        data.agcode,
+        data.reason,
+        data.method,
+        new Date(), // System Record Time
+        data.date || '', // Violation Date
+        data.category || '其它', // Category
+        'Active' // [NEW] Status
+      ];
       sheet.getRange(sheet.getLastRow() + 1, 1).setNumberFormat('@');
-      sheet.appendRow([data.agcode, data.reason, data.method, new Date()]);
-      return { success: true, message: '已新增違規處分' };
+      sheet.appendRow(row);
+      return { success: true, message: '已發布正式處分命令' };
     } else if (operation === 'delete') {
+      // "撤銷" operation - remove from record with audit info
       const rows = sheet.getDataRange().getValues();
+      const agcode = cleanVal(data.agcode);
+      const createdAt = data.createdAt;
+      
       for (let i = rows.length - 1; i >= 1; i--) {
-        if (cleanVal(rows[i][0]) === cleanVal(data.agcode)) {
-          sheet.deleteRow(i + 1);
-          return { success: true, message: '已刪除處分紀錄' };
+        const rowAgcode = cleanVal(rows[i][0]);
+        const rowTs = rows[i][3] instanceof Date ? rows[i][3].getTime() : rows[i][3];
+        
+        if (rowAgcode === agcode && (!createdAt || rowTs == createdAt)) {
+           // We keep the row but change status and add operator info instead of deleting?
+           // Actually user says "撤銷處罰按鈕", usually this means logically deleted but we might want to keep the audit.
+           // For now, let's mark it as 'Revoked' to keep the record/audit.
+           sheet.getRange(i + 1, 7, 1, 5).setValues([[
+             'Revoked', 
+             data.opAgcode || '', 
+             data.opName || '', 
+             data.opRank || '', 
+             new Date()
+           ]]);
+           return { success: true, message: '處分命令已撤銷' };
         }
       }
-      return { success: false, message: '找不到該紀錄' };
+      return { success: false, message: '找不到相關紀錄' };
+    } else if (operation === 'complete') {
+      // "完成" operation - mark as Completed with audit info
+      const rows = sheet.getDataRange().getValues();
+      const agcode = cleanVal(data.agcode);
+      const createdAt = data.createdAt;
+      
+      for (let i = rows.length - 1; i >= 1; i--) {
+        const rowAgcode = cleanVal(rows[i][0]);
+        const rowTs = rows[i][3] instanceof Date ? rows[i][3].getTime() : rows[i][3];
+        
+        if (rowAgcode === agcode && (!createdAt || rowTs == createdAt)) {
+           sheet.getRange(i + 1, 7, 1, 5).setValues([[
+             'Completed', 
+             data.opAgcode || '', 
+             data.opName || '', 
+             data.opRank || '', 
+             new Date()
+           ]]);
+           return { success: true, message: '處分已標記為完成' };
+        }
+      }
+      return { success: false, message: '找不到相關紀錄' };
     }
   } catch (e) {
     return { success: false, message: e.toString() };
   } finally {
     lock.releaseLock();
+  }
+}
+
+function getLiveAttendance(eventId) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const eventSheet = getTrainingSheet('訓練活動');
+    const checkinSheet = getTrainingSheet('訓練簽到紀錄');
+    const peopleSheet = ss.getSheetByName('人員名單');
+    
+    // 1. Get Event Details
+    const eventData = eventSheet.getDataRange().getValues();
+    let event = null;
+    for (let i = 1; i < eventData.length; i++) {
+      if (cleanVal(eventData[i][0]) === cleanVal(eventId)) {
+        event = {
+          id: eventData[i][0],
+          title: eventData[i][1],
+          start: eventData[i][2],
+          end: eventData[i][3]
+        };
+        break;
+      }
+    }
+    if (!event) return { success: false, message: '找不到該活動' };
+
+    // 2. Get All Personnel
+    const pData = peopleSheet.getDataRange().getValues();
+    const allPeople = pData.slice(1).filter(r => r[0]).map(r => ({
+      agcode: cleanVal(r[0]),
+      name: r[1],
+      dept: r[3]
+    }));
+
+    // 3. Get Checked-in Personnel for this event
+    const cData = checkinSheet.getDataRange().getValues();
+    const checkedInMap = {};
+    const checkedInList = [];
+    cData.slice(1).forEach(r => {
+      if (cleanVal(r[1]) === cleanVal(eventId)) {
+        const agcode = cleanVal(r[3]);
+        checkedInMap[agcode] = {
+          name: r[4],
+          time: r[0] instanceof Date ? Utilities.formatDate(r[0], Session.getScriptTimeZone(), "HH:mm:ss") : r[0]
+        };
+        checkedInList.push({
+          agcode: agcode,
+          name: r[4],
+          dept: r[5],
+          time: checkedInMap[agcode].time
+        });
+      }
+    });
+
+    // 4. Calculate Missing
+    const missingList = allPeople.filter(p => !checkedInMap[p.agcode]);
+
+    return {
+      success: true,
+      event: event,
+      stats: {
+        total: allPeople.length,
+        checkedIn: checkedInList.length,
+        missing: missingList.length
+      },
+      checkedInList: checkedInList,
+      missingList: missingList
+    };
+  } catch (e) {
+    return { success: false, message: e.toString() };
   }
 }
