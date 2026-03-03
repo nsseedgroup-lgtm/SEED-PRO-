@@ -58,8 +58,15 @@ function routeAction(action, args) {
     case 'getTrainingStats': return getTrainingStats(args[0], args[1]);
     case 'getPenalties': return getPenalties();
     case 'managePenalty': return managePenalty(args[0], args[1]);
+    case 'getPointsStatus': return getPointsStatus(args[0]);
+    case 'addPoints': return addPoints(args[0], args[1], args[2]);
+    case 'getLeaderboard': return getLeaderboard();
     case 'getLiveAttendance': return getLiveAttendance(args[0]);
     case 'generateTrainingStatsPDF': return generateTrainingStatsPDF(args[0], args[1]);
+    case 'setWorkshopState': return setWorkshopState(args[0]);
+    case 'getWorkshopState': return getWorkshopState();
+    case 'submitWorkshopUpload': return submitWorkshopUpload(args[0]);
+    case 'getWorkshopUploads': return getWorkshopUploads();
     case 'ping': return { success: true, timestamp: new Date().getTime() };
     default: throw new Error("Unknown action: " + action);
   }
@@ -173,6 +180,30 @@ function doPost(e) {
         break;
       case 'generateTrainingStatsPDF':
         result = generateTrainingStatsPDF(args[0], args[1]);
+        break;
+      case 'getPointsStatus':
+        result = getPointsStatus(args[0]);
+        break;
+      case 'addPoints':
+        result = addPoints(args[0], args[1], args[2]);
+        break;
+      case 'getLeaderboard':
+        result = getLeaderboard();
+        break;
+      case 'setWorkshopState':
+        result = setWorkshopState(args[0]);
+        break;
+      case 'getWorkshopState':
+        result = getWorkshopState();
+        break;
+      case 'submitWorkshopUpload':
+        result = submitWorkshopUpload(args[0]);
+        break;
+      case 'getWorkshopUploads':
+        result = getWorkshopUploads();
+        break;
+      case 'deleteWorkshopUpload':
+        result = deleteWorkshopUpload(args[0]);
         break;
       case 'ping':
         result = ping();
@@ -1634,3 +1665,198 @@ function getLiveAttendance(eventId) {
     return { success: false, message: e.toString() };
   }
 }
+
+// ==========================================
+// ★ 積分與榮譽系統 (Points & Honor)
+// ==========================================
+
+function getPointsStatus(empId) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. Get User Details
+  const pSheet = ss.getSheetByName('人員名單');
+  const pData = pSheet.getDataRange().getValues();
+  const cleanId = cleanVal(empId);
+  let userName = '未知人員';
+  let userGroup = '未知單位';
+  
+  if (pData.length > 1) {
+    const row = pData.slice(1).find(r => cleanVal(r[0]) === cleanId);
+    if (row) {
+      userName = row[1];
+      userGroup = row[3];
+    }
+  }
+
+  // 2. Get Points
+  let s = ss.getSheetByName('積分紀錄');
+  if(!s) {
+    s = ss.insertSheet('積分紀錄');
+    s.appendRow(['時間', 'AGCODE', '積分變動', '原因']);
+  }
+  
+  const data = s.getDataRange().getValues();
+  let total = 0;
+  const history = [];
+  
+  if (data.length > 1) {
+    data.slice(1).forEach(r => {
+      if (cleanVal(r[1]) === cleanId) {
+        const pts = parseFloat(r[2]) || 0;
+        total += pts;
+        history.push({
+          time: Utilities.formatDate(new Date(r[0]), Session.getScriptTimeZone(), "MM/dd HH:mm"),
+          points: pts,
+          reason: r[3]
+        });
+      }
+    });
+  }
+  
+  return { success: true, total, name: userName, group: userGroup, agcode: cleanId, history: history.reverse().slice(0, 10) };
+}
+
+function addPoints(empId, points, reason) {
+  const lock = LockService.getScriptLock();
+  try { lock.waitLock(10000); } catch(e) { return {success:false, message: '系統忙碌'}; }
+  
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let s = ss.getSheetByName('積分紀錄');
+    if(!s) {
+      s = ss.insertSheet('積分紀錄');
+      s.appendRow(['時間', 'AGCODE', '積分變動', '原因']);
+    }
+    
+    s.appendRow([new Date(), cleanVal(empId), points, reason]);
+    writeLog('積分變動', `ID=[${empId}], 點數=[${points}], 原因=[${reason}]`);
+    return { success: true, newPoints: points };
+  } catch(e) {
+    return { success: false, message: e.toString() };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function getLeaderboard() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const pSheet = ss.getSheetByName('人員名單');
+  const ptsSheet = ss.getSheetByName('積分紀錄');
+  
+  if (!pSheet) return { success: false, message: '查無人員名單' };
+  
+  const people = pSheet.getDataRange().getValues().slice(1).map(r => ({
+    id: cleanVal(r[0]),
+    name: r[1],
+    group: r[3]
+  }));
+  
+  const pointsMap = {};
+  if (ptsSheet) {
+    const ptsData = ptsSheet.getDataRange().getValues().slice(1);
+    ptsData.forEach(r => {
+      const id = cleanVal(r[1]);
+      pointsMap[id] = (pointsMap[id] || 0) + (parseFloat(r[2]) || 0);
+    });
+  }
+  
+  const leaderboard = people.map(p => ({
+    ...p,
+    points: pointsMap[p.id] || 0
+  })).sort((a, b) => b.points - a.points).filter(p => p.points > 0).slice(0, 20);
+  
+  return { success: true, leaderboard };
+}
+
+// ==========================================
+// ★ A&H 工作坊 後端邏輯
+// ==========================================
+
+/**
+ * 儲存工作坊狀態 (PropertiesService 適合這種頻繁讀取的緩存資料)
+ * data: { active, startTime, limit, teams, members }
+ */
+function setWorkshopState(data) {
+  const props = PropertiesService.getScriptProperties();
+  if (!data) {
+    props.deleteProperty('WORKSHOP_ACTIVE_STATE');
+    // 清除本次上傳紀錄
+    const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('工作坊繳交紀錄');
+    if (s) s.clearContents().appendRow(['時間', '隊伍', '檔案內容']);
+    return { success: true, message: '工作坊已重置' };
+  }
+  props.setProperty('WORKSHOP_ACTIVE_STATE', JSON.stringify(data));
+  return { success: true };
+}
+
+function getWorkshopState() {
+  const props = PropertiesService.getScriptProperties();
+  const raw = props.getProperty('WORKSHOP_ACTIVE_STATE');
+  return { success: true, state: raw ? JSON.parse(raw) : null };
+}
+
+/**
+ * 學員繳交檔案
+ * upload: { team, data }
+ */
+function submitWorkshopUpload(upload) {
+  const lock = LockService.getScriptLock();
+  try { lock.waitLock(10000); } catch(e) { return { success: false, message: '伺服器忙碌' }; }
+  
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let s = ss.getSheetByName('工作坊繳交紀錄');
+    if (!s) {
+      s = ss.insertSheet('工作坊繳交紀錄');
+      s.appendRow(['時間', '隊伍', '檔案內容']);
+    }
+    
+    // 檢查該隊伍是否已繳交
+    const data = s.getDataRange().getValues();
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][1] === upload.team) return { success: false, message: '該隊伍已經繳交過囉！' };
+    }
+    
+    s.appendRow([new Date(), upload.team, upload.data]);
+    return { success: true };
+  } catch(e) {
+    return { success: false, message: e.toString() };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function getWorkshopUploads() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const s = ss.getSheetByName('工作坊繳交紀錄');
+  if (!s) return { success: true, uploads: [] };
+  
+  const data = s.getDataRange().getValues().slice(1);
+  const uploads = data.map(r => ({ timestamp: r[0], team: r[1], data: r[2] }));
+  return { success: true, uploads };
+}
+
+function deleteWorkshopUpload(team) {
+  const lock = LockService.getScriptLock();
+  try { lock.waitLock(10000); } catch(e) { return { success: false, message: '伺服器忙碌' }; }
+  
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let s = ss.getSheetByName('工作坊繳交紀錄');
+    if (!s) return { success: true };
+    
+    const data = s.getDataRange().getValues();
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][1] === team) {
+        s.deleteRow(i + 1);
+        return { success: true, message: '已刪除繳交紀錄' };
+      }
+    }
+    return { success: true };
+  } catch(e) {
+    return { success: false, message: e.toString() };
+  } finally {
+    lock.releaseLock();
+  }
+}
+

@@ -447,26 +447,45 @@
         }
 
         .btn-icon-soft {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: #f8fafc;
+            background: #ffffff;
             color: #64748b;
-            border: none;
-            transition: all 0.2s;
+            border: 1px solid #edf2f7;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
         }
 
         .btn-icon-soft:hover {
-            background: #f1f5f9;
-            transform: scale(1.05);
+            background: #f8fafc;
+            color: #1e293b;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .btn-icon-soft.text-danger:hover {
-            background: #fff1f2;
-            color: #e11d48;
+        .action-done:hover {
+            color: #10b981;
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+
+        .action-revert:hover {
+            color: #6366f1;
+            border-color: #6366f1;
+            background: #eef2ff;
+        }
+
+        .action-exempt:hover {
+            color: #94a3b8;
+            border-color: #94a3b8;
+            background: #f8fafc;
         }
 
         .table tbody tr:hover {
@@ -790,6 +809,88 @@
                     </div>
                 </div>
 
+                <!-- Quick Stats -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                        <div class="card p-4 h-100 bg-white border-0 shadow-sm overflow-hidden"
+                            style="border-radius: 24px;">
+                            <div class="row align-items-center">
+                                <div class="col-lg-8 border-end-lg">
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+                                        <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary">
+                                            <i class="bi bi-graph-up-arrow fs-5"></i>
+                                        </div>
+                                        <h6 class="fw-800 text-muted mb-0 small text-uppercase"
+                                            style="letter-spacing: 1px;">訓練進度概覽 (Overall Progress)</h6>
+                                    </div>
+                                    <div class="d-flex flex-wrap align-items-end gap-3 mb-2">
+                                        <h1 class="fw-900 mb-0"
+                                            style="font-size: 3.5rem; line-height: 1; color: var(--primary-dark);"
+                                            id="completion-rate">0%</h1>
+                                        <div class="pb-1">
+                                            <span class="badge bg-success bg-opacity-10 text-success fw-bold p-2 px-3"
+                                                style="border-radius: 10px;">
+                                                <i class="bi bi-check-circle-fill me-1"></i> <span
+                                                    id="stat-done-count">0</span> 項已完成
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="progress bg-light" style="height: 14px; border-radius: 7px;">
+                                        <div id="completion-bar" class="progress-bar"
+                                            style="width: 0%; border-radius: 7px; background: linear-gradient(90deg, #6c5ce7, #a29bfe); transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
+                                        </div>
+                                    </div>
+                                    <div class="small text-muted mt-3 fw-500">
+                                        <i class="bi bi-info-circle-fill me-1 text-primary"></i>
+                                        排除「免訓/不計」項目之即時統計：分析目前所有人員應修課程之達成狀況。
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 mt-4 mt-lg-0 text-center text-lg-end">
+                                    <div class="px-lg-4">
+                                        <div class="text-primary fw-900 h4 mb-0" id="stat-total-count">0</div>
+                                        <div class="small text-muted fw-bold mb-3">應完成總數 (Pending Items)</div>
+                                        <div
+                                            class="d-inline-flex align-items-center gap-2 bg-dark text-white p-2 px-3 rounded-pill small fw-800">
+                                            <span class="pulse-dot"></span> Live Data Syncing
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .pulse-dot {
+                        width: 8px;
+                        height: 8px;
+                        background: #00b894;
+                        border-radius: 50%;
+                        display: inline-block;
+                        animation: dotPulse 2s infinite;
+                    }
+
+                    @keyframes dotPulse {
+                        0% {
+                            box-shadow: 0 0 0 0 rgba(0, 184, 148, 0.7);
+                        }
+
+                        70% {
+                            box-shadow: 0 0 0 10px rgba(0, 184, 148, 0);
+                        }
+
+                        100% {
+                            box-shadow: 0 0 0 0 rgba(0, 184, 148, 0);
+                        }
+                    }
+
+                    @media (min-width: 992px) {
+                        .border-end-lg {
+                            border-right: 1px solid #f1f5f9 !important;
+                        }
+                    }
+                </style>
+
                 <div class="card p-4">
                     <div class="row g-2 align-items-end">
                         <div class="col-md-2">
@@ -848,7 +949,6 @@
                                     <th onclick="doSort('status')">狀態 <i class="bi bi-arrow-down-up sort-icon"
                                             id="sort-status"></i></th>
                                     <th>日期</th>
-                                    <th>時間</th>
                                     <th>方式</th>
                                     <th width="120" class="text-center">操作</th>
                                 </tr>
@@ -900,7 +1000,6 @@
                             <table class="table mb-0">
                                 <thead>
                                     <tr>
-                                        <th>時間</th>
                                         <th>AGCODE</th>
                                         <th>姓名</th>
                                         <th>課程</th>
@@ -1562,7 +1661,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
         <script>
             /* Netlify API Shim for Google Apps Script */
-            const API_URL = "https://script.google.com/macros/s/AKfycbwwy_8wjD_NkVgW-1fSySwQhRF3dYxzJqQ8bjeQQhG-F3NYaBpYMPORraUha8-oY3Jv/exec";
+            const API_URL = "https://script.google.com/macros/s/AKfycbz4kiWGCG96zZHAJgc-wOAaCxOkS7WXf5IriAEKk0StXYFNVlME7x2SjaSva3Rp8obX/exec";
             // Polyfill google.script.run for Netlify environment
             if (typeof google === 'undefined' || !google.script) {
                 console.log("Initializing Netlify-to-GAS Bridge...");
@@ -1613,6 +1712,20 @@
             let inactivityTimer = null;
             const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
             let personnelChanges = [];
+
+
+            function updateQuickStats() {
+                if (!currentDashData || !currentDashData.length) return;
+                const done = currentDashData.filter(x => x.status === 'done').length;
+                const miss = currentDashData.filter(x => x.status === 'miss').length;
+                const total = done + miss;
+                const rate = total === 0 ? 0 : Math.round((done / total) * 100);
+
+                document.getElementById('completion-rate').textContent = rate + '%';
+                document.getElementById('completion-bar').style.width = rate + '%';
+                document.getElementById('stat-done-count').textContent = done.toLocaleString();
+                document.getElementById('stat-total-count').textContent = total.toLocaleString();
+            }
 
             // Audio Settings
             let audioEnabled = true;
@@ -1986,6 +2099,7 @@
                         // Preload Training Data (Silent)
                         loadTrEvents(true);
                         loadPenalties(true);
+                        updateQuickStats();
                     })
                     .withFailureHandler(err => {
                         load(false);
@@ -2114,6 +2228,7 @@
 
                 currentDashData = list;
                 document.getElementById('dashCount').innerText = list.length + ' Data';
+                updateQuickStats();
 
                 const tb = document.getElementById('dashBody');
                 const limit = 200; // Hard render limit for performance
@@ -2124,18 +2239,26 @@
 
                     if (d.status === 'done') {
                         statusHtml = `<span class="status-pill pill-done"><i class="bi bi-check-circle-fill"></i> Done</span>`;
-                        actionHtml = `<button class="btn-icon-soft action-revert" title="撤銷完訓" onclick="handleAction(this,'${d.p.id}','${code}','done','completion')"><i class="bi bi-arrow-counterclockwise"></i></button><button class="btn-icon-soft action-exempt" title="設為免訓" onclick="handleAction(this,'${d.p.id}','${code}','done','exemption')"><i class="bi bi-slash-circle"></i></button>`;
+                        actionHtml = `<div class="d-flex justify-content-center gap-2">
+                            <button class="btn-icon-soft action-revert" title="撤銷完訓" onclick="handleAction(this,'${d.p.id}','${code}','done','completion')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                            <button class="btn-icon-soft action-exempt" title="設為免訓" onclick="handleAction(this,'${d.p.id}','${code}','done','exemption')"><i class="bi bi-slash-circle"></i></button>
+                        </div>`;
                     } else if (d.status === 'exempt') {
                         if (d.isClosedExempt) {
                             statusHtml = `<span class="status-pill pill-exempt bg-secondary border-0 text-white" title="課程已關閉，自動免修"><i class="bi bi-archive-fill"></i> Closed</span>`;
-                            actionHtml = `<span class="text-muted small">已關閉</span>`;
+                            actionHtml = `<span class="text-muted small opacity-50">已關閉</span>`;
                         } else {
                             statusHtml = `<span class="status-pill pill-exempt"><i class="bi bi-slash-circle"></i> Exempt</span>`;
-                            actionHtml = `<button class="btn-icon-soft action-revert" title="撤銷免訓" onclick="handleAction(this,'${d.p.id}','${code}','exempt','exemption')"><i class="bi bi-arrow-counterclockwise"></i></button>`;
+                            actionHtml = `<div class="d-flex justify-content-center gap-2">
+                                <button class="btn-icon-soft action-revert" title="撤銷免訓" onclick="handleAction(this,'${d.p.id}','${code}','exempt','exemption')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                            </div>`;
                         }
                     } else {
                         statusHtml = `<span class="status-pill pill-miss"><i class="bi bi-exclamation-circle"></i> Missing</span>`;
-                        actionHtml = `<button class="btn-icon-soft action-done" title="設為完成" onclick="handleAction(this,'${d.p.id}','${code}','miss','completion')"><i class="bi bi-check-lg"></i></button><button class="btn-icon-soft action-exempt" title="設為免訓" onclick="handleAction(this,'${d.p.id}','${code}','miss','exemption')"><i class="bi bi-slash-circle"></i></button>`;
+                        actionHtml = `<div class="d-flex justify-content-center gap-2">
+                            <button class="btn-icon-soft action-done" title="設為完成" onclick="handleAction(this,'${d.p.id}','${code}','miss','completion')"><i class="bi bi-check-lg"></i></button>
+                            <button class="btn-icon-soft action-exempt" title="設為免訓" onclick="handleAction(this,'${d.p.id}','${code}','miss','exemption')"><i class="bi bi-slash-circle"></i></button>
+                        </div>`;
                     }
 
                     return `<tr class="align-middle text-nowrap">
@@ -2147,7 +2270,6 @@
                     <td><small class="text-muted">${d.c.fullCode}</small><br>${d.c.cName}</td>
                     <td>${statusHtml}</td>
                     <td>${d.rec ? d.rec.date : '-'}</td>
-                    <td style="font-size: 0.8rem; font-family: monospace;">${d.rec && d.rec.time ? d.rec.time : '-'}</td>
                     <td>${d.rec ? d.rec.method : '-'}</td>
                     <td class="text-center">${actionHtml}</td>
                 </tr>`;
@@ -2214,8 +2336,8 @@
 
             function renderAudit() {
                 const list = db.auditList || []; const tb = document.getElementById('auditBody');
-                if (list.length === 0) tb.innerHTML = '<tr><td colspan="8" class="text-center text-muted p-4">目前沒有待確認的資料</td></tr>';
-                else tb.innerHTML = list.map(r => `<tr><td>${r.timestamp.split('T')[0]}</td><td>${r.empId}</td><td>${r.empName}</td><td>${r.courseCode}</td><td>${r.finishDate}</td><td>${r.filler}</td><td>${r.method}</td><td><button class="btn btn-sm btn-elegant me-1" onclick="doAudit('${r.rowIndex}', 'approve', '${r.empId}', '${r.courseCode}', '${r.finishDate}', '${r.method}')">准</button><button class="btn btn-sm btn-minimal" onclick="doAudit('${r.rowIndex}', 'reject')">駁</button></td></tr>`).join('');
+                if (list.length === 0) tb.innerHTML = '<tr><td colspan="7" class="text-center text-muted p-4">目前沒有待確認的資料</td></tr>';
+                else tb.innerHTML = list.map(r => `<tr><td>${r.empId}</td><td>${r.empName}</td><td>${r.courseCode}</td><td>${r.finishDate}</td><td>${r.filler}</td><td>${r.method}</td><td><button class="btn btn-sm btn-elegant me-1" onclick="doAudit('${r.rowIndex}', 'approve', '${r.empId}', '${r.courseCode}', '${r.finishDate}', '${r.method}')">准</button><button class="btn btn-sm btn-minimal" onclick="doAudit('${r.rowIndex}', 'reject')">駁</button></td></tr>`).join('');
 
                 // Update badges
                 updateAuditBadges();
@@ -2497,6 +2619,7 @@
                 const courseSelect = document.getElementById('rec_course');
                 const course = courseSelect.value;
                 const date = document.getElementById('rec_date').value;
+
 
                 // Validate inputs
                 if (!course) {
