@@ -559,20 +559,28 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(239, 68, 68, 0.95);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             z-index: 10000;
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
-            backdrop-filter: blur(20px);
+            text-align: center;
         }
 
         .time-up-text {
-            font-size: 12rem;
+            font-size: 10rem;
             font-weight: 950;
-            text-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #ff7675, #d63031);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 20px 50px rgba(214, 48, 49, 0.4);
+            letter-spacing: 5px;
+            font-family: 'JetBrains Mono';
         }
 
         /* Custom UI */
@@ -710,13 +718,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(30px);
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             z-index: 10001;
             display: none;
             flex-direction: column;
             overflow-y: auto;
-            padding: 40px;
+            padding: 60px;
+            color: white;
         }
 
         .workshop-init-overlay {
@@ -725,51 +735,63 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             z-index: 10005;
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
-            padding: 40px;
+            padding: 20px;
         }
 
         .workshop-init-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 40px;
             padding: 60px;
             text-align: center;
             max-width: 900px;
             width: 100%;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 1;
         }
 
         .workshop-init-option {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 30px;
             padding: 40px;
             cursor: pointer;
-            transition: 0.4s;
-            border: 1px solid transparent;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .workshop-init-option:hover {
             background: rgba(255, 255, 255, 0.15);
-            border-color: var(--primary);
+            border-color: rgba(255, 255, 255, 0.3);
             transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
         .workshop-init-option i {
-            font-size: 4rem;
+            font-size: 4.5rem;
             margin-bottom: 20px;
-            color: var(--primary);
+            color: white;
+            filter: drop-shadow(0 10px 15px rgba(255, 255, 255, 0.2));
+            transition: all 0.4s ease;
+        }
+
+        .workshop-init-option:hover i {
+            transform: scale(1.1);
         }
 
         /* Participant Selection Overlay */
@@ -779,73 +801,80 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.98);
+            background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             z-index: 10001;
             display: none;
             flex-direction: column;
-            padding: 40px;
+            padding: 50px;
         }
 
         .selection-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             color: white;
         }
 
         .selection-search {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
-            padding: 12px 25px;
+            padding: 15px 30px;
             color: white;
-            width: 300px;
+            width: 350px;
             transition: 0.3s;
+            backdrop-filter: blur(10px);
         }
 
         .selection-search:focus {
             outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         #selection-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
             overflow-y: auto;
-            padding: 10px;
+            padding: 20px 10px;
             flex-grow: 1;
         }
 
         .selection-pill {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            padding: 20px;
-            border-radius: 30px;
+            padding: 25px 20px;
+            border-radius: 24px;
             text-align: center;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             font-weight: 700;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .selection-pill:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
 
         .selection-pill.active {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-purple) 100%);
+            border-color: transparent;
+            box-shadow: 0 15px 40px rgba(108, 92, 231, 0.4);
+            transform: translateY(-5px) scale(1.05);
         }
 
         .selection-pill .unit-text {
@@ -863,30 +892,61 @@
 
         /* QR Code & Dashboard Hub */
         .qr-hub-card {
-            background: white;
-            border-radius: 30px;
-            padding: 30px;
-            border: 2px solid #f1f5f9;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 35px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
             display: flex;
             align-items: center;
             gap: 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .qr-hub-card:hover {
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
         }
 
         .dashboard-timer-circle {
             width: 220px;
             height: 220px;
-            border: 10px solid #f1f5f9;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(248, 250, 252, 0.9));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06), inset 0 0 0 8px rgba(255, 255, 255, 0.4);
+            border: none;
+        }
+
+        .dashboard-timer-circle::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #0984e3, #6c5ce7);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.2;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-timer-circle:hover::before {
+            opacity: 0.4;
+            transform: scale(1.02);
         }
 
         .dashboard-timer-circle .time-text {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 950;
-            color: #1e293b;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-family: 'JetBrains Mono';
         }
 
@@ -898,67 +958,93 @@
 
         /* Workshop Gamma Extensions */
         .workshop-team-config-card {
-            background: white;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             overflow: hidden;
             height: 100%;
-            transition: 0.3s;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
         }
 
         .workshop-team-config-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .workshop-team-card-header {
-            padding: 15px 20px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(248, 250, 252, 0.9));
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .workshop-member-list {
-            padding: 15px;
-            min-height: 80px;
+            padding: 20px 25px;
+            min-height: 100px;
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
 
         .workshop-member-pill {
-            background: #f1f5f9;
+            background: white;
             border-radius: 50px;
-            padding: 4px 12px;
+            padding: 6px 16px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.2s ease;
+        }
+
+        .workshop-member-pill:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
         }
 
         .workshop-member-pill .btn-remove {
             color: #ef4444;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .workshop-member-pill .btn-remove:hover {
+            color: #b91c1c;
         }
 
         .dashboard-status-card {
-            background: white;
-            border-radius: 30px;
-            padding: 25px;
-            border: 2px solid #f1f5f9;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 35px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
             position: relative;
             overflow: hidden;
-            transition: 0.5s cubic-bezier(0.18, 1, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             height: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+        }
+
+        .dashboard-status-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .dashboard-status-card.submitted {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.05);
+            border-color: rgba(108, 92, 231, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(108, 92, 231, 0.05));
         }
 
         .rank-badge {
@@ -1021,20 +1107,37 @@
         }
 
         .workshop-tab-btn {
-            transition: 0.3s;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--text-muted);
+            border: none !important;
+            background: transparent !important;
+            font-size: 1.1rem;
+        }
+
+        .workshop-tab-btn:hover:not(.active) {
+            color: var(--primary-dark);
+            background: rgba(255, 255, 255, 0.8) !important;
+            transform: translateY(-2px);
         }
 
         .workshop-tab-btn.active {
-            background: #1e293b;
-            color: white;
-            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-purple) 100%) !important;
+            color: white !important;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2) !important;
+            transform: scale(1.02);
         }
 
         .workshop-ctrl-btn {
-            border-radius: 12px;
+            border-radius: 16px;
             font-weight: 800;
-            padding: 10px 20px;
+            padding: 12px 24px;
             letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .workshop-ctrl-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .workshop-team-pill {
@@ -1082,6 +1185,324 @@
 
         .translate-y:hover {
             transform: translateY(-5px);
+        }
+
+        /* Carousel Showcase */
+        .showcase-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 10500;
+            display: none;
+            flex-direction: column;
+        }
+
+        .showcase-header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .showcase-body {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .showcase-img {
+            max-width: 80vw;
+            max-height: 70vh;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s;
+        }
+
+        .showcase-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 40px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .showcase-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .showcase-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .showcase-footer {
+            padding: 30px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        body.workshop-mode-active::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 100%, rgba(108, 92, 231, 0.15) 0%, transparent 60%);
+            z-index: -1;
+            pointer-events: none;
+            animation: pulse-glow 8s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        /* ===== PODIUM OVERLAY ===== */
+        .podium-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, rgba(15, 23, 42, 0.97) 55%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            z-index: 11000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 0;
+            color: white;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .podium-title-wrap {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeSlideDown 0.8s 0.3s ease forwards;
+        }
+
+        .podium-subtitle {
+            font-size: 0.78rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: 0.45;
+            margin-bottom: 10px;
+        }
+
+        .podium-main-title {
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            font-weight: 950;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 40%, #e17055 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 6px 24px rgba(253, 203, 110, 0.45));
+            line-height: 1.1;
+        }
+
+        .podium-stage {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: clamp(8px, 2vw, 24px);
+            width: 100%;
+            max-width: 860px;
+            height: 60vh;
+            padding: 0 clamp(16px, 4vw, 60px);
+        }
+
+        .podium-slot {
+            flex: 1;
+            max-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .podium-team-info {
+            text-align: center;
+            margin-bottom: 18px;
+            opacity: 0;
+        }
+
+        .podium-medal {
+            font-size: 2.8rem;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .podium-team-name {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-weight: 900;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .podium-score {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 950;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: -1px;
+        }
+
+        .podium-score-unit {
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0.55;
+        }
+
+        .podium-bar {
+            width: 100%;
+            border-radius: 20px 20px 0 0;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .podium-bar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), transparent 50%);
+            border-radius: inherit;
+        }
+
+        .podium-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -70%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: podiumShimmer 2.5s 2s infinite;
+        }
+
+        @keyframes podiumShimmer {
+            to {
+                left: 140%;
+            }
+        }
+
+        .podium-rank-num {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 950;
+            color: rgba(255, 255, 255, 0.18);
+            font-family: 'JetBrains Mono', monospace;
+            user-select: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .podium-bar.gold {
+            background: linear-gradient(180deg, #fff3cd, #ffeaa7 20%, #fdcb6e 55%, #e09940);
+            box-shadow: 0 -30px 80px rgba(253, 203, 110, 0.6), 0 0 120px rgba(253, 203, 110, 0.2);
+        }
+
+        .podium-bar.silver {
+            background: linear-gradient(180deg, #f5f6fa, #dfe6e9 20%, #b2bec3 55%, #6d7f8c);
+            box-shadow: 0 -20px 50px rgba(178, 190, 195, 0.5);
+        }
+
+        .podium-bar.bronze {
+            background: linear-gradient(180deg, #ffd8a8, #fab1a0 20%, #e07060 55%, #c05040);
+            box-shadow: 0 -15px 40px rgba(224, 112, 96, 0.4);
+        }
+
+        .podium-close-hint {
+            position: absolute;
+            bottom: 24px;
+            font-size: 0.78rem;
+            opacity: 0;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: fadeSlideDown 0.8s 2.5s ease forwards;
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+
+            to {
+                opacity: 0.4;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes riseUp {
+            from {
+                transform: scaleY(0);
+            }
+
+            to {
+                transform: scaleY(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -1298,47 +1719,97 @@
 
                 <div id="timer-display" style="display:none;">
                     <div class="glass-card d-flex flex-column align-items-center justify-content-center p-5"
-                        style="min-height: 500px;">
-                        <div id="timer-number"
-                            style="font-size: 11rem; font-weight: 950; font-family: 'JetBrains Mono'; color: var(--primary-dark);">
-                            05:00</div>
-                        <div class="d-flex gap-3 mt-4">
-                            <button class="btn btn-dark btn-lg px-5 fw-900 rounded-pill" id="btn-timer-toggle"
-                                onclick="toggleTimer()">START</button>
-                            <button class="btn btn-outline-secondary btn-lg px-4 fw-800 rounded-pill"
-                                onclick="resetTimer()">RESET</button>
+                        style="min-height: 520px; background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.9)); border: 1px solid rgba(255,255,255,0.08);">
+
+                        <!-- Timer ring visual -->
+                        <div
+                            style="position:relative; display:flex; align-items:center; justify-content:center; margin-bottom: 24px;">
+                            <div style="
+                                width: 300px; height: 300px;
+                                border-radius: 50%;
+                                background: conic-gradient(rgba(99,102,241,0.3) 0%, rgba(99,102,241,0.05) 100%);
+                                border: 3px solid rgba(99,102,241,0.2);
+                                display:flex; align-items:center; justify-content:center;
+                                box-shadow: 0 0 60px rgba(99,102,241,0.15), inset 0 0 60px rgba(0,0,0,0.3);
+                            ">
+                                <div id="timer-number"
+                                    style="font-size: 5.5rem; font-weight: 950; font-family: 'Outfit', sans-serif; color: white; letter-spacing: -4px; line-height: 1; text-shadow: 0 0 40px rgba(99,102,241,0.5);">
+                                    05:00</div>
+                            </div>
                         </div>
-                        <div class="d-flex gap-2 mt-4">
-                            <button class="btn btn-sm btn-light rounded-pill px-3" onclick="setTimer(60)">1 MIN</button>
-                            <button class="btn btn-sm btn-light rounded-pill px-3" onclick="setTimer(180)">3
+
+                        <!-- Controls -->
+                        <div class="d-flex gap-3 mb-4">
+                            <button class="btn btn-lg fw-900 rounded-pill px-5" id="btn-timer-toggle"
+                                onclick="toggleTimer()"
+                                style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; box-shadow: 0 8px 25px rgba(99,102,241,0.4);">
+                                <i class="bi bi-play-fill me-2"></i>START
+                            </button>
+                            <button class="btn btn-lg fw-800 rounded-pill px-4" onclick="resetTimer()"
+                                style="background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15);">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                        </div>
+
+                        <!-- Preset buttons -->
+                        <div class="d-flex gap-2 flex-wrap justify-content-center">
+                            <button class="btn btn-sm rounded-pill px-4 fw-bold" onclick="setTimer(60)"
+                                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1);">1
                                 MIN</button>
-                            <button class="btn btn-sm btn-light rounded-pill px-3" onclick="setTimer(300)">5
+                            <button class="btn btn-sm rounded-pill px-4 fw-bold" onclick="setTimer(180)"
+                                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1);">3
                                 MIN</button>
-                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3"
-                                onclick="setCustomTimer()"><i class="bi bi-pencil-square me-1"></i> CUSTOM</button>
+                            <button class="btn btn-sm rounded-pill px-4 fw-bold" onclick="setTimer(300)"
+                                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1);">5
+                                MIN</button>
+                            <button class="btn btn-sm rounded-pill px-4 fw-bold" onclick="setTimer(600)"
+                                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1);">10
+                                MIN</button>
+                            <button class="btn btn-sm rounded-pill px-4 fw-bold" onclick="setCustomTimer()"
+                                style="background: rgba(99,102,241,0.2); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3);">
+                                <i class="bi bi-pencil-square me-1"></i>自訂</button>
                         </div>
                     </div>
                 </div>
 
                 <div id="session-points-display" style="display:none;">
-                    <div class="glass-card p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-950 mb-0">即時積分排行</h5>
-                            <div class="btn-group btn-group-sm">
-                                <button class="btn btn-outline-dark" onclick="togglePointsView('indiv')">個人</button>
-                                <button class="btn btn-outline-dark" onclick="togglePointsView('team')">單位</button>
-                                <button class="btn btn-outline-dark"
-                                    onclick="togglePointsView('customTeam')">自訂小組</button>
-                                <button class="btn btn-outline-danger ms-3" onclick="confirmResetPoints()">重置</button>
+                    <div class="glass-card p-4"
+                        style="background: linear-gradient(135deg, rgba(15,23,42,0.96), rgba(30,41,59,0.92)); border: 1px solid rgba(255,255,255,0.08); color: white;">
+                        <!-- Header -->
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                            <div>
+                                <div class="small fw-bold mb-1"
+                                    style="color: rgba(255,255,255,0.4); letter-spacing: 4px; text-transform:uppercase;">
+                                    Scoreboard</div>
+                                <h5 class="fw-950 mb-0">即時積分排行</h5>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <!-- Mode toggle pills -->
+                                <div class="d-flex gap-1 p-1 rounded-pill"
+                                    style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                                    <button id="pts-tab-indiv"
+                                        class="btn btn-sm rounded-pill px-3 fw-bold pts-tab active"
+                                        onclick="setPointsTab('indiv')">個人</button>
+                                    <button id="pts-tab-team" class="btn btn-sm rounded-pill px-3 fw-bold pts-tab"
+                                        onclick="setPointsTab('team')">單位</button>
+                                    <button id="pts-tab-customTeam" class="btn btn-sm rounded-pill px-3 fw-bold pts-tab"
+                                        onclick="setPointsTab('customTeam')">自訂小組</button>
+                                </div>
+                                <button class="btn btn-sm rounded-pill px-3 fw-bold" onclick="confirmResetPoints()"
+                                    style="background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.25);">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>重置
+                                </button>
                             </div>
                         </div>
-                        <div id="session-points-list" class="row g-4 justify-content-center"></div>
+                        <div id="session-points-list" class="row g-3 justify-content-center"></div>
 
-                        <!-- Workshop Specifc Points Actions -->
-                        <div id="workshop-points-actions" class="mt-5 pt-4 border-top text-center"
-                            style="display:none;">
-                            <button class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold"
-                                onclick="nextWorkshopRound()">繼續下一局</button>
+                        <!-- Workshop Specific Points Actions -->
+                        <div id="workshop-points-actions" class="mt-5 pt-4 text-center"
+                            style="display:none; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <button class="btn rounded-pill px-5 py-3 fw-bold" onclick="nextWorkshopRound()"
+                                style="background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15);">
+                                繼續下一局
+                            </button>
                             <button class="btn btn-elegant rounded-pill px-5 py-3 fw-bold ms-3"
                                 onclick="finalizeWorkshop()">結束並結算</button>
                         </div>
@@ -1352,19 +1823,22 @@
 
     <div id="workshop-display" style="display: none;">
         <!-- Workshop Sub-Nav -->
-        <div class="d-flex gap-3 mb-4">
-            <button class="btn btn-dark rounded-pill px-4 fw-bold workshop-tab-btn active"
-                onclick="switchWorkshopSection('setup')">
-                <i class="bi bi-gear-fill me-2"></i> 隊伍配置
-            </button>
-            <button class="btn btn-outline-dark rounded-pill px-4 fw-bold workshop-tab-btn"
-                onclick="switchWorkshopSection('dashboard')">
-                <i class="bi bi-speedometer2 me-2"></i> 監測儀表板
-            </button>
-            <button class="btn btn-outline-dark rounded-pill px-4 fw-bold workshop-tab-btn"
-                onclick="switchWorkshopSection('scoring')">
-                <i class="bi bi-star-fill me-2"></i> 計分與結算
-            </button>
+        <div class="mb-5 text-center">
+            <div class="d-inline-flex gap-2 p-2 rounded-pill"
+                style="background: rgba(255,255,255,0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <button class="btn rounded-pill px-5 py-2 fw-bold workshop-tab-btn active"
+                    onclick="switchWorkshopSection('setup')">
+                    <i class="bi bi-gear-fill me-2"></i> 隊伍配置
+                </button>
+                <button class="btn rounded-pill px-5 py-2 fw-bold workshop-tab-btn"
+                    onclick="switchWorkshopSection('dashboard')">
+                    <i class="bi bi-speedometer2 me-2"></i> 監測儀表板
+                </button>
+                <button class="btn rounded-pill px-5 py-2 fw-bold workshop-tab-btn"
+                    onclick="switchWorkshopSection('scoring')">
+                    <i class="bi bi-star-fill me-2"></i> 計分與結算
+                </button>
+            </div>
         </div>
 
         <!-- Setup Section -->
@@ -1413,7 +1887,7 @@
                                 <div id="workshop-qr-container" class="bg-light p-2 rounded-4 shadow-sm">
                                 </div>
                                 <div>
-                                    <div class="small fw-bold text-muted mb-1">學員提交入口</div>
+                                    <div class="small fw-bold text-muted mb-1">繳交頁面</div>
                                     <div class="fw-800 text-primary mb-1">workshop.html</div>
                                     <div class="d-flex gap-2">
                                         <button class="btn btn-sm btn-dark rounded-pill px-3"
@@ -1427,15 +1901,25 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="glass-card p-4 h-100 bg-primary bg-opacity-10 border-primary border-opacity-25">
+                    <div class="glass-card p-4 h-100 bg-primary bg-opacity-10 border-primary border-opacity-25 shadow-sm"
+                        style="backdrop-filter: blur(20px);">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="fw-950 mb-0">繳交即時動態</h5>
                             <span id="workshop-status-badge"
-                                class="badge bg-primary rounded-pill px-3 py-2 fw-bold">ACTIVE</span>
+                                class="badge bg-primary rounded-pill px-4 py-2 fw-bold fs-6 shadow-sm">ACTIVE</span>
                         </div>
                         <div id="workshop-stats" class="h-100 d-flex flex-column justify-content-center text-center">
-                            <div class="display-4 fw-950 text-primary" id="workshop-submit-count">0</div>
-                            <div class="fw-bold text-muted">已提交隊伍 / 共 <span id="workshop-total-teams">0</span> 隊
+                            <div class="display-3 fw-950 text-primary mb-2" id="workshop-submit-count">0</div>
+                            <div class="fw-bold text-muted fs-5 mb-3">已提交隊伍 / 共 <span id="workshop-total-teams"
+                                    class="text-dark fw-900">0</span> 隊
+                            </div>
+                            <div class="progress"
+                                style="height: 12px; border-radius: 50px; background: rgba(0,0,0,0.08);">
+                                <div id="workshop-progress-bar" class="progress-bar rounded-pill fw-bold"
+                                    role="progressbar"
+                                    style="width: 0%; background: linear-gradient(90deg, var(--primary-light, #6366f1), var(--accent-purple)); transition: width 0.8s cubic-bezier(0.16,1,0.3,1);"
+                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1452,6 +1936,8 @@
             <div class="glass-card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="fw-950 mb-0">工作坊 組別計分</h5>
+                    <button class="btn btn-dark fw-bold rounded-pill px-4 shadow-sm" onclick="startShowcase()"><i
+                            class="bi bi-play-circle-fill me-2"></i> 啟動作品展演</button>
                 </div>
                 <div id="workshop-scoring-list" class="row g-4 justify-content-center"></div>
 
@@ -1498,7 +1984,7 @@
 
     <div id="time-up-overlay" class="time-up-overlay" onclick="this.style.display='none'">
         <div class="time-up-text">TIME UP</div>
-        <div class="fs-4 fw-bold opacity-75">訓練階段結束</div>
+        <div class="fs-4 fw-bold opacity-75">時間到</div>
         <div class="mt-4 btn btn-light rounded-pill px-5 py-2 fw-900">點擊任意處返回</div>
     </div>
 
@@ -1506,16 +1992,61 @@
         style="display:none; flex-direction:column; justify-content:center; align-items:center;">
         <div class="time-up-text">TIME UP</div>
         <div class="fs-4 fw-bold opacity-75 mb-4">研討階段結束，學員上傳功能已暫停</div>
-        <div class="d-flex gap-3 mt-4">
-            <button class="btn btn-outline-light rounded-pill px-5 py-3 fw-900 shadow"
-                onclick="extendWorkshopTime()">延長上傳時間</button>
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <button class="btn btn-outline-light rounded-pill px-4 py-3 fw-900 shadow"
+                onclick="extendWorkshopTime(60)">+1 分鐘</button>
+            <button class="btn btn-outline-light rounded-pill px-4 py-3 fw-900 shadow"
+                onclick="extendWorkshopTime(300)">+5 分鐘</button>
             <button class="btn btn-light text-dark rounded-pill px-5 py-3 fw-900 shadow"
-                onclick="endWorkshopAndScore()">結束並進入計分</button>
+                onclick="endWorkshopAndScore()">結束並結算</button>
         </div>
     </div>
 
     <div id="result-overlay" class="result-overlay" onclick="closeOverlay()">
         <div id="celebration-container"></div>
+    </div>
+
+    <!-- Showcase Overlay -->
+    <div id="showcase-overlay" class="showcase-overlay">
+        <div class="showcase-header">
+            <div class="fw-950 fs-2" id="showcase-team-name">小組名稱</div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-none d-md-flex gap-2 opacity-50" style="font-size:0.75rem; font-family: monospace;">
+                    <span class="badge bg-white text-dark">← →</span><span>切換</span>
+                    <span class="badge bg-white text-dark ms-2">+ / -</span><span>給分</span>
+                    <span class="badge bg-white text-dark ms-2">Esc</span><span>離開</span>
+                </div>
+                <button class="btn-close btn-close-white" style="font-size: 1.5rem;" onclick="closeShowcase()"></button>
+            </div>
+        </div>
+        <div class="showcase-body">
+            <img src="" id="showcase-image" class="showcase-img">
+            <div class="showcase-controls">
+                <div class="showcase-btn" onclick="prevShowcase()"><i class="bi bi-chevron-left"></i></div>
+                <div class="showcase-btn" onclick="nextShowcase()"><i class="bi bi-chevron-right"></i></div>
+            </div>
+        </div>
+        <div class="showcase-footer">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-light btn-lg rounded-pill fw-900 px-4" onclick="addShowcasePoint(-1)">-1
+                    分</button>
+                <div class="fw-950 fs-1 px-4" id="showcase-team-score">0</div>
+                <button class="btn btn-light text-dark btn-lg rounded-pill fw-900 px-4" onclick="addShowcasePoint(1)">+1
+                    分</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Podium Overlay -->
+    <div id="podium-overlay" class="podium-overlay" onclick="closePodium()">
+        <div class="podium-title-wrap">
+            <div class="podium-subtitle">Workshop Final Result</div>
+            <div class="podium-main-title" id="podium-winner-name">最終結算</div>
+        </div>
+        <div class="podium-stage" id="podium-stage">
+            <!-- Filled by JS -->
+        </div>
+        <div class="podium-close-hint">點擊任意處關閉</div>
     </div>
 
     <div id="workshop-init-overlay" class="workshop-init-overlay">
@@ -1535,7 +2066,7 @@
                     <div class="workshop-init-option" onclick="selectWorkshopMode('random')">
                         <i class="bi bi-shuffle"></i>
                         <h3 class="fw-900">隨機分隊</h3>
-                        <p class="opacity-75 small">搭配動態發牌動畫，自動將學員分配至指定組數。</p>
+                        <p class="opacity-75 small">搭配動態發牌動畫，自動分配至指定組數。</p>
                     </div>
                 </div>
             </div>
@@ -1714,21 +2245,29 @@
         function goHome() {
             document.getElementById('dashboard-menu').style.display = 'block';
             document.getElementById('tool-container').style.display = 'none';
+            document.getElementById('workshop-display').style.display = 'none';
             document.getElementById('sidebarToggle').style.display = 'none';
             const backBtn = document.getElementById('back-to-menu-btn');
-            backBtn.href = "index.html";
+            backBtn.href = 'index.html';
             backBtn.onclick = null;
             backBtn.innerHTML = '<i class="bi bi-arrow-left me-1"></i> 返回大廳';
             currentGameMode = 'normal';
+            document.body.classList.remove('workshop-mode-active');
             closeSidebar();
         }
 
         function switchTool(tool) {
+            // Hide dashboard menu
             document.getElementById('dashboard-menu').style.display = 'none';
-            document.getElementById('tool-container').style.display = 'block';
-            document.getElementById('sidebarToggle').style.display = (tool === 'timer' || tool === 'points' || tool === 'workshop') ? 'none' : 'flex';
 
-            ['lottery-display', 'group-results', 'timer-display', 'session-points-display', 'workshop-display'].forEach(id => {
+            // Workshop uses its own container outside tool-container
+            const isWorkshop = (tool === 'workshop');
+            document.getElementById('tool-container').style.display = isWorkshop ? 'none' : 'block';
+            document.getElementById('workshop-display').style.display = isWorkshop ? 'block' : 'none';
+            document.getElementById('sidebarToggle').style.display = (tool === 'timer' || tool === 'points' || isWorkshop) ? 'none' : 'flex';
+
+            // Hide all sub-displays within tool-container
+            ['lottery-display', 'group-results', 'timer-display', 'session-points-display'].forEach(id => {
                 const el = document.getElementById(id); if (el) el.style.display = 'none';
             });
 
@@ -1741,7 +2280,7 @@
             currentGameMode = tool;
 
             const backBtn = document.getElementById('back-to-menu-btn');
-            backBtn.href = "#";
+            backBtn.href = '#';
             backBtn.onclick = (e) => { e.preventDefault(); goHome(); };
             backBtn.innerHTML = '<i class="bi bi-grid-fill me-1"></i> 返回選單';
 
@@ -1769,13 +2308,9 @@
                 document.getElementById('current-tool-desc').textContent = 'REAL-TIME SCOREBOARD';
                 document.getElementById('action-text').textContent = '頒獎儀式';
                 document.getElementById('source-config').style.display = 'none';
-                renderSessionPoints();
-            } else if (tool === 'workshop') {
-                document.getElementById('workshop-display').style.display = 'block';
-                document.getElementById('current-tool-title').textContent = 'A&H 工作坊';
-                document.getElementById('current-tool-desc').textContent = 'COLLABORATIVE SESSIONS';
-                document.getElementById('action-text').textContent = '啟動工作坊';
-                document.getElementById('source-config').style.display = 'none';
+                setPointsTab(pointsView); // initialise tab highlight + render
+            } else if (isWorkshop) {
+                document.body.classList.add('workshop-mode-active');
                 document.getElementById('workshop-init-overlay').style.display = 'flex';
                 switchWorkshopSection('setup');
             }
@@ -1821,7 +2356,7 @@
             const customPool = document.getElementById('custom-items').value.split('\n').filter(i => i.trim());
             const pool = document.getElementById('source-people').checked ? activePool : customPool;
 
-            if (pool.length === 0) return showCustomAlert('準備就緒？', '請先選擇學員或輸入自訂項目。');
+            if (pool.length === 0) return showCustomAlert('準備就緒？', '請先選擇或輸入自訂項目。');
 
             document.getElementById('settingsSidebar').classList.remove('open');
             document.getElementById('sidebarToggle').classList.remove('active');
@@ -1983,9 +2518,10 @@
             }
         }
         function toggleTimer() {
+            const btn = document.getElementById('btn-timer-toggle');
             if (isTimerRunning) {
                 clearInterval(timerInterval);
-                document.getElementById('btn-timer-toggle').textContent = 'START';
+                btn.innerHTML = '<i class="bi bi-play-fill me-2"></i>START';
                 const lbl = document.getElementById('workshop-timer-label');
                 if (lbl) lbl.textContent = '已暫停';
             } else {
@@ -1994,7 +2530,7 @@
                     if (timerSeconds <= 10 && timerSeconds > 0) document.getElementById('sound-tick').play().catch(() => { });
                     if (timerSeconds <= 0) { clearInterval(timerInterval); timerEnded(); }
                 }, 1000);
-                document.getElementById('btn-timer-toggle').textContent = 'PAUSE';
+                btn.innerHTML = '<i class="bi bi-pause-fill me-2"></i>PAUSE';
                 const lbl = document.getElementById('workshop-timer-label');
                 if (lbl) lbl.textContent = '執行中(點擊暫停)';
 
@@ -2011,6 +2547,7 @@
             isTimerRunning = !isTimerRunning;
         }
         function timerEnded() {
+            const btn = document.getElementById('btn-timer-toggle');
             if (currentGameMode === 'workshop') {
                 callAPI('setWorkshopState', [{ active: false, startTime: null, limit: 0, teams: workshopTeams, members: workshopMembers }]);
                 document.getElementById('workshop-time-up-overlay').style.display = 'flex';
@@ -2018,7 +2555,7 @@
                 confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 } });
 
                 isTimerRunning = false;
-                document.getElementById('btn-timer-toggle').textContent = 'START';
+                btn.innerHTML = '<i class="bi bi-play-fill me-2"></i>START';
                 const lbl = document.getElementById('workshop-timer-label');
                 if (lbl) lbl.textContent = '已結束';
 
@@ -2031,26 +2568,42 @@
                 resetTimer();
             }
         }
-        function resetTimer() { clearInterval(timerInterval); isTimerRunning = false; timerPoints_Reset(); timerSeconds = 300; updateTimerDisplay(); document.getElementById('btn-timer-toggle').textContent = 'START'; }
+        function resetTimer() {
+            clearInterval(timerInterval); isTimerRunning = false; timerPoints_Reset(); timerSeconds = 300; updateTimerDisplay();
+            document.getElementById('btn-timer-toggle').innerHTML = '<i class="bi bi-play-fill me-2"></i>START';
+        }
         function timerPoints_Reset() { } // Internal helper
         function setCustomTimer() {
-            showCustomPrompt('自訂計時器', '輸入分:秒', '如 02:30', val => {
+            showCustomPrompt('自訂計時器', '輸入分:秒 (如 02:30)', '', val => {
                 if (!val) return;
                 const p = val.split(':');
-                const s = (parseInt(p[0]) * 60) + (parseInt(p[1] || 0));
+                const s = (parseInt(p[0] || 0) * 60) + (parseInt(p[1] || 0));
                 setTimer(s);
             });
         }
-        function extendWorkshopTime() {
-            document.getElementById('workshop-time-up-overlay').style.display = 'none';
-            showCustomPrompt('延長上傳時間', '輸入延長分鐘數 (例如: 5)', '5', val => {
-                const mins = parseInt(val);
-                if (!mins) return;
-                setTimer(mins * 60);
-                toggleTimer(); // This handles restarting and updating backend
-                document.getElementById('workshop-status-badge').className = 'badge bg-primary rounded-pill px-3 py-2 fw-bold';
+        function extendWorkshopTime(secs) {
+            if (secs) {
+                document.getElementById('workshop-time-up-overlay').style.display = 'none';
+                timerSeconds += secs;
+                // update backend
+                callAPI('setWorkshopState', [{
+                    active: true,
+                    startTime: Date.now(),
+                    limit: timerSeconds,
+                    members: workshopMembers
+                }]);
+                if (!isTimerRunning) toggleTimer();
+                updateTimerDisplay();
+                document.getElementById('workshop-status-badge').className = 'badge bg-primary rounded-pill px-4 py-2 fw-bold fs-6 shadow-sm';
                 document.getElementById('workshop-status-badge').textContent = 'ACTIVE';
-            });
+            } else {
+                document.getElementById('workshop-time-up-overlay').style.display = 'none';
+                showCustomPrompt('延長上傳時間', '輸入延長分鐘數 (例如: 5)', '5', val => {
+                    const mins = parseInt(val);
+                    if (!mins) return;
+                    extendWorkshopTime(mins * 60);
+                });
+            }
         }
         function endWorkshopAndScore() {
             document.getElementById('workshop-time-up-overlay').style.display = 'none';
@@ -2058,66 +2611,109 @@
         }
 
         // Points
-        function togglePointsView(mode) {
+        function setPointsTab(mode) {
             pointsView = mode;
+            // Update tab highlight
+            ['indiv', 'team', 'customTeam'].forEach(m => {
+                const btn = document.getElementById('pts-tab-' + m);
+                if (!btn) return;
+                if (m === mode) {
+                    btn.style.background = 'rgba(255,255,255,0.15)';
+                    btn.style.color = 'white';
+                } else {
+                    btn.style.background = 'transparent';
+                    btn.style.color = 'rgba(255,255,255,0.45)';
+                }
+            });
             renderSessionPoints();
         }
+        function togglePointsView(mode) { setPointsTab(mode); }
+
         function renderSessionPoints() {
             const list = document.getElementById('session-points-list');
             if (!list) return;
 
+            // Shared card style helpers
+            const cardBase = `background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; transition: transform 0.2s, box-shadow 0.2s;`;
+            const scoreBig = `font-size: 2.5rem; font-weight: 950; line-height: 1; color: white;`;
+            const btnMinus = `background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.12); border-radius: 50%; width:36px; height:36px; font-size:1.2rem; font-weight:900; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:0.15s;`;
+            const btnPlus = `background: rgba(99,102,241,0.5); color: white; border: 1px solid rgba(99,102,241,0.4); border-radius: 50%; width:36px; height:36px; font-size:1.2rem; font-weight:900; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:0.15s;`;
+
             if (pointsView === 'indiv') {
                 list.innerHTML = participants.filter(p => p.active).map(p => `
-                    <div class="col-md-3">
-                        <div class="glass-card p-3 d-flex justify-content-between align-items-center">
-                            <div><div class="fw-bold">${p.name}</div><div class="small text-muted">${p.group}</div></div>
-                            <div class="d-flex align-items-center gap-2">
-                                <button class="btn btn-sm btn-light border" onclick="addPoint('${p.id}',-1)">-</button>
-                                <span id="pts-${p.id}" class="fw-900 text-primary">${sessionPoints[p.id] || 0}</span>
-                                <button class="btn btn-sm btn-dark" onclick="addPoint('${p.id}',1)">+</button>
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+                        <div class="p-3" style="${cardBase}">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <div class="fw-bold" style="color:white; font-size:1rem;">${p.name}</div>
+                                    <div class="small" style="color:rgba(255,255,255,0.35);">${p.group || ''}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div style="${scoreBig}" id="pts-${p.id}">${sessionPoints[p.id] || 0}</div>
+                                <div class="d-flex gap-2">
+                                    <button style="${btnMinus}" onclick="addPoint('${p.id}',-1)">−</button>
+                                    <button style="${btnPlus}" onclick="addPoint('${p.id}',1)">+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 `).join('');
+
             } else if (pointsView === 'team') {
                 const teams = [...new Set(participants.filter(p => p.active).map(p => p.group || 'TMS'))];
                 list.innerHTML = teams.map(t => `
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 border border-primary bg-primary bg-opacity-10">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="p-4" style="${cardBase} border-color: rgba(99,102,241,0.3);">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="fw-950 mb-0">${t}</h5>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-light" onclick="addTeamPoint('${t}',-1)">-1</button>
-                                    <button class="btn btn-sm btn-primary" onclick="addTeamPoint('${t}',1)">+1</button>
+                                <div>
+                                    <div class="small fw-bold mb-1" style="color:rgba(255,255,255,0.35); letter-spacing:3px; text-transform:uppercase;">UNIT</div>
+                                    <h5 class="fw-950 mb-0" style="color:white;">${t}</h5>
                                 </div>
                             </div>
-                            <div class="fw-900 fs-4 text-primary">總分: ${getTeamScore(t)}</div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div style="${scoreBig} color: #a5b4fc;">${getTeamScore(t)}</div>
+                                <div class="d-flex gap-2">
+                                    <button style="${btnMinus}" onclick="addTeamPoint('${t}',-1)">−</button>
+                                    <button style="${btnPlus}" onclick="addTeamPoint('${t}',1)">+</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `).join('');
+
             } else if (pointsView === 'customTeam') {
-                list.innerHTML = `
-                    <div class="col-12 mb-3">
-                        <button class="btn btn-dark rounded-pill" onclick="promptAddCustomTeam()"><i class="bi bi-plus-lg me-1"></i> 新增自訂小組</button>
-                        <button class="btn btn-outline-danger rounded-pill ms-2" onclick="confirmResetCustomTeams()"><i class="bi bi-trash me-1"></i> 清除所有小組</button>
+                const toolbar = `
+                    <div class="col-12 mb-3 d-flex gap-2">
+                        <button class="btn rounded-pill px-4 fw-bold btn-sm" onclick="promptAddCustomTeam()"
+                            style="background:rgba(99,102,241,0.2); color:#a5b4fc; border:1px solid rgba(99,102,241,0.3);">
+                            <i class="bi bi-plus-lg me-1"></i>新增小組
+                        </button>
+                        <button class="btn rounded-pill px-4 fw-bold btn-sm" onclick="confirmResetCustomTeams()"
+                            style="background:rgba(239,68,68,0.1); color:#f87171; border:1px solid rgba(239,68,68,0.2);">
+                            <i class="bi bi-trash me-1"></i>清除全部
+                        </button>
                     </div>
-                ` + (customTeams.length === 0 ? '<div class="col-12 text-muted text-center pt-3">尚未建立自訂小組</div>' : customTeams.map(t => `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="glass-card p-4 border border-info bg-info bg-opacity-10 position-relative">
-                            <button class="btn-close position-absolute top-0 end-0 m-3" style="font-size:0.7rem;" onclick="removeCustomTeam('${t}')"></button>
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="fw-950 mb-0">${t}</h5>
-                            </div>
+                `;
+                const empty = customTeams.length === 0
+                    ? `<div class="col-12 text-center py-5" style="color:rgba(255,255,255,0.3);"><i class="bi bi-people display-4 d-block mb-3"></i>尚未建立自訂小組</div>`
+                    : customTeams.map(t => `
+                    <div class="col-sm-6 col-md-4">
+                        <div class="p-4 position-relative" style="${cardBase} border-color: rgba(34,211,238,0.25);">
+                            <button onclick="removeCustomTeam('${t}')" class="position-absolute" style="top:12px; right:12px; background:rgba(255,255,255,0.07); border:none; border-radius:50%; width:28px; height:28px; color:rgba(255,255,255,0.4); cursor:pointer; font-size:0.75rem;">✕</button>
+                            <div class="small fw-bold mb-1" style="color:rgba(255,255,255,0.35); letter-spacing:3px; text-transform:uppercase;">TEAM</div>
+                            <h5 class="fw-950 mb-3" style="color:white;">${t}</h5>
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="fw-900 fs-1 text-info">${sessionPoints[t] || 0}</div>
-                                <div class="d-flex flex-column gap-2">
-                                    <button class="btn btn-sm btn-info" onclick="addCustomTeamPoint('${t}',1)">+1</button>
-                                    <button class="btn btn-sm btn-outline-info" onclick="addCustomTeamPoint('${t}',-1)">-1</button>
+                                <div style="${scoreBig} color: #67e8f9;">${sessionPoints[t] || 0}</div>
+                                <div class="d-flex gap-2">
+                                    <button style="${btnMinus}" onclick="addCustomTeamPoint('${t}',-1)">−</button>
+                                    <button style="background: rgba(6,182,212,0.4); color:white; border:1px solid rgba(6,182,212,0.4); border-radius:50%; width:36px; height:36px; font-size:1.2rem; font-weight:900; display:flex; align-items:center; justify-content:center; cursor:pointer;" onclick="addCustomTeamPoint('${t}',1)">+</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                `).join(''));
+                `).join('');
+                list.innerHTML = toolbar + empty;
             }
             syncHonorWall();
         }
@@ -2151,23 +2747,33 @@
             renderSessionPoints();
         }
 
-        function getTeamScore(teamName) {
-            return participants.filter(p => p.active && (p.group || 'TMS') === teamName).reduce((sum, p) => sum + (sessionPoints[p.id] || 0), 0);
-        }
-
         function addPoint(id, v) { sessionPoints[id] = (sessionPoints[id] || 0) + v; renderSessionPoints(); }
+
+        // Team-mode points are stored with a dedicated prefix key to avoid collision with individual IDs
+        function teamKey(t) { return '__team__' + t; }
         function addTeamPoint(t, v) {
-            participants.filter(p => p.active && (p.group || 'TMS') === t).forEach(m => sessionPoints[m.id] = (sessionPoints[m.id] || 0) + v);
+            const k = teamKey(t);
+            sessionPoints[k] = (sessionPoints[k] || 0) + v;
             renderSessionPoints();
+        }
+        function getTeamScore(t) {
+            return sessionPoints[teamKey(t)] || 0;
         }
 
         function syncHonorWall() {
             let data = [];
             if (pointsView === 'customTeam') {
-                data = customTeams.map(t => ({ id: t, name: t, group: '小組', points: sessionPoints[t] || 0 }));
+                data = customTeams.map(t => ({ id: t, name: t, group: '自訂小組', points: sessionPoints[t] || 0 }));
+            } else if (pointsView === 'team') {
+                // Read from dedicated team keys
+                const teams = [...new Set(participants.filter(p => p.active).map(p => p.group || 'TMS'))];
+                data = teams.map(t => ({ id: t, name: t, group: '單位', points: sessionPoints[teamKey(t)] || 0 }));
             } else {
+                // indiv mode
                 data = participants.filter(p => p.active).map(p => ({ id: p.id, name: p.name, group: p.group || '', points: sessionPoints[p.id] || 0 }));
             }
+            // Store current mode so buzzer.html can display proper label
+            localStorage.setItem('seedpro_points_mode', pointsView);
             localStorage.setItem('seedpro_session_scores', JSON.stringify(data));
         }
 
@@ -2175,6 +2781,9 @@
             const sorted = [];
             if (pointsView === 'customTeam') {
                 customTeams.forEach(t => sorted.push({ name: t, score: sessionPoints[t] || 0 }));
+            } else if (pointsView === 'team') {
+                const teams = [...new Set(participants.filter(p => p.active).map(p => p.group || 'TMS'))];
+                teams.forEach(t => sorted.push({ name: t, score: sessionPoints[teamKey(t)] || 0 }));
             } else {
                 participants.filter(p => p.active).forEach(p => sorted.push({ name: p.name, score: sessionPoints[p.id] || 0 }));
             }
@@ -2358,7 +2967,7 @@
         }
 
         async function endWorkshopSession() {
-            showCustomPrompt('停止並結算？', '停止學員繳交權限，並結算成績，請輸入 END', 'END', async v => {
+            showCustomPrompt('停止並結算？', '停止繳交權限，並結算成績，請輸入 END', 'END', async v => {
                 if (v === 'END') {
                     showLoading();
 
@@ -2381,7 +2990,7 @@
                     await callAPI('setWorkshopState', [status]);
                     hideLoading();
 
-                    showCustomAlert('已結算', '工作坊繳交已截止，學員無法再上傳成果。');
+                    showCustomAlert('已結算', '工作坊繳交已截止，無法再上傳。');
                     document.getElementById('workshop-status-badge').className = 'badge bg-danger rounded-pill px-3 py-2 fw-bold';
                     document.getElementById('workshop-status-badge').textContent = 'CLOSED';
                 }
@@ -2398,6 +3007,17 @@
             if (submitCount) submitCount.textContent = uploads.length;
             const totalTeams = document.getElementById('workshop-total-teams');
             if (totalTeams) totalTeams.textContent = workshopTeams.length;
+
+            // Update progress bar
+            const progressBar = document.getElementById('workshop-progress-bar');
+            if (progressBar && workshopTeams.length > 0) {
+                const pct = Math.round((uploads.length / workshopTeams.length) * 100);
+                progressBar.style.width = pct + '%';
+                progressBar.setAttribute('aria-valuenow', pct);
+                progressBar.style.background = pct === 100
+                    ? 'linear-gradient(90deg, #00b894, #00cec9)'
+                    : 'linear-gradient(90deg, #6366f1, var(--accent-purple))';
+            }
 
             container.innerHTML = workshopTeams.map((t, i) => {
                 const submission = uploads.find(u => u.team === t);
@@ -2419,7 +3039,7 @@
                                     <div class="text-primary fw-900"><i class="bi bi-clock-fill me-1"></i> ${new Date(submission.timestamp).toLocaleTimeString()}</div>
                                     <div class="d-flex gap-2">
                                         <button class="btn btn-dark rounded-pill px-3 btn-sm" onclick="viewSubmission('${submission.data}')">查看</button>
-                                        <button class="btn btn-outline-danger rounded-pill px-3 btn-sm" onclick="deleteUpload('${t}')"><i class="bi bi-unlock-fill"></i> 重投</button>
+                                        <button class="btn btn-outline-danger rounded-pill px-3 btn-sm" onclick="deleteUpload('${t}')"><i class="bi bi-unlock-fill"></i> 重設</button>
                                     </div>
                                 ` : `
                                     <div class="text-muted opacity-50 fw-bold"><i class="bi bi-hourglass-split me-1"></i> 等待中...</div>
@@ -2436,8 +3056,16 @@
             showCustomPrompt('開放重新上傳', `確定要刪除 ${team} 的繳交紀錄，讓他們能重新上傳嗎？請輸入 DEL 確認`, 'DEL', async v => {
                 if (v === 'DEL') {
                     showLoading('處理中...');
-                    await callAPI('deleteWorkshopUpload', [team]);
+                    const res = await callAPI('deleteWorkshopUpload', [team]);
                     hideLoading();
+                    if (res.success) {
+                        // Optimistically re-render dashboard cards and scoring
+                        renderWorkshopDashboard();
+                        renderWorkshopScoring();
+                        showCustomPrompt('提示', `${team} 的紀錄已清除，請重新上傳。`, '');
+                    } else {
+                        showCustomPrompt('錯誤', '清除失敗：' + res.message, '');
+                    }
                 }
             });
         }
@@ -2456,21 +3084,22 @@
                 const submission = uploads.find(u => u.team === t);
                 return `
                     <div class="col-md-6 col-lg-4">
-                        <div class="glass-card p-4 border border-dark bg-light bg-opacity-75">
+                        <div class="dashboard-status-card ${submission ? 'submitted' : ''}">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="fw-950 mb-0">${t}</h5>
-                                <div class="badge ${submission ? 'bg-success' : 'bg-secondary'} rounded-pill">
+                                <h4 class="fw-950 mb-0">${t}</h4>
+                                <div class="badge ${submission ? 'bg-success' : 'bg-secondary'} rounded-pill px-3 py-2">
                                     ${submission ? '已繳交' : '未繳交'}
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="fw-900 fs-1 text-primary text-center flex-grow-1">${pts} <span class="fs-5 text-muted">分</span></div>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <div class="fw-950 flex-grow-1" style="font-size: 3rem; color: var(--primary-dark);">${pts} <span class="fs-5 text-muted">分</span></div>
                                 <div class="d-flex flex-column gap-2">
-                                    <button class="btn btn-outline-dark fw-bold px-3 py-2" onclick="addWorkshopPoint('${t}', 1)">+1 分</button>
-                                    <button class="btn btn-outline-danger px-3" onclick="addWorkshopPoint('${t}', -1)">-1 分</button>
+                                    <button class="btn btn-dark fw-bold px-4 rounded-pill" onclick="addWorkshopPoint('${t}', 1)">+1 分</button>
+                                    <button class="btn btn-outline-danger px-4 rounded-pill" onclick="addWorkshopPoint('${t}', -1)">-1 分</button>
                                 </div>
                             </div>
-                            ${submission ? `<button class="btn btn-dark w-100 mt-3 rounded-pill" onclick="viewSubmission('${submission.data}')">查看作品</button>` : ''}
+                            ${submission ? `<button class="btn btn-outline-primary fw-900 w-100 mt-4 rounded-pill py-2" onclick="viewSubmission('${submission.data}')"><i class="bi bi-eye-fill"></i> 查看作品</button>` : ''}
+                            <div class="status-glow"></div>
                         </div>
                     </div>
                 `;
@@ -2482,6 +3111,83 @@
             saveWorkshopData();
             renderWorkshopScoring();
         }
+
+        // --- Showcase Mode ---
+        let showcaseList = [];
+        let showcaseIndex = 0;
+
+        async function startShowcase() {
+            showLoading('準備資料...');
+            const res = await callAPI('getWorkshopUploads');
+            hideLoading();
+            if (!res.success) return showCustomPrompt('提示', '無法取得繳交紀錄。', '');
+
+            showcaseList = res.uploads;
+            if (showcaseList.length === 0) return showCustomPrompt('提示', '目前還沒有任何隊伍繳交！', '');
+
+            showcaseIndex = 0;
+            document.getElementById('showcase-overlay').style.display = 'flex';
+            renderShowcaseCurrent();
+        }
+
+        function renderShowcaseCurrent() {
+            if (!showcaseList[showcaseIndex]) return;
+            const upload = showcaseList[showcaseIndex];
+            const imgEl = document.getElementById('showcase-image');
+            imgEl.style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('showcase-team-name').innerText = upload.team + ` (${showcaseIndex + 1}/${showcaseList.length})`;
+                imgEl.src = upload.data;
+                document.getElementById('showcase-team-score').innerText = (workshopPoints[upload.team] || 0);
+                imgEl.style.opacity = '1';
+            }, 300);
+        }
+
+        function nextShowcase() {
+            if (showcaseIndex < showcaseList.length - 1) {
+                showcaseIndex++;
+                renderShowcaseCurrent();
+            }
+        }
+
+        function prevShowcase() {
+            if (showcaseIndex > 0) {
+                showcaseIndex--;
+                renderShowcaseCurrent();
+            }
+        }
+
+        function closeShowcase() {
+            document.getElementById('showcase-overlay').style.display = 'none';
+            renderWorkshopScoring();
+        }
+
+        function addShowcasePoint(v) {
+            if (!showcaseList[showcaseIndex]) return;
+            const team = showcaseList[showcaseIndex].team;
+            addWorkshopPoint(team, v);
+            document.getElementById('showcase-team-score').innerText = (workshopPoints[team] || 0);
+
+            // Give a quick visual feedback
+            const scoreEl = document.getElementById('showcase-team-score');
+            scoreEl.style.color = v > 0 ? '#00b894' : '#d63031';
+            scoreEl.style.transform = 'scale(1.5)';
+            setTimeout(() => {
+                scoreEl.style.color = '';
+                scoreEl.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // Keyboard shortcuts for showcase mode
+        document.addEventListener('keydown', (e) => {
+            const overlay = document.getElementById('showcase-overlay');
+            if (!overlay || overlay.style.display === 'none') return;
+            if (e.key === 'ArrowRight') nextShowcase();
+            else if (e.key === 'ArrowLeft') prevShowcase();
+            else if (e.key === '=' || e.key === '+') addShowcasePoint(1);
+            else if (e.key === '-') addShowcasePoint(-1);
+            else if (e.key === 'Escape') closeShowcase();
+        });
 
         function viewSubmission(data) {
             document.getElementById('celebration-container').innerHTML = `
@@ -2550,7 +3256,7 @@
                     hideLoading();
 
                     resetTimer();
-                    document.getElementById('workshop-status-text').textContent = '檔案繳交監測連線中...';
+                    document.getElementById('workshop-status-text').textContent = '檔案繳交監測中...';
                     switchTool('workshop');
                     switchWorkshopSection('dashboard');
                 }
@@ -2564,34 +3270,69 @@
                     await callAPI('setWorkshopState', [null]);
                     hideLoading();
 
-                    const sorted = workshopTeams.map(t => ({ name: t, score: workshopPoints[t] || 0 })).sort((a, b) => b.score - a.score);
-                    const winnerHtml = sorted.length > 0 && sorted[0].score > 0
-                        ? `<div class="mt-4 animate__animated animate__zoomIn animate__delay-1s">
-                               <h3 class="fw-bold text-dark">🏅 最終優勝小組</h3>
-                               <h1 class="display-1 fw-950 text-primary mb-0" style="text-shadow: 0 5px 15px rgba(0,0,0,0.1);">${sorted[0].name}</h1>
-                               <div class="fs-4 text-muted fw-bold">總分: ${sorted[0].score} 分</div>
-                           </div>`
-                        : '';
+                    const sorted = workshopTeams
+                        .map(t => ({ name: t, score: workshopPoints[t] || 0 }))
+                        .sort((a, b) => b.score - a.score);
 
-                    document.getElementById('celebration-container').innerHTML = `
-                        <div class="celebration-banner pt-5 pb-5 px-5">
-                            <h4 class="text-muted fw-bold mb-3" style="letter-spacing: 5px;">WORKSHOP HAS ENDED</h4>
-                            <div style="font-size: 3.5rem; font-weight: 950;">感謝參與</div>
-                            ${winnerHtml}
-                        </div>
-                    `;
-                    document.getElementById('result-overlay').style.display = 'flex';
-                    confetti({ particleCount: 300, spread: 150, origin: { y: 0.6 } });
+                    showPodium(sorted);
 
                     workshopTeams = [];
                     workshopMembers = {};
                     workshopPoints = {};
                     saveWorkshopData();
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 8000);
+                    setTimeout(() => window.location.reload(), 14000);
                 }
             });
+        }
+
+        function showPodium(sorted) {
+            const top3 = sorted.slice(0, 3);
+            // Visual order: Silver (left), Gold (center, tallest), Bronze (right)
+            const SLOTS = [
+                { idx: 1, cls: 'silver', medal: '🥈', height: '52%', barDelay: '0.3s', infoDelay: '1.0s' },
+                { idx: 0, cls: 'gold', medal: '🥇', height: '80%', barDelay: '0.0s', infoDelay: '0.8s' },
+                { idx: 2, cls: 'bronze', medal: '🥉', height: '36%', barDelay: '0.5s', infoDelay: '1.2s' },
+            ];
+
+            const winnerEl = document.getElementById('podium-winner-name');
+            if (top3[0]) winnerEl.textContent = top3[0].name + ' 奪冠！';
+            else winnerEl.textContent = '工作坊結束';
+
+            const stage = document.getElementById('podium-stage');
+            stage.innerHTML = SLOTS.map(slot => {
+                const team = top3[slot.idx];
+                if (!team) return `<div class="podium-slot"></div>`;
+                return `
+                    <div class="podium-slot">
+                        <div class="podium-team-info"
+                             style="animation: fadeInUp 0.7s ${slot.infoDelay} ease forwards;">
+                            <div class="podium-medal">${slot.medal}</div>
+                            <div class="podium-team-name">${team.name}</div>
+                            <div class="podium-score">${team.score}<span class="podium-score-unit"> 分</span></div>
+                        </div>
+                        <div class="podium-bar ${slot.cls}"
+                             style="height: ${slot.height}; animation: riseUp 1.0s ${slot.barDelay} cubic-bezier(0.16,1,0.3,1) forwards;">
+                            <div class="podium-rank-num">${slot.idx + 1}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Fallback for single/no team
+            if (sorted.length === 0) {
+                stage.innerHTML = `<div style="text-align:center;padding:80px 0;"><div style="font-size:4rem">🎉</div><div style="font-size:2rem;font-weight:950;margin-top:20px;">感謝所有參與者</div></div>`;
+            }
+
+            document.getElementById('podium-overlay').style.display = 'flex';
+
+            // Staggered confetti bursts
+            setTimeout(() => confetti({ particleCount: 100, spread: 80, angle: 60, origin: { x: 0.05, y: 0.6 }, colors: ['#fdcb6e', '#ffeaa7', '#e17055'] }), 900);
+            setTimeout(() => confetti({ particleCount: 100, spread: 80, angle: 120, origin: { x: 0.95, y: 0.6 }, colors: ['#74b9ff', '#a29bfe', '#fd79a8'] }), 1100);
+            setTimeout(() => confetti({ particleCount: 150, spread: 120, startVelocity: 45, origin: { x: 0.5, y: 0.3 }, colors: ['#ffffff', '#ffeaa7', '#fdcb6e'] }), 1600);
+        }
+
+        function closePodium() {
+            document.getElementById('podium-overlay').style.display = 'none';
         }
     </script>
 </body>
